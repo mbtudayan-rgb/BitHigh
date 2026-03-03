@@ -22,12 +22,18 @@ pygame.display.set_caption("BitHigh")
 pygame.display.set_icon(pygame.image.load("BitHighIcon.png"))
 
 # Screen setup
-SCREEN_WIDTH = 1366
+SCREEN_WIDTH = 686
 SCREEN_HEIGHT = 768
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 20)
-
+RED     = "\033[31m"
+GREEN   = "\033[32m"
+YELLOW  = "\033[33m"
+BLUE    = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN    = "\033[36m"
+RESET   = "\033[0m"
 
 # ------------------------------------------------------------------------------
 # UTILITY FUNCTIONS
@@ -36,6 +42,12 @@ def resource_path(relative):
     base = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
     return os.path.join(base, relative)
 
+# ------------------------------------------------------------------------------
+# POPUP CLASS
+# ------------------------------------------------------------------------------
+class Popup:
+    def __init__(self, animation, position, size):
+        print(" ")
 
 # ------------------------------------------------------------------------------
 # BUTTON CLASS
@@ -93,56 +105,32 @@ def load_assets():
 
     # Background
     assets['main_game_image'] = pygame.transform.scale(
-        pygame.image.load(resource_path("MainGame.jpg")),
+        pygame.image.load(resource_path("MainGame.png")),
         (SCREEN_WIDTH, SCREEN_HEIGHT)
     )
     return assets
 
 
 # ------------------------------------------------------------------------------
-# CREATE BUTTONS
+# CREATE BUTTONS...
 # ------------------------------------------------------------------------------
 def create_buttons():
     buttons = {}
 
 
+
+    # FROM THE MAIN GAME
+    # button to skip the week
     buttons['skip'] = Button(
         "SkipButton1.png",
         "SkipButton2.png",
         (1013, 610),
-        (215, 215)
-    )
+        (215, 215))
 
-    buttons['involvements'] = Button(
-        "InvolvementsButton1.png",
-        "InvolvementsButton2.png",
-        (743, 649),
-        (70, 70)
-    )
+    # FROM THE POP UPS
 
-    buttons['activities'] = Button(
-        "ActivitiesButton1.png",
-        "ActivitiesButton2.png",
-        (843.5, 649),
-        (70, 70)
-    )
-
-    buttons['relationships'] = Button(
-        "RelationshipButton1.png",
-        "RelationshipsButton2.png",
-        (1181.5, 649),
-        (70, 70)
-    )
-
-    buttons['menu'] = Button(
-        "MenuButton1.png",
-        "MenuButton2.png",
-        (1281.5, 649),
-        (70, 70)
-    )
 
     return buttons
-
 
 # ------------------------------------------------------------------------------
 # VIDEO PLAYBACK
@@ -151,6 +139,15 @@ def handle_video(assets, game_state):
     frame, val = assets['intro_video'].get_frame()
 
     if val == 'eof':
+        print(fr"""{CYAN}
+ _     _  _______  ___      _______  _______  __   __  _______ 
+| | _ | ||       ||   |    |       ||       ||  |_|  ||       |
+| || || ||    ___||   |    |       ||   _   ||       ||    ___|
+|       ||   |___ |   |    |       ||  | |  ||       ||   |___ 
+|       ||    ___||   |___ |      _||  |_|  ||       ||    ___|
+|   _   ||   |___ |       ||     |_ |       || ||_|| ||   |___ 
+|__| |__||_______||_______||_______||_______||_|   |_||_______|{RESET}""")
+        print(f"{BLUE}Start a Scholar's Academic Life!{RESET}")
         game_state.playing_video = False
         screen.blit(assets['main_game_image'], (0, 0))
         pygame.display.update()
@@ -176,24 +173,12 @@ def handle_main_game(buttons, game_state, event):
     screen.blit(assets['main_game_image'], (0, 0))
 
     # Handle button events
-    if (buttons['skip'].handle_event(event) or
-            buttons['involvements'].handle_event(event) or
-            buttons['activities'].handle_event(event) or
-            buttons['relationships'].handle_event(event) or
-            buttons['menu'].handle_event(event)):
+    if (buttons['skip'].handle_event(event)):
         pass
 
     # Draw all buttons
     for button in buttons.values():
         button.draw(screen)
-
-    # Show text if week has advanced
-    if game_state.show_text:
-        text_surface = font.render("hi", True, (1, 47, 71))
-        screen.blit(text_surface, (300, 300))
-
-    if game_state.week == 1:
-        game_state.show_text = True
 
 
 # ------------------------------------------------------------------------------
@@ -235,7 +220,6 @@ def main():
 
     # Cleanup
     pygame.quit()
-
 
 # ------------------------------------------------------------------------------
 # RUN GAME
