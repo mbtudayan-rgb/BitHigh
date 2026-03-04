@@ -156,7 +156,7 @@ def handle_video(assets, game_state):
 
     if frame is not None:
         img, t = frame
-        surface = pygame.image.frombuffer(
+        surface = pygame.image.frombuffer(/
             img.to_bytearray()[0],
             img.get_size(),
             'RGB'
