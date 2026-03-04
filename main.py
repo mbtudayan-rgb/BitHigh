@@ -103,11 +103,15 @@ def load_assets():
     # Video
     assets['intro_video'] = MediaPlayer(resource_path("GameIntro.mp4"))
 
-    # Background
+    # Main Game Background
     assets['main_game_image'] = pygame.transform.scale(
         pygame.image.load(resource_path("MainGame.png")),
-        (SCREEN_WIDTH, SCREEN_HEIGHT)
-    )
+        (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    assets['main_menu_image'] = pygame.transform.scale(
+        pygame.image.load(resource_path("Menu.png")),
+        (SCREEN_WIDTH, SCREEN_HEIGHT))
+
     return assets
 
 
@@ -126,6 +130,12 @@ def create_buttons():
         "SkipButton2.png",
         (1013, 610),
         (215, 215))
+
+    buttons['start_game'] = Button(
+        "StartGameButton.png",
+        "StartGameAnimation.png",
+        (340.5, 386.5),
+        (686, 768))
 
     # FROM THE POP UPS
 
@@ -149,7 +159,7 @@ def handle_video(assets, game_state):
 |__| |__||_______||_______||_______||_______||_|   |_||_______|{RESET}""")
         print(f"{BLUE}Start a Scholar's Academic Life!{RESET}")
         game_state.playing_video = False
-        screen.blit(assets['main_game_image'], (0, 0))
+        screen.blit(assets['main_menu_image'], (0, 0))
         pygame.display.update()
         assets['intro_video'].close_player()
         return
@@ -170,10 +180,11 @@ def handle_video(assets, game_state):
 # ------------------------------------------------------------------------------
 def handle_main_game(buttons, game_state, event):
     # Draw background
-    screen.blit(assets['main_game_image'], (0, 0))
+    screen.blit(assets['main_menu_image'], (0, 0))
 
     # Handle button events
-    if (buttons['skip'].handle_event(event)):
+    if (buttons['skip'].handle_event(event),
+        buttons['start_game'].handle_event(event)):
         pass
 
     # Draw all buttons
@@ -207,12 +218,9 @@ def main():
         else:
             # Redraw main game if no events (prevents flickering)
             if not pygame.event.peek():
-                screen.blit(assets['main_game_image'], (0, 0))
+                screen.blit(assets['main_menu_image'], (0, 0))
                 for button in buttons.values():
                     button.draw(screen)
-                if game_state.show_text:
-                    text_surface = font.render("hi", True, (1, 47, 71))
-                    screen.blit(text_surface, (300, 300))
 
         # Update display
         pygame.display.flip()
