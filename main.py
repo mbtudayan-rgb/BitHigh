@@ -210,10 +210,6 @@ def load_assets():
 def create_buttons():
     buttons = {}
 
-    buttons['skip'] = Button(
-        "SkipButton1.png", "SkipButton2.png",
-        (1013, 610), (215, 215))
-
     buttons['start_game'] = Button(
         "StartGameButton.png", "StartGameAnimation.png",
         (338, 385), (474, 109))
@@ -279,7 +275,6 @@ def handle_main_game(buttons, popups, game_state, event):
     if not details_popup.active:
         if buttons['details'].handle_event(event):
             details_popup.open()
-        buttons['skip'].handle_event(event)
         buttons['start_game'].handle_event(event)
     else:
         details_popup.handle_event(event)
