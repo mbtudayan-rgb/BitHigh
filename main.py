@@ -30,17 +30,16 @@ SCREEN_HEIGHT = 768 #Height of the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #Sets the size of the screen
 clock = pygame.time.Clock() #Controls the game's frame rate
 RED     = "\033[31m" #Color's the word's Red
-GREEN   = "\033[32m" #Colors
-YELLOW  = "\033[33m"
-BLUE    = "\033[34m"
-MAGENTA = "\033[35m"
-CYAN    = "\033[36m"
-RESET   = "\033[0m"
-
+GREEN   = "\033[32m" #Color's the word's Green
+YELLOW  = "\033[33m" #Color's the word's Yellow
+BLUE    = "\033[34m" #Color's the word's Blue
+MAGENTA = "\033[35m" #Color's the word's Magenta
+CYAN    = "\033[36m" #Color's the word's Cyan
 
 # ------------------------------------------------------------------------------
 # UTILITY FUNCTIONS
 # ------------------------------------------------------------------------------
+#Para lang sa video, it won't work without this, IDK what it does but its important said by the video
 def resource_path(relative):
    base = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
    return os.path.join(base, relative)
@@ -62,22 +61,22 @@ class Popup:
     def __init__(self, image_path, size):
         self.image = pygame.transform.scale(
             pygame.image.load(resource_path(image_path)), size)
-        self.size   = size
-        self.rect   = self.image.get_rect(
-            centerx=SCREEN_WIDTH // 2, top=self.OFFSCREEN_Y)
-        self.state  = None       # None | 'slide_in' | 'bob' | 'slide_out'
-        self.vel    = 0.0
-        self.active = False      # is the popup visible at all?
+        self.size = size
+        self.rect = self.image.get_rect(
+            centerx = SCREEN_WIDTH // 2, top=self.OFFSCREEN_Y)
+        self.state = None
+        self.vel = 0.0
+        self.active = False
 
     def open(self):
         self.rect.top = self.OFFSCREEN_Y
-        self.vel      = self.SLIDE_SPEED
-        self.state    = 'slide_in'
-        self.active   = True
+        self.vel = self.SLIDE_SPEED
+        self.state = 'slide_in'
+        self.active = True
 
     def close(self):
         if self.active and self.state != 'slide_out':
-            self.vel   = self.SLIDE_OUT_SPD
+            self.vel = self.SLIDE_OUT_SPD
             self.state = 'slide_out'
 
     def handle_event(self, event):
@@ -97,22 +96,22 @@ class Popup:
             self.rect.top += self.vel
             if self.rect.top >= self.TARGET_Y:
                 self.rect.top = self.TARGET_Y
-                self.vel      = self.BOB_STRENGTH   # first upward bounce
-                self.state    = 'bob'
+                self.vel = self.BOB_STRENGTH   # first upward bounce
+                self.state = 'bob'
 
         elif self.state == 'bob':
-            self.vel      += self.GRAVITY
+            self.vel += self.GRAVITY
             self.rect.top += int(self.vel)
             if self.rect.top >= self.TARGET_Y and self.vel > 0:
                 self.rect.top = self.TARGET_Y
-                self.vel      = self.vel * -self.BOB_DAMPEN  # reverse & dampen
+                self.vel = self.vel * -self.BOB_DAMPEN  # reverse & dampen
                 if abs(self.vel) < self.BOB_STOP:
-                    self.vel   = 0
-                    self.state = None                # settled — fully at rest
+                    self.vel = 0
+                    self.state = None
 
         elif self.state == 'slide_out':
             self.rect.top += self.vel
-            if self.rect.top > SCREEN_HEIGHT:        # fully off-screen below
+            if self.rect.top > SCREEN_HEIGHT:
                 self.active = False
                 self.state  = None
 
@@ -245,8 +244,8 @@ _     _  _______  ___      _______  _______  __   __  _______
 |       ||   |___ |   |    |       ||  | |  ||       ||   |___
 |       ||    ___||   |___ |      _||  |_|  ||       ||    ___|
 |   _   ||   |___ |       ||     |_ |       || ||_|| ||   |___
-|__| |__||_______||_______||_______||_______||_|   |_||_______|{RESET}""")
-       print(f"{BLUE}Start a Scholar's Academic Life!{RESET}")
+|__| |__||_______||_______||_______||_______||_|   |_||_______|""")
+       print(f"{BLUE}Start a Scholar's Academic Life!")
        game_state.playing_video = False
        screen.blit(assets['main_menu_image'], (0, 0))
        pygame.display.update()
@@ -292,7 +291,7 @@ def main():
     global assets
     assets  = load_assets()
     buttons = create_buttons()
-    popups  = create_popups()        # <-- add this
+    popups  = create_popups()
     game_state = GameState()
 
     while game_state.running:
@@ -301,7 +300,7 @@ def main():
                 game_state.running = False
 
             if not game_state.playing_video:
-                handle_main_game(buttons, popups, game_state, event)  # pass popups
+                handle_main_game(buttons, popups, game_state, event)
 
         if game_state.playing_video:
             handle_video(assets, game_state)
@@ -310,7 +309,7 @@ def main():
                 screen.blit(assets['main_menu_image'], (0, 0))
                 for button in buttons.values():
                     button.draw(screen)
-                for popup in popups.values():        # <-- add this
+                for popup in popups.values():
                     popup.update()
                     popup.draw(screen)
 
