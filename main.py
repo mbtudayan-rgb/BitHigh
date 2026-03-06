@@ -25,21 +25,21 @@ pygame.display.set_icon(pygame.image.load("BitHighIcon.png")) #Displays the Icon
 
 
 # Screen setup
-SCREEN_WIDTH = 686 #Width of the screen
-SCREEN_HEIGHT = 768 #Height of the screen
+SCREEN_WIDTH = 686          #Width of the screen
+SCREEN_HEIGHT = 768         #Height of the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #Sets the size of the screen
 clock = pygame.time.Clock() #Controls the game's frame rate
-RED     = "\033[31m" #Color's the word's Red
-GREEN   = "\033[32m" #Color's the word's Green
-YELLOW  = "\033[33m" #Color's the word's Yellow
-BLUE    = "\033[34m" #Color's the word's Blue
-MAGENTA = "\033[35m" #Color's the word's Magenta
-CYAN    = "\033[36m" #Color's the word's Cyan
+RED     = "\033[31m"        #Color's the word's Red
+GREEN   = "\033[32m"        #Color's the word's Green
+YELLOW  = "\033[33m"        #Color's the word's Yellow
+BLUE    = "\033[34m"        #Color's the word's Blue
+MAGENTA = "\033[35m"        #Color's the word's Magenta
+CYAN    = "\033[36m"        #Color's the word's Cyan
 
 # ------------------------------------------------------------------------------
 # UTILITY FUNCTIONS
 # ------------------------------------------------------------------------------
-#Para lang sa video, it won't work without this, IDK what it does but its important said by the video
+#Helps to locate the resources correctly
 def resource_path(relative):
    base = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
    return os.path.join(base, relative)
@@ -204,7 +204,7 @@ def load_assets():
    return assets
 
 # ------------------------------------------------------------------------------
-# CREATIONS OF ANYTHING NALANG
+# CREATIONS
 # ------------------------------------------------------------------------------
 def create_buttons():
     buttons = {}
