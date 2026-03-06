@@ -173,7 +173,7 @@ class GameState:
         self.running = True
         self.playing_video = True
         self.week = 0
-        self.show_text = False
+        self.scene = "menu"
         self.show_details_popup = False
         self.popup_anim_state = None
         self.popup_y = -400
@@ -267,23 +267,25 @@ _     _  _______  ___      _______  _______  __   __  _______
 # MAIN GAME LOOP
 # ------------------------------------------------------------------------------
 def handle_main_game(buttons, popups, game_state, event):
-    screen.blit(assets['main_menu_image'], (0, 0))
-
     details_popup = popups['details']
 
     if not details_popup.active:
         if buttons['details'].handle_event(event):
             details_popup.open()
-        buttons['start_game'].handle_event(event)
+        if buttons['start_game'].handle_event(event):
+            game_state.scene = "game"
+
     else:
         details_popup.handle_event(event)
 
+    screen.blit(assets['main_menu_image'], (0, 0))
     for button in buttons.values():
         button.draw(screen)
-
     details_popup.update()
     details_popup.draw(screen)
 
+def handle_game_scene(assets):
+    screen.blit(assets['main_game_image'], (0, 0))
 # ------------------------------------------------------------------------------
 # MAIN PROGRAM
 # ------------------------------------------------------------------------------
@@ -300,11 +302,12 @@ def main():
                 game_state.running = False
 
             if not game_state.playing_video:
-                handle_main_game(buttons, popups, game_state, event)
+                if game_state.scene == "menu":
+                    handle_main_game(buttons, popups, game_state, event)
 
         if game_state.playing_video:
             handle_video(assets, game_state)
-        else:
+        elif game_state.scene == "menu":
             if not pygame.event.peek():
                 screen.blit(assets['main_menu_image'], (0, 0))
                 for button in buttons.values():
@@ -312,9 +315,11 @@ def main():
                 for popup in popups.values():
                     popup.update()
                     popup.draw(screen)
+        elif game_state.scene == "game":
+            handle_game_scene(assets)
 
         pygame.display.flip()
-        clock.tick(120)
+        clock.tick(60)
 
     pygame.quit()
 
