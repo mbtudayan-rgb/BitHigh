@@ -1,8 +1,6 @@
 [
     {
         "Appearance": "BlueHairBoy.png",
-        "FirstName": "IIIII",
-        "LastName": "VVVVVVV",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -11,8 +9,6 @@
     },
     {
         "Appearance": "BrownHairBoy.png",
-        "Name": "IIIII",
-        "LastName": "VVVVVVV",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -21,8 +17,6 @@
     },
     {
         "Appearance": "PurpleHairBoy.png",
-        "Name": "IIIII",
-        "LastName": "VVVVVVV",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -31,8 +25,6 @@
     },
     {
         "Appearance": "CrimsonHairBoy.png",
-        "Name": "IIIII",
-        "LastName": "VVVVVVV",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -42,8 +34,6 @@
     {
 
         "Appearance": "HazelHairBoy.png",
-        "Name": "IIIII",
-        "LastName": "VVVVVVV",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,

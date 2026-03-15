@@ -1,0 +1,53 @@
+[
+    {
+        "Appearance": "BlueHairBoy.png",
+        "FirstName": "Juan",
+        "LastName": "Yuna",
+        "Starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "BrownHairBoy.png",
+        "Name": "John",
+        "LastName": "Custudio",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "PurpleHairBoy.png",
+        "Name": "Gerard",
+        "LastName": "Pelayo",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "CrimsonHairBoy.png",
+        "Name": "Alexander",
+        "LastName": "Graham",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+
+        "Appearance": "HazelHairBoy.png",
+        "Name": "Jake",
+        "LastName": "Campbell",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    }
+]
