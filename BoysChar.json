@@ -1,6 +1,6 @@
 [
     {
-        "Appearance": "BlueHairBoy.png",
+        "Appearance": "Hao Chang.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -32,8 +32,39 @@
         "starting_grades": 0
     },
     {
-
         "Appearance": "HazelHairBoy.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Kim Soleum.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+     {
+        "Appearance": "Klein Moretti.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Kim Dokja.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Jasper Thorne.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
