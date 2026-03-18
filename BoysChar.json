@@ -8,7 +8,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "BrownHairBoy.png",
+        "Appearance": "Juan Yuna.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -16,7 +16,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "PurpleHairBoy.png",
+        "Appearance": "Kaito Zhiyuan.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -24,7 +24,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "CrimsonHairBoy.png",
+        "Appearance": "Alexander Graham.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -32,7 +32,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "HazelHairBoy.png",
+        "Appearance": "Hoze Lizal.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -65,6 +65,14 @@
     },
     {
         "Appearance": "Jasper Thorne.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Finn Gurme.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
