@@ -1,8 +1,6 @@
 [
     {
-        "Appearance": "BlueHairBoy.png",
-        "FirstName": "Juan",
-        "LastName": "Yuna",
+        "Appearance": "Hao Chang.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -10,9 +8,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "BrownHairBoy.png",
-        "Name": "John",
-        "LastName": "Custudio",
+        "Appearance": "Juan Yuna.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -20,9 +16,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "PurpleHairBoy.png",
-        "Name": "Gerard",
-        "LastName": "Pelayo",
+        "Appearance": "Kaito Zhiyuan.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -30,9 +24,7 @@
         "starting_grades": 0
     },
     {
-        "Appearance": "CrimsonHairBoy.png",
-        "Name": "Alexander",
-        "LastName": "Graham",
+        "Appearance": "Alexander Graham.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -40,10 +32,47 @@
         "starting_grades": 0
     },
     {
-
-        "Appearance": "HazelHairBoy.png",
-        "Name": "Jake",
-        "LastName": "Campbell",
+        "Appearance": "Hoze Lizal.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Kim Soleum.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+     {
+        "Appearance": "Klein Moretti.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Kim Dokja.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Jasper Thorne.png",
+        "starting_health": 67,
+        "starting_stress": 20,
+        "starting_happiness": 40,
+        "starting_intelligence": 30,
+        "starting_grades": 0
+    },
+    {
+        "Appearance": "Finn Gurme.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
