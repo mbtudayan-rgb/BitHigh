@@ -1,11 +1,3 @@
-"""
-GAME:BitHigh
-MEMBERS:
-  -Bocalan, Rachel
-  -Carpizo, Eunice
-  -Tudayan, Matt Jhardy
-"""
-
 # ==============================================================================
 # IMPORTS
 # ==============================================================================
@@ -27,82 +19,17 @@ clock  = pygame.time.Clock()
 
 RED, GREEN, YELLOW = "\033[31m", "\033[32m", "\033[33m"
 BLUE, MAGENTA, CYAN = "\033[34m", "\033[35m", "\033[36m"
-RESET = "\033[0m"
-BOLD  = "\033[1m"
 
 # ==============================================================================
 # UTILITIES
 # ==============================================================================
 def resource_path(relative):
+    """Locate bundled resources correctly whether running from source or .exe."""
     base = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
     return os.path.join(base, relative)
 
 def load_scaled_image(path, size):
     return pygame.transform.scale(pygame.image.load(resource_path(path)), size)
-
-# ==============================================================================
-# QUIZ
-# ==============================================================================
-def run_nce_quiz(json_file="NCE.json"):
-
-    with open(resource_path(json_file), "r") as f:
-        all_questions = json.load(f)
-
-    # Group questions by subject
-    subjects = {}
-    for q in all_questions:
-        subj = q["Subject"]
-        if subj not in subjects:
-            subjects[subj] = []
-        subjects[subj].append(q)
-
-    # Shuffle subject order AND questions within each subject
-    subject_order = list(subjects.keys())
-    random.shuffle(subject_order)
-    for subj in subject_order:
-        random.shuffle(subjects[subj])
-
-    score = 0
-    total = sum(len(subjects[s]) for s in subject_order)  # 12 total
-    question_num = 1
-
-    for subj in subject_order:
-        # Subject header
-        print(f"\n{CYAN}{BOLD}{'='*55}")
-        print(f"  {subj}!!!")
-        print(f"{'='*55}{RESET}")
-
-        for q in subjects[subj]:
-            print(f"\n{BOLD}Question {question_num} of {total}:{RESET}")
-            print(f"{MAGENTA}{q['Question']}{RESET}")
-            print(f"  {q['A']}")
-            print(f"  {q['B']}")
-            print(f"  {q['C']}")
-
-            while True:
-                raw = input(f"\n{YELLOW}Your answer (A/B/C): {RESET}").strip().upper()
-                if raw in ("A", "B", "C"):
-                    break
-                print(f"{RED}  Please type A, B, or C only!{RESET}")
-
-            correct_letter = q["Answer"].split(".")[0].strip().upper()
-            if raw == correct_letter:
-                print(f"{GREEN}  ✓ Correct!{RESET}")
-                score += 1
-            else:
-                print(f"{RED}  ✗ Wrong! The answer was: {q['Answer']}{RESET}")
-
-            question_num += 1
-
-    # Final results
-    print(f"\n{CYAN}{BOLD}{'='*55}")
-    print(f"  NCE Complete!  Score: {score}/{total}")
-    if score >= 8:
-        print(f"  Nice work! Keep it up! 🌟📚✨")
-    else:
-        print(f"  Yikes... better hit the books! 😬📖💀")
-        print(f"  You got {7 - score + 1} more wrong than passing... 😅")
-    print(f"{'='*55}{RESET}\n")
 
 # ==============================================================================
 # POPUP
@@ -266,7 +193,6 @@ class GameState:
         self.scene         = "menu"
         self.gender        = None
         self.selected_char = None
-        self.pending_quiz  = False
 
 # ==============================================================================
 # ASSET LOADING
@@ -274,6 +200,7 @@ class GameState:
 CHAR_IMG_SIZE = (217, 193)
 
 def load_chars_from_json(json_file, char_images):
+    """Load a character JSON and preload all appearance images into char_images."""
     with open(resource_path(json_file), "r") as f:
         chars = json.load(f)
     for char in chars:
@@ -285,7 +212,7 @@ def load_chars_from_json(json_file, char_images):
 def load_assets():
     assets = {}
 
-    assets['intro_video']      = MediaPlayer(resource_path("GameIntro.mov"))
+    assets['intro_video']      = MediaPlayer(resource_path("GameIntro.mp4"))
     assets['button_click']     = pygame.mixer.Sound(resource_path("ButtonClicked.mp3"))
     assets['slide_in']         = pygame.mixer.Sound(resource_path("slide_in.mp3"))
     assets['skip_clicked']     = pygame.mixer.Sound(resource_path("skip_clicked.mp3"))
@@ -293,24 +220,37 @@ def load_assets():
     assets['main_menu_image']  = load_scaled_image("Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
 
     assets['char_images'] = {}
-    all_chars = load_chars_from_json("Characters.json", assets['char_images'])
-    assets['boys_chars']  = [c for c in all_chars if c['Gender'] == 'Male']
-    assets['girls_chars'] = [c for c in all_chars if c['Gender'] == 'Female']
+    assets['boys_chars']  = load_chars_from_json("Characters.json", assets['char_images'])
+    assets['girls_chars'] = load_chars_from_json("GirlsChar.json", assets['char_images'])
 
     return assets
 
 # ==============================================================================
 # BUTTON / POPUP CREATION
 # ==============================================================================
-def create_buttons_and_popups():
-    popups, buttons = load_popups_from_json("Popup.json")
+def create_buttons():
+    return {
+        # Main menu
+        'start_game': Button("StartGameButton.png", "StartGameAnimation.png", (338, 385), (474, 109)),
+        'details':    Button("DetailsButton.png",   "DetailsAnimation.png",   (338, 565), (474, 109)),
+        # Gender popup
+        'girl': Button("FemaleButton.png", "FemaleButtonAnimation.png", (0, 0), (406, 89)),
+        'boy':  Button("MaleButton.png",   "MaleButtonAnimation.png",   (0, 0), (406, 89)),
+        # Game scene
+        'skip': Button("Skip.png", "SkipAnimation.png", (120, 655), (128, 130)),
+        # NCE popup buttons
+        'nce_btn1':    Button("NCE_button1.png",    "NCE_button1_anim.png",    (0, 0), (500, 76)),
+        'nce_btn2':    Button("NCE_button2.png",    "NCE_button2_anim.png",    (0, 0), (500, 76)),
+        'nce_btn3':    Button("NCE_button3.png",    "NCE_button3_anim.png",    (0, 0), (500, 76)),
+        'nce_surprise':Button("Surprise_me.png",    "Surprise_me_anim.png",    (0, 0), (284, 44)),
+    }
 
-    # Static buttons that aren't tied to any popup
-    buttons['menu_start']   = Button("StartGameButton.png", "StartGameAnimation.png", (338, 385), (474, 109))
-    buttons['menu_details'] = Button("DetailsButton.png",   "DetailsAnimation.png",   (338, 565), (474, 109))
-    buttons['skip']         = Button("Skip.png",            "SkipAnimation.png",      (120, 655), (128, 130))
-
-    return buttons, popups
+def create_popups():
+    return {
+        'details': Popup("DetailsPopup.png", (613, 727), target_y=15),
+        'gender':  Popup("GenderPopup.png",  (517, 615), target_y=80, unclickable=False),
+        'nce':     Popup("NCE_popup.png",    (583, 695), target_y=40, unclickable=False),  # adjust size/target_y to fit your image
+    }
 
 # ==============================================================================
 # VIDEO PLAYBACK
@@ -320,14 +260,14 @@ def handle_video(assets, game_state):
 
     if val == 'eof':
         print(fr"""{CYAN}
- _     _  _______  ___      _______  _______  __   __  _______
+_     _  _______  ___      _______  _______  __   __  _______
 | | _ | ||       ||   |    |       ||       ||  |_|  ||       |
 | || || ||    ___||   |    |       ||   _   ||       ||    ___|
 |       ||   |___ |   |    |       ||  | |  ||       ||   |___
 |       ||    ___||   |___ |      _||  |_|  ||       ||    ___|
 |   _   ||   |___ |       ||     |_ |       || ||_|| ||   |___
 |__| |__||_______||_______||_______||_______||_|   |_||_______|""")
-        print(f"{BLUE}               Start a Scholar's Academic Life!")
+        print(f"{BLUE}Start a Scholar's Academic Life!")
         game_state.playing_video = False
         screen.blit(assets['main_menu_image'], (0, 0))
         pygame.display.update()
@@ -342,46 +282,11 @@ def handle_video(assets, game_state):
         screen.blit(surface, (0, 0))
 
 # ==============================================================================
-# POPUP + BUTTON LOADING FROM JSON
-# ==============================================================================
-def load_popups_from_json(json_file="Popup.json"):
-    with open(resource_path(json_file), "r") as f:
-        data = json.load(f)
-
-    popups  = {}
-    buttons = {}
-
-    for entry in data:
-        name = entry["name"]
-        w, h = entry["size"]
-
-        popup = Popup(
-            entry["image"],
-            (w, h),
-            target_y   = entry["target_y"],
-            unclickable = entry["closable"]
-        )
-        popup.button_data = entry.get("buttons", [])
-        popups[name] = popup
-
-        for i, btn_data in enumerate(popup.button_data):
-            key = f"{name}_{i}"
-            buttons[key] = Button(
-                btn_data["image"],
-                btn_data["image_anim"],
-                (0, 0),
-                tuple(btn_data["size"])
-            )
-            buttons[key].role = btn_data["role"]
-
-    return popups, buttons
-
-# ==============================================================================
 # MENU SCENE — EVENT HANDLING
 # ==============================================================================
 def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
     if blue_fade.active:
-        return
+        return  # Block input during transition
 
     gender_popup  = popups['gender']
     details_popup = popups['details']
@@ -389,35 +294,32 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
     if gender_popup.active:
         gender_popup.handle_event(event)
 
-        for key, btn in buttons.items():
-            if not key.startswith("gender_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                if btn.role == "gender_boy":
-                    game_state.gender        = "boy"
-                    game_state.selected_char = random.choice(assets['boys_chars'])
-                elif btn.role == "gender_girl":
-                    game_state.gender        = "girl"
-                    game_state.selected_char = random.choice(assets['girls_chars'])
-                gender_popup.close()
-                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'game'))
+        if buttons['girl'].handle_event(event):
+            assets['button_click'].play()
+            game_state.gender        = "girl"
+            game_state.selected_char = random.choice(assets['girls_chars'])
+            gender_popup.close()
+            blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'game'))
+
+        if buttons['boy'].handle_event(event):
+            assets['button_click'].play()
+            game_state.gender        = "boy"
+            game_state.selected_char = random.choice(assets['boys_chars'])
+            gender_popup.close()
+            blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'game'))
 
     elif details_popup.active:
         details_popup.handle_event(event)
 
     else:
-        if buttons['menu_details'].handle_event(event):
+        if buttons['details'].handle_event(event):
             assets['button_click'].play()
             details_popup.open(sound=assets['slide_in'])
 
-        if buttons['menu_start'].handle_event(event):
+        if buttons['start_game'].handle_event(event):
             assets['button_click'].play()
             gender_popup.open(sound=assets['slide_in'])
 
-# ==============================================================================
-# GAME SCENE — EVENT HANDLING
-# ==============================================================================
 def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
     if blue_fade.active:
         return
@@ -426,41 +328,50 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
         assets['skip_clicked'].play()
         popups['nce'].open(sound=assets['slide_in'])
 
+    # NCE popup button handling
     if popups['nce'].active:
         popups['nce'].handle_event(event)
 
-        for key, btn in buttons.items():
-            if not key.startswith("nce_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                if btn.role == "nce_quiz":
-                    popups['nce'].close()
-                    game_state.pending_quiz = True
-                elif btn.role in ("nce_close", "nce_surprise"):
-                    popups['nce'].close()
+        if buttons['nce_btn1'].handle_event(event):
+            assets['button_click'].play()
+            popups['nce'].close()
+            # TODO: your NCE_button1 logic here
+
+        if buttons['nce_btn2'].handle_event(event):
+            assets['button_click'].play()
+            popups['nce'].close()
+            # TODO: your NCE_button2 logic here
+
+        if buttons['nce_btn3'].handle_event(event):
+            assets['button_click'].play()
+            popups['nce'].close()
+            # TODO: your NCE_button3 logic here
+
+        if buttons['nce_surprise'].handle_event(event):
+            assets['button_click'].play()
+            popups['nce'].close()
+            # TODO: Surprise_me logic here
 
 # ==============================================================================
 # MENU SCENE — DRAWING
 # ==============================================================================
 def draw_menu(screen, buttons, popups):
-    buttons['menu_start'].draw(screen)
-    buttons['menu_details'].draw(screen)
+    for name, button in buttons.items():
+        if name not in ('girl', 'boy', 'skip'):
+            button.draw(screen)
 
     for popup in popups.values():
         popup.update()
         popup.draw(screen)
 
+    # Pin gender buttons to the popup's current position
     if popups['gender'].active:
         popup_top = popups['gender'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("gender_"):
-                continue
-            # find which button index this is to get offset_y
-            idx = int(key.split("_")[1])
-            offset_y = popups['gender'].button_data[idx]["offset_y"]
-            btn.rect.center = (337, popup_top + offset_y)
-            btn.draw(screen)
+        buttons['boy'].rect.center  = (337, popup_top + 293)
+        buttons['girl'].rect.center = (337, popup_top + 443)
+        buttons['boy'].draw(screen)
+        buttons['girl'].draw(screen)
+
 # ==============================================================================
 # GAME SCENE — DRAWING
 # ==============================================================================
@@ -473,27 +384,31 @@ def draw_game(screen, assets, game_state, buttons, popups):
 
     buttons['skip'].draw(screen)
 
+    # NCE popup
     popups['nce'].update()
     popups['nce'].draw(screen)
 
     if popups['nce'].active:
         popup_top = popups['nce'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("nce_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['nce'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
+        # Adjust Y offsets below to match your NCE_popup.png button positions
+        buttons['nce_btn1'].rect.center    = (349, popup_top + 335)
+        buttons['nce_btn2'].rect.center    = (349, popup_top + 430)
+        buttons['nce_btn3'].rect.center    = (349, popup_top + 520)
+        buttons['nce_surprise'].rect.center = (355, popup_top + 601)
+        buttons['nce_btn1'].draw(screen)
+        buttons['nce_btn2'].draw(screen)
+        buttons['nce_btn3'].draw(screen)
+        buttons['nce_surprise'].draw(screen)
 
 # ==============================================================================
 # MAIN LOOP
 # ==============================================================================
 def main():
-    assets          = load_assets()
-    buttons, popups = create_buttons_and_popups()
-    game_state      = GameState()
-    blue_fade       = Fade()
+    assets     = load_assets()
+    buttons    = create_buttons()
+    popups     = create_popups()
+    game_state = GameState()
+    blue_fade  = Fade()
 
     while game_state.running:
         for event in pygame.event.get():
@@ -506,12 +421,7 @@ def main():
             elif not game_state.playing_video and game_state.scene == "game":
                 handle_game_events(buttons, popups, game_state, event, blue_fade, assets)
 
-        if game_state.pending_quiz:
-            game_state.pending_quiz = False
-            run_nce_quiz()
-            # After quiz: fade out → back to menu
-            blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
-
+        # --- Draw ---
         if game_state.playing_video:
             handle_video(assets, game_state)
 
@@ -536,3 +446,4 @@ def main():
 # ==============================================================================
 if __name__ == "__main__":
     main()
+
