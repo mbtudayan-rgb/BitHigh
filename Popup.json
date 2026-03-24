@@ -1,0 +1,70 @@
+[
+    {
+        "name": "details",
+        "image": "DetailsPopup.png",
+        "size": [613, 727],
+        "target_y": 15,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "gender",
+        "image": "GenderPopup.png",
+        "size": [517, 615],
+        "target_y": 80,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "gender_boy",
+                "image": "MaleButton.png",
+                "image_anim": "MaleButtonAnimation.png",
+                "size": [406, 89],
+                "offset_y": 293
+            },
+            {
+                "role": "gender_girl",
+                "image": "FemaleButton.png",
+                "image_anim": "FemaleButtonAnimation.png",
+                "size": [406, 89],
+                "offset_y": 443
+            }
+        ]
+    },
+    {
+        "name": "nce",
+        "image": "NCE_popup.png",
+        "size": [583, 695],
+        "target_y": 40,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "nce_quiz",
+                "image": "NCE_button1.png",
+                "image_anim": "NCE_button1_anim.png",
+                "size": [500, 76],
+                "offset_y": 335
+            },
+            {
+                "role": "nce_quiz",
+                "image": "NCE_button2.png",
+                "image_anim": "NCE_button2_anim.png",
+                "size": [500, 76],
+                "offset_y": 430
+            },
+            {
+                "role": "nce_close",
+                "image": "NCE_button3.png",
+                "image_anim": "NCE_button3_anim.png",
+                "size": [500, 76],
+                "offset_y": 520
+            },
+            {
+                "role": "nce_surprise",
+                "image": "Surprise_me.png",
+                "image_anim": "Surprise_me_anim.png",
+                "size": [284, 44],
+                "offset_y": 601
+            }
+        ]
+    }
+]

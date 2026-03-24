@@ -1,0 +1,98 @@
+[
+    {
+        "Subject": "English",
+        "Question": "Vocabulary - What is the antonym of \"transparent\"",
+        "A": "A. Opaque",
+        "B": "B. Clear",
+        "C": "C. Shiny",
+        "Answer": "A. Opaque"
+    },
+    {
+        "Subject": "English",
+        "Question": "\"Using Context Clues - The scientist made an erroneous conclusion because she misread the data.\" What does erroneous mean?",
+        "A": "A. Brilliant",
+        "B": "B. Incorrect",
+        "C": "C. Unusual",
+        "Answer": "B. Incorrect"
+    },
+    {
+        "Subject": "English",
+        "Question": "Figure of Speech - Which sentence contains a simile?",
+        "A": "A. The stars danced in the night sky.",
+        "B": "B. Her voice was music to his ears.",
+        "C": "C. He ran as fast as a cheetah.",
+        "Answer": "C. He ran as fast as a cheetah."
+    },
+    {
+        "Subject": "English",
+        "Question": "Figure of speech - The wind whispered through the trees.\" What figure of speech is used?",
+        "A": "A. Simile",
+        "B": "B. Hyperbole",
+        "C": "C. Personification",
+        "Answer": "C. Personification"
+    },
+    {
+        "Subject": "Math",
+        "Question": "Statistics - The scores of 5 students are: 78, 85, 90, 92, and 100. What is their average score?",
+        "A": "A. 87",
+        "B": "B. 90",
+        "C": "C. 89",
+        "Answer": "C. 89"
+    },
+    {
+        "Subject": "Math",
+        "Question": "Word Problems - A tank holds 120 liters of water. If 35% has already been used, how many liters remain?",
+        "A": "A. 67 Liters",
+        "B": "B. 78 Liters",
+        "C": "C. 85 Liters",
+        "Answer": "B. 78 Liters"
+    },
+    {
+        "Subject": "Math",
+        "Question": "Word Problems -If 4 workers can finish a job in 6 days, how many days will it take 8 workers to finish the same job? ",
+        "A": "A. 2 days",
+        "B": "B. 3 days",
+        "C": "C. 4 days",
+        "Answer": "B. 3 days"
+    },
+    {
+        "Subject": "Math",
+        "Question": "Probability - If a bag has 3 red, 4 blue, and 3 green marbles. What is the probability of picking a blue marble?",
+        "A": "A. 2/5",
+        "B": "B. 3/10",
+        "C": "C. 4/9",
+        "Answer": "A. 2/5"
+    },
+    {
+        "Subject": "Science",
+        "Question": "The Water Cycle - Water from the ocean rises into the atmosphere, cools down, and forms a cloud. Rain then falls from it and flows back into rivers and oceans. Which stage of the water cycle causes water vapor to form clouds?",
+        "A": "A. Condensation",
+        "B": "B. Precipitation",
+        "C": "C. Transpiration",
+        "Answer": "A. Condensation"
+    },
+    {
+        "Subject": "Science",
+        "Question": "Forces and Motion - A ball is rolled on a flat surface and slowly stops. What force caused it to stop?",
+        "A": "A. Gravity",
+        "B": "B. Friction",
+        "C": "C. Magnetism",
+        "Answer": "B.  Friction"
+    },
+    {
+        "Subject": "Science",
+        "Question": "Light - What happens to light when it passes through a prism?",
+        "A": "A. It disappears",
+        "B": "B. Nothing happens",
+        "C": "C. It separates into different colors",
+        "Answer": "C. It separates into different colors"
+    },
+    {
+        "Subject": "Science",
+        "Question": "Physics -Which of the following is an example of potential energy?",
+        "A": "A. A fan spinning in a room",
+        "B": "B. A rock sitting at the top of a hill",
+        "C": "C. A car driving on a highway",
+        "Answer": "B. A rock sitting at the top of a hill"
+    }
+]
