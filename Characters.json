@@ -1,7 +1,7 @@
 [
     {
         "Gender": "Male",
-        "Appearance": "Hao Chang.png",
+        "Appearance": "Finn Gurme.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -10,7 +10,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Juan Yuna.png",
+        "Appearance": "Jasper Thorne.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -19,25 +19,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Kaito Zhiyuan.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Male",
-        "Appearance": "Alexander Graham.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Male",
-        "Appearance": "Hoze Lizal.png",
+        "Appearance": "Kim Dokja.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -63,35 +45,8 @@
         "starting_grades": 0
     },
     {
-        "Gender": "Male",
-        "Appearance": "Kim Dokja.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Male",
-        "Appearance": "Jasper Thorne.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Male",
-        "Appearance": "Finn Gurme.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
         "Gender": "Female",
-        "Appearance": "Hao Chang.png",
+        "Appearance": "Emily Williams.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -100,7 +55,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Juan Yuna.png",
+        "Appearance": "Ren Goku.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -109,7 +64,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Kaito Zhiyuan.png",
+        "Appearance": "Yuzu Enoshima.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -118,7 +73,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Alexander Graham.png",
+        "Appearance": "Runan Deer.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -127,52 +82,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Hoze Lizal.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Female",
-        "Appearance": "Kim Soleum.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Female",
-        "Appearance": "Klein Moretti.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Female",
-        "Appearance": "Kim Dokja.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Female",
-        "Appearance": "Jasper Thorne.png",
-        "starting_health": 67,
-        "starting_stress": 20,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
-    },
-    {
-        "Gender": "Female",
-        "Appearance": "Finn Gurme.png",
+        "Appearance": "Luna Salem.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
