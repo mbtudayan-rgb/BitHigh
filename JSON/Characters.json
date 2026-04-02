@@ -1,7 +1,7 @@
 [
     {
         "Gender": "Male",
-        "Appearance": "Finn Gurme.png",
+        "Appearance": "Characters/Finn Gurme.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -10,7 +10,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Jasper Thorne.png",
+        "Appearance": "Characters/Jasper Thorne.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -19,7 +19,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Kim Dokja.png",
+        "Appearance": "Characters/Kim Dokja.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -28,7 +28,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Kim Soleum.png",
+        "Appearance": "Characters/Kim Soleum.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -37,7 +37,7 @@
     },
     {
         "Gender": "Male",
-        "Appearance": "Klein Moretti.png",
+        "Appearance": "Characters/Klein Moretti.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -46,7 +46,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Emily Williams.png",
+        "Appearance": "Characters/Emily Williams.png",
         "Starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -55,7 +55,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Ren Goku.png",
+        "Appearance": "Characters/Ren Goku.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -64,7 +64,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Yuzu Enoshima.png",
+        "Appearance": "Characters/Yuzu Enoshima.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -73,7 +73,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Runan Deer.png",
+        "Appearance": "Characters/Runan Deer.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,
@@ -82,7 +82,7 @@
     },
     {
         "Gender": "Female",
-        "Appearance": "Luna Salem.png",
+        "Appearance": "Characters/Luna Salem.png",
         "starting_health": 67,
         "starting_stress": 20,
         "starting_happiness": 40,

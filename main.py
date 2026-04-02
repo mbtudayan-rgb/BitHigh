@@ -17,7 +17,7 @@ from ffpyplayer.player import MediaPlayer
 # ==============================================================================
 pygame.init()
 pygame.display.set_caption("BitHigh")
-pygame.display.set_icon(pygame.image.load("BitHighIcon.png"))
+pygame.display.set_icon(pygame.image.load("Assets/BitHighIcon.png"))
 
 SCREEN_WIDTH  = 686
 SCREEN_HEIGHT = 768
@@ -43,7 +43,7 @@ def load_scaled_image(path, size):
 # ==============================================================================
 # QUIZ
 # ==============================================================================
-def run_nce_quiz(json_file="NCE.json"):
+def run_nce_quiz(json_file="JSON/NCE.json"):
 
     with open(resource_path(json_file), "r") as f:
         all_questions = json.load(f)
@@ -286,14 +286,14 @@ def load_assets():
     assets = {}
 
     assets['intro_video']      = MediaPlayer(resource_path("GameIntro.mov"))
-    assets['button_click']     = pygame.mixer.Sound(resource_path("ButtonClicked.mp3"))
-    assets['slide_in']         = pygame.mixer.Sound(resource_path("slide_in.mp3"))
-    assets['skip_clicked']     = pygame.mixer.Sound(resource_path("skip_clicked.mp3"))
-    assets['main_game_image']  = load_scaled_image("MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
-    assets['main_menu_image']  = load_scaled_image("Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
+    assets['button_click']     = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
+    assets['slide_in']         = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
+    assets['skip_clicked']     = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
+    assets['main_game_image']  = load_scaled_image("Assets/MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
+    assets['main_menu_image']  = load_scaled_image("Assets/Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
 
     assets['char_images'] = {}
-    all_chars = load_chars_from_json("Characters.json", assets['char_images'])
+    all_chars = load_chars_from_json("JSON/Characters.json", assets['char_images'])
     assets['boys_chars']  = [c for c in all_chars if c['Gender'] == 'Male']
     assets['girls_chars'] = [c for c in all_chars if c['Gender'] == 'Female']
 
@@ -303,12 +303,12 @@ def load_assets():
 # BUTTON / POPUP CREATION
 # ==============================================================================
 def create_buttons_and_popups():
-    popups, buttons = load_popups_from_json("Popup.json")
+    popups, buttons = load_popups_from_json("JSON/Popup.json")
 
     # Static buttons that aren't tied to any popup
-    buttons['menu_start']   = Button("StartGameButton.png", "StartGameAnimation.png", (338, 385), (474, 109))
-    buttons['menu_details'] = Button("DetailsButton.png",   "DetailsAnimation.png",   (338, 565), (474, 109))
-    buttons['skip']         = Button("Skip.png",            "SkipAnimation.png",      (120, 655), (128, 130))
+    buttons['menu_start']   = Button("Buttons/StartGameButton.png", "Buttons/StartGameAnimation.png", (338, 385), (474, 109))
+    buttons['menu_details'] = Button("Buttons/DetailsButton.png",   "Buttons/DetailsAnimation.png",   (338, 565), (474, 109))
+    buttons['skip']         = Button("Buttons/Skip.png",            "Buttons/SkipAnimation.png",      (120, 655), (128, 130))
 
     return buttons, popups
 
@@ -344,7 +344,7 @@ def handle_video(assets, game_state):
 # ==============================================================================
 # POPUP + BUTTON LOADING FROM JSON
 # ==============================================================================
-def load_popups_from_json(json_file="Popup.json"):
+def load_popups_from_json(json_file="JSON/Popup.json"):
     with open(resource_path(json_file), "r") as f:
         data = json.load(f)
 
