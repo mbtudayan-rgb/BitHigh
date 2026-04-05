@@ -91,18 +91,16 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
                 score += 1
             else:
                 print(f"{RED}  ✗ Wrong! The answer was: {q['Answer']}{RESET}")
-
             question_num += 1
 
     # Final results
-    print(f"\n{CYAN}{BOLD}{'='*55}")
-    print(f"  NCE Complete!  Score: {score}/{total}")
+    print(f"\n{BOLD}NCE Complete!  Score: {score}/{total}")
     if score >= 8:
-        print(f"  Nice work! Keep it up! 🌟📚✨")
+        print(f"Nice work! Keep it up! 🌟📚✨")
     else:
-        print(f"  Yikes... better hit the books! 😬📖💀")
-        print(f"  You got {7 - score + 1} more wrong than passing... 😅")
-    print(f"{'='*55}{RESET}\n")
+        print(f"Yikes... better hit the books! 😬📖💀")
+        print(f"You got {7 - score + 1} more wrong than passing... 😅{RESET}\n")
+    return score
 
 # ==============================================================================
 # POPUP
@@ -267,11 +265,22 @@ class GameState:
         self.gender        = None
         self.selected_char = None
         self.pending_quiz  = False
+        self.hp         = [0, 0, 0, 0, 0]
+        self.hp_display = [0.0, 0.0, 0.0, 0.0, 0.0]
+
+    def apply_char_stats(self, char):
+        self.hp = [
+            char.get("starting_stress",        20),
+            char.get("starting_happiness",     40),
+            char.get("starting_grades",        30),
+            char.get("starting_intelligence",   0),
+        ]
+        self.hp_display = [float(v) for v in self.hp]
 
 # ==============================================================================
 # ASSET LOADING
 # ==============================================================================
-CHAR_IMG_SIZE = (217, 193)
+CHAR_IMG_SIZE = (700, 382)
 
 def load_chars_from_json(json_file, char_images):
     with open(resource_path(json_file), "r") as f:
@@ -289,6 +298,10 @@ def load_assets():
     assets['button_click']     = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
     assets['slide_in']         = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
     assets['skip_clicked']     = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
+    assets['game_over']        = pygame.mixer.Sound(resource_path("Assets/GameOver.mp3"))
+    assets['happy']            = pygame.mixer.Sound(resource_path("Assets/Happy.wav"))
+    assets['sad'] = pygame.mixer.Sound(resource_path("Assets/Sad.wav"))
+
     assets['main_game_image']  = load_scaled_image("Assets/MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
     assets['main_menu_image']  = load_scaled_image("Assets/Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -327,7 +340,7 @@ def handle_video(assets, game_state):
 |       ||    ___||   |___ |      _||  |_|  ||       ||    ___|
 |   _   ||   |___ |       ||     |_ |       || ||_|| ||   |___
 |__| |__||_______||_______||_______||_______||_|   |_||_______|""")
-        print(f"{BLUE}               Start a Scholar's Academic Life!")
+        print(f"{BLUE}{BOLD}               Start a Scholar's Academic Life!")
         game_state.playing_video = False
         screen.blit(assets['main_menu_image'], (0, 0))
         pygame.display.update()
@@ -373,6 +386,7 @@ def load_popups_from_json(json_file="JSON/Popup.json"):
                 tuple(btn_data["size"])
             )
             buttons[key].role = btn_data["role"]
+            buttons[key].stats = btn_data.get("stats", {})
 
     return popups, buttons
 
@@ -395,13 +409,20 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
             if btn.handle_event(event):
                 assets['button_click'].play()
                 if btn.role == "gender_boy":
-                    game_state.gender        = "boy"
+                    game_state.gender = "boy"
                     game_state.selected_char = random.choice(assets['boys_chars'])
+                    game_state.apply_char_stats(game_state.selected_char)  # ← add this
                 elif btn.role == "gender_girl":
-                    game_state.gender        = "girl"
+                    game_state.gender = "girl"
                     game_state.selected_char = random.choice(assets['girls_chars'])
-                gender_popup.close()
-                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'game'))
+                    game_state.apply_char_stats(game_state.selected_char)
+
+                def switch_to_game():
+                    popups['gender'].active = False  #
+                    popups['gender'].state = None
+                    game_state.scene = 'game'
+
+                blue_fade.start(on_peak_callback=switch_to_game)
 
     elif details_popup.active:
         details_popup.handle_event(event)
@@ -418,13 +439,50 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
 # ==============================================================================
 # GAME SCENE — EVENT HANDLING
 # ==============================================================================
+STAT_INDEX = {
+    "stress":        0,
+    "happiness":     1,
+    "grades":        2,
+    "intelligence":  3,
+}
+
+def apply_stats(game_state, stats):
+    for stat, value in stats.items():
+        idx = STAT_INDEX.get(stat)
+        if idx is not None:
+            game_state.hp[idx] = max(0, min(100, game_state.hp[idx] + value))
+
 def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
     if blue_fade.active:
         return
 
-    if buttons['skip'].handle_event(event):
-        assets['skip_clicked'].play()
-        popups['nce'].open(sound=assets['slide_in'])
+    any_popup_active = any(p.active for p in popups.values())
+    if not any_popup_active:
+        if buttons['skip'].handle_event(event):
+            assets['skip_clicked'].play()
+            print(f"\n{YELLOW}{BOLD}{'=' * 55}")
+            print(f"                    Week {game_state.week} of 32 🗓️")
+            print(f"{'=' * 55}{RESET}")
+            game_state.week += 1
+            if game_state.week > 32:
+                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
+                game_state.week = 0
+            elif game_state.week % 4 == 1:
+                chosen = random.choice([
+                    'friend1',
+                    'friend2',
+                    'friend3',
+                    'friend4',
+                    'friend5',
+                    'friend6',
+                    'bully1',
+                    'bully2',
+                    'bully3',
+                    'bully4'
+                ])
+                popups[chosen].open(sound=assets['slide_in'])
+            else:
+                popups['nce'].open(sound=assets['slide_in'])
 
     if popups['nce'].active:
         popups['nce'].handle_event(event)
@@ -435,10 +493,318 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             if btn.handle_event(event):
                 assets['button_click'].play()
                 if btn.role == "nce_quiz":
+                    idx = int(key.split("_")[1])
+                    if idx == 0:
+                        print(f"\n{BOLD}You studied hard all night just to take the NCE{RESET}")
+                        print(" ")
+                    elif idx == 1:
+                        print(f"\n{BOLD}You did not study but still decided to take the NCE{RESET}")
+                        print(" ")
+                    apply_stats(game_state, btn.stats)
                     popups['nce'].close()
                     game_state.pending_quiz = True
-                elif btn.role in ("nce_close", "nce_surprise"):
-                    popups['nce'].close()
+                elif btn.role == "nce_close":
+                    popups['nce'].active = False
+                    popups['nce'].state = None
+                    popups['gameover1'].open(sound=assets['game_over'])
+                    print(f"\n{RED}{BOLD}{'=' * 55}")
+                    print(f"                      Game Over!")
+                    print(f"{'=' * 55}{RESET}\n")
+
+    if popups['friend1'].active:
+        popups['friend1'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend1_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    idx = int(key.split("_")[1])
+                    if idx == 0:
+                        popups['friend1'].active = False
+                        popups['friend1'].state = None
+                        popups['friend1popup1'].open(sound=assets['happy'])
+                        print(f"\n{BOLD}You decided to sit beside Hao Chang ")
+                        print(f"You made a new friend! Hao Chang!{RESET}\n")
+                        print(" ")
+
+                    elif idx == 1:
+                        popups['friend1'].active = False
+                        popups['friend1'].state = None
+                        popups['friend1popup2'].open(sound=assets['happy'])
+                        print(f"\n{BOLD}You decided to compliment his thermos")
+                        print(f"You made a new friend! Hao Chang!{RESET}\n")
+                        print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend1'].active = False
+                    popups['friend1'].state = None
+                    popups['friend1popup3'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You pretended to not notice him")
+                    print(f"Awkward... he noticed you slightly looking at him before you walk away{RESET}\n")
+                    print(" ")
+
+    if popups['friend2'].active:
+        popups['friend2'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend2_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    popups['friend2'].active = False
+                    popups['friend2'].state = None
+                    popups['friend2popup1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You decided to just min your own business and just sit nearby him ")
+                    print(f"You made a new friend! Juan Yuna!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend2'].active = False
+                    popups['friend2'].state = None
+                    if random.randint(0, 100) < 30:
+                        popups['friend2popup2'].open(sound=assets['happy'])
+                        print(f"\n{BOLD}You decided to ask what his drawing")
+                        print(f"You made a new friend! Juan Yuna!{RESET}\n")
+                        print(" ")
+
+                    else:
+                        popups['friend2popup3'].open(sound=assets['sad'])
+                        print(f"\n{BOLD}You decided to ask what his drawing")
+                        print(f"Awkward... he immediately shuts his notebook and scootched away{RESET}\n")
+                        print(" ")
+
+    if popups['friend3'].active:
+        popups['friend3'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend3_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    popups['friend3'].active = False
+                    popups['friend3'].state = None
+                    popups['f3p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You got intruiged and asked Joze Lizal how he opened the locker ")
+                    print(f"You made a new friend! Joze Lizal!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend3'].active = False
+                    popups['friend3'].state = None
+                    popups['f3p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You ignored him and grabbed your stuff")
+                    print(f"Awkward... He shrugs and does not bother you again{RESET}\n")
+                    print(" ")
+
+    if popups['friend4'].active:
+        popups['friend4'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend4_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    popups['friend4'].active = False
+                    popups['friend4'].state = None
+                    popups['f4p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}She decides your tolerable and you two nail the lab ")
+                    print(f"You made a new friend! Li Tianxi!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend4'].active = False
+                    popups['friend4'].state = None
+                    popups['f4p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You stared at her and the lab sheet in silence")
+                    print(f"Awkward... She does most of the work in silence{RESET}\n")
+                    print(" ")
+
+    if popups['friend5'].active:
+        popups['friend5'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend5_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    popups['friend5'].active = False
+                    popups['friend5'].state = None
+                    popups['f5p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You help her pick up the books and quiz eachother for an hour")
+                    print(f"You made a new friend! Beth Sanchez!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend5'].active = False
+                    popups['friend5'].state = None
+                    popups['f5p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You decided to ignore her and put your headphones back in")
+                    print(f"Awkward... She struggles alone while you tune out{RESET}\n")
+                    print(" ")
+
+    if popups['friend6'].active:
+        popups['friend6'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("friend6_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "friends!":
+                    popups['friend6'].active = False
+                    popups['friend6'].state = None
+                    popups['f6p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
+                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "not friends":
+                    popups['friend6'].active = False
+                    popups['friend6'].state = None
+                    popups['f6p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
+                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
+                    print(" ")
+
+    if popups['bully1'].active:
+        popups['bully1'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("bully1_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "not bullied":
+                    popups['bully1'].active = False
+                    popups['bully1'].state = None
+                    popups['b1p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
+                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "bullied!":
+                    popups['bully1'].active = False
+                    popups['bully1'].state = None
+                    popups['b1p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
+                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
+                    print(" ")
+
+    if popups['bully2'].active:
+        popups['bully2'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("bully2_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "not bullied":
+                    popups['bully2'].active = False
+                    popups['bully2'].state = None
+                    popups['b2p1'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
+                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "bullied!":
+                    popups['bully2'].active = False
+                    popups['bully2'].state = None
+                    popups['b2p2'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
+                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
+                    print(" ")
+
+    if popups['bully3'].active:
+        popups['bully3'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("bully3_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "not bullied":
+                    popups['bully3'].active = False
+                    popups['bully3'].state = None
+                    popups['b3p2'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
+                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "bullied!":
+                    popups['bully3'].active = False
+                    popups['bully3'].state = None
+                    popups['b3p1'].open(sound=assets['sad'])
+                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
+                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
+                    print(" ")
+
+    if popups['bully4'].active:
+        popups['bully4'].handle_event(event)
+
+        for key, btn in buttons.items():
+            if not key.startswith("bully4_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                if btn.role == "not bullied":
+                    popups['bully4'].active = False
+                    popups['bully4'].state = None
+                    popups['b4p3'].open(sound=assets['happy'])
+                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
+                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(" ")
+
+                elif btn.role == "bullied!":
+                    popups['bully4'].active = False
+                    popups['bully4'].state = None
+                    if random.randint(0, 100) < 40:
+                        popups['b4p2'].open(sound=assets['happy'])
+                        print(f"\n{BOLD}You decided to ask what his drawing")
+                        print(f"You made a new friend! Juan Yuna!{RESET}\n")
+                        print(" ")
+
+                    else:
+                        popups['b4p1'].open(sound=assets['sad'])
+                        print(f"\n{BOLD}You decided to ask what his drawing")
+                        print(f"Awkward... he immediately shuts his notebook and scootched away{RESET}\n")
+                        print(" ")
+
+    for key in ('friend1popup1', 'friend1popup2', 'friend1popup3'): #<- Here
+        popups[key].handle_event(event)
+    for key in ('friend2popup1', 'friend2popup2', 'friend2popup3'):
+        popups[key].handle_event(event)
+    for key in ('f3p1', 'f3p2'):
+        popups[key].handle_event(event)
+    for key in ('f4p1', 'f4p2'):
+        popups[key].handle_event(event)
+    for key in ('f5p1', 'f5p2'):
+        popups[key].handle_event(event)
+    for key in ('f6p1', 'f6p2'):
+        popups[key].handle_event(event)
+    for key in ('b1p1', 'b1p2'):
+        popups[key].handle_event(event)
+    for key in ('b2p1', 'b2p2'):
+        popups[key].handle_event(event)
+    for key in ('b3p1', 'b3p2'):
+        popups[key].handle_event(event)
+    for key in ('b4p1', 'b4p2', 'b4p3'):
+        popups[key].handle_event(event)
 
 # ==============================================================================
 # MENU SCENE — DRAWING
@@ -464,17 +830,82 @@ def draw_menu(screen, buttons, popups):
 # ==============================================================================
 # GAME SCENE — DRAWING
 # ==============================================================================
+
+def draw_health_bar(surface, hp_display, bar_x, bar_y, bar_w=250, bar_h=16, label="", invert=False):
+    COLOR_HIGH = (144, 238, 144)
+    COLOR_MID  = (255, 215, 0)
+    COLOR_LOW  = (255, 153, 153)
+
+    pct = max(0.0, min(100.0, hp_display))
+
+    if invert:
+        color = COLOR_LOW if pct >= 80 else COLOR_MID if pct >= 21 else COLOR_HIGH
+    else:
+        color = COLOR_HIGH if pct >= 80 else COLOR_MID if pct >= 21 else COLOR_LOW
+
+    if label:
+        font_lbl = pygame.font.SysFont("Segoe UI", 12, bold=True)
+        lbl = font_lbl.render(label, True, (255, 255, 255))
+        surface.blit(lbl, (bar_x - lbl.get_width() - 8, bar_y + bar_h // 2 - lbl.get_height() // 2))
+
+    pygame.draw.rect(surface, (60, 60, 70), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
+    fill_w = int(bar_w * pct / 100)
+    if fill_w > 0:
+        pygame.draw.rect(surface, color, (bar_x, bar_y, fill_w, bar_h), border_radius=6)
+    pygame.draw.rect(surface, (255, 255, 255), (bar_x, bar_y, bar_w, bar_h), 2, border_radius=6)
+
+    font = pygame.font.SysFont("Segoe UI", 12, bold=True)
+    txt  = font.render(f"{int(round(pct))}%", True, (255, 255, 255))
+    surface.blit(txt, txt.get_rect(center=(bar_x + bar_w // 2, bar_y + bar_h // 2)))
+
 def draw_game(screen, assets, game_state, buttons, popups):
     screen.blit(assets['main_game_image'], (0, 0))
 
     if game_state.selected_char:
         face_img = assets['char_images'][game_state.selected_char['Appearance']]
-        screen.blit(face_img, (116, 105))
+        screen.blit(face_img, (-7, -1))
+
+    BAR_X       = 290
+    BAR_START_Y = 377
+    BAR_GAP     = 51
+    BAR_W       = 310
+    BAR_H       = 25
+
+    for i in range(4):
+        diff = game_state.hp[i] - game_state.hp_display[i]
+        game_state.hp_display[i] += diff * 0.12
+        draw_health_bar(screen, game_state.hp_display[i],
+        bar_x=BAR_X,
+        bar_y=BAR_START_Y + i * BAR_GAP,
+        bar_w=BAR_W,
+        bar_h=BAR_H,
+        invert=(i == 1)
+        )
 
     buttons['skip'].draw(screen)
 
     popups['nce'].update()
     popups['nce'].draw(screen)
+    popups['friend1'].update()
+    popups['friend1'].draw(screen)
+    popups['friend2'].update()
+    popups['friend2'].draw(screen)
+    popups['friend3'].update()
+    popups['friend3'].draw(screen)
+    popups['friend4'].update()
+    popups['friend4'].draw(screen)
+    popups['friend5'].update()
+    popups['friend5'].draw(screen)
+    popups['friend6'].update()
+    popups['friend6'].draw(screen)
+    popups['bully1'].update()
+    popups['bully1'].draw(screen)
+    popups['bully2'].update()
+    popups['bully2'].draw(screen)
+    popups['bully3'].update()
+    popups['bully3'].draw(screen)
+    popups['bully4'].update()
+    popups['bully4'].draw(screen)
 
     if popups['nce'].active:
         popup_top = popups['nce'].rect.top
@@ -485,6 +916,157 @@ def draw_game(screen, assets, game_state, buttons, popups):
             offset_y = popups['nce'].button_data[idx]["offset_y"]
             btn.rect.center = (349, popup_top + offset_y)
             btn.draw(screen)
+
+    if popups['friend1'].active:
+        popup_top = popups['friend1'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend1_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend1'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['friend2'].active:
+        popup_top = popups['friend2'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend2_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend2'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['friend3'].active:
+        popup_top = popups['friend3'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend3_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend3'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['friend4'].active:
+        popup_top = popups['friend4'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend4_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend4'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['friend5'].active:
+        popup_top = popups['friend5'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend5_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend5'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['friend6'].active:
+        popup_top = popups['friend6'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("friend6_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['friend6'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['bully1'].active:
+        popup_top = popups['bully1'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("bully1_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['bully1'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['bully2'].active:
+        popup_top = popups['bully2'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("bully2_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['bully2'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['bully3'].active:
+        popup_top = popups['bully3'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("bully3_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['bully3'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    if popups['bully4'].active:
+        popup_top = popups['bully4'].rect.top
+        for key, btn in buttons.items():
+            if not key.startswith("bully4_"):
+                continue
+            idx = int(key.split("_")[1])
+            offset_y = popups['bully4'].button_data[idx]["offset_y"]
+            btn.rect.center = (349, popup_top + offset_y)
+            btn.draw(screen)
+
+    popups['gameover1'].update()
+    popups['gameover1'].draw(screen)
+    popups['gameover2'].update()
+    popups['gameover2'].draw(screen)
+    popups['friend1popup1'].update()
+    popups['friend1popup1'].draw(screen)
+    popups['friend1popup2'].update()
+    popups['friend1popup2'].draw(screen)
+    popups['friend1popup3'].update()
+    popups['friend1popup3'].draw(screen)
+    popups['friend2popup1'].update()
+    popups['friend2popup1'].draw(screen)
+    popups['friend2popup2'].update()
+    popups['friend2popup2'].draw(screen)
+    popups['friend2popup3'].update()
+    popups['friend2popup3'].draw(screen)
+    popups['f3p1'].update()
+    popups['f3p1'].draw(screen)
+    popups['f3p2'].update()
+    popups['f3p2'].draw(screen)
+    popups['f4p1'].update()
+    popups['f4p1'].draw(screen)
+    popups['f4p2'].update()
+    popups['f4p2'].draw(screen)
+    popups['f5p1'].update()
+    popups['f5p1'].draw(screen)
+    popups['f5p2'].update()
+    popups['f5p2'].draw(screen)
+    popups['f6p1'].update()
+    popups['f6p1'].draw(screen)
+    popups['f6p2'].update()
+    popups['f6p2'].draw(screen)
+    popups['b1p1'].update()
+    popups['b1p1'].draw(screen)
+    popups['b1p2'].update()
+    popups['b1p2'].draw(screen)
+    popups['b2p1'].update()
+    popups['b2p1'].draw(screen)
+    popups['b2p2'].update()
+    popups['b2p2'].draw(screen)
+    popups['b3p1'].update()
+    popups['b3p1'].draw(screen)
+    popups['b3p2'].update()
+    popups['b3p2'].draw(screen)
+    popups['b4p1'].update()
+    popups['b4p1'].draw(screen)
+    popups['b4p2'].update()
+    popups['b4p2'].draw(screen)
+    popups['b4p3'].update()
+    popups['b4p3'].draw(screen)
 
 # ==============================================================================
 # MAIN LOOP
@@ -508,9 +1090,12 @@ def main():
 
         if game_state.pending_quiz:
             game_state.pending_quiz = False
-            run_nce_quiz()
-            # After quiz: fade out → back to menu
-            blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
+            score = run_nce_quiz()
+            if score < 8:
+                print(f"\n{RED}{BOLD}{'=' * 55}")
+                print(f"    Game Over!")
+                print(f"{'=' * 55}{RESET}\n")
+                popups['gameover2'].open(sound=assets['game_over'])
 
         if game_state.playing_video:
             handle_video(assets, game_state)

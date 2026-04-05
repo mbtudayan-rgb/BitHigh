@@ -33,8 +33,8 @@
     {
         "name": "nce",
         "image": "Popup/NCE_popup.png",
-        "size": [583, 695],
-        "target_y": 40,
+        "size": [686, 768],
+        "target_y": 0,
         "closable": false,
         "buttons": [
             {
@@ -42,22 +42,483 @@
                 "image": "Buttons/NCE_button1.png",
                 "image_anim": "Buttons/NCE_button1_anim.png",
                 "size": [500, 76],
-                "offset_y": 335
+                "offset_y": 418,
+                "stats": {"stress": 20, "happiness": 10}
             },
             {
                 "role": "nce_quiz",
                 "image": "Buttons/NCE_button2.png",
                 "image_anim": "Buttons/NCE_button2_anim.png",
                 "size": [500, 76],
-                "offset_y": 430
+                "offset_y": 510,
+                "stats": {"stress": 10, "happiness": 20}
             },
             {
                 "role": "nce_close",
                 "image": "Buttons/NCE_button3.png",
                 "image_anim": "Buttons/NCE_button3_anim.png",
                 "size": [500, 76],
-                "offset_y": 520
+                "offset_y": 600,
+                "stats": {}
             }
         ]
+    },
+    {
+        "name": "friend1",
+        "image": "Popup/NewFriend1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "friends!",
+                "image": "Buttons/Friend1_Button1.png",
+                "image_anim": "Buttons/Friend1_Button1A.png",
+                "size": [500, 76],
+                "offset_y": 460,
+                "stats": {}
+            },
+            {
+                "role": "friends!",
+                "image": "Buttons/Friend1_Button2.png",
+                "image_anim": "Buttons/Friend1_button2A.png",
+                "size": [500, 76],
+                "offset_y": 543,
+                "stats": {}
+            },
+            {
+                "role": "not friends",
+                "image": "Buttons/Friend1_Button3.png",
+                "image_anim": "Buttons/Friend1_Button3A.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "friend1popup1",
+        "image": "Popup/Friend1_Popup1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend1popup2",
+        "image": "Popup/Friend1_Popup2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend1popup3",
+        "image": "Popup/Friend1_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend2",
+        "image": "Popup/NewFriend2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "not friends",
+                "image": "Buttons/Friend2_Button1.png",
+                "image_anim": "Buttons/Friend2_Button1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "friends!",
+                "image": "Buttons/Friend2_Button2.png",
+                "image_anim": "Buttons/Friend2_Button2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "friend2popup1",
+        "image": "Popup/Friend2_Popup1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend2popup2",
+        "image": "Popup/Friend2_Popup2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend2popup3",
+        "image": "Popup/Friend2_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend3",
+        "image": "Popup/NewFriend3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "friends!",
+                "image": "Buttons/F3_B1.png",
+                "image_anim": "Buttons/F3_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not friends",
+                "image": "Buttons/F3_B2.png",
+                "image_anim": "Buttons/F3_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "f3p1",
+        "image": "Popup/F3P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "f3p2",
+        "image": "Popup/F3P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend4",
+        "image": "Popup/NewFriend4.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "friends!",
+                "image": "Buttons/F4_B1.png",
+                "image_anim": "Buttons/F4_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not friends",
+                "image": "Buttons/F4_B2.png",
+                "image_anim": "Buttons/F4_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "f4p1",
+        "image": "Popup/F4P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "f4p2",
+        "image": "Popup/F4P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend5",
+        "image": "Popup/NewFriend5.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "friends!",
+                "image": "Buttons/F5_B1.png",
+                "image_anim": "Buttons/F5_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not friends",
+                "image": "Buttons/F5_B2.png",
+                "image_anim": "Buttons/F5_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "f5p1",
+        "image": "Popup/F5P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "f5p2",
+        "image": "Popup/F5P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "friend6",
+        "image": "Popup/NewFriend6.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "friends!",
+                "image": "Buttons/F6_B1.png",
+                "image_anim": "Buttons/F6_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not friends",
+                "image": "Buttons/F6_B2.png",
+                "image_anim": "Buttons/F6_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "f6p1",
+        "image": "Popup/F6P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "f6p2",
+        "image": "Popup/F6P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "bully1",
+        "image": "Popup/Bully1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "not bullied",
+                "image": "Buttons/B1_B1.png",
+                "image_anim": "Buttons/B1_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "bullied!",
+                "image": "Buttons/B1_B2.png",
+                "image_anim": "Buttons/B1_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "b1p1",
+        "image": "Popup/B1P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "b1p2",
+        "image": "Popup/B1P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "bully2",
+        "image": "Popup/Bully1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "bullied!",
+                "image": "Buttons/B2_B1.png",
+                "image_anim": "Buttons/B2_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not bullied",
+                "image": "Buttons/B2_B2.png",
+                "image_anim": "Buttons/B2_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "b2p1",
+        "image": "Popup/B2P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "b2p2",
+        "image": "Popup/B2P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "bully3",
+        "image": "Popup/Bully3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "bullied!",
+                "image": "Buttons/B3_B1.png",
+                "image_anim": "Buttons/B3_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not bullied",
+                "image": "Buttons/B3_B2.png",
+                "image_anim": "Buttons/B3_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "b3p1",
+        "image": "Popup/B3P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "b3p2",
+        "image": "Popup/B3P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "bully4",
+        "image": "Popup/Bully4.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "bullied!",
+                "image": "Buttons/B4_B1.png",
+                "image_anim": "Buttons/B4_B1A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            },
+            {
+                "role": "not bullied",
+                "image": "Buttons/B4_B2.png",
+                "image_anim": "Buttons/B4_B2A.png",
+                "size": [500, 76],
+                "offset_y": 610,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "b4p1",
+        "image": "Popup/B4P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "b4p2",
+        "image": "Popup/B4P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "b4p3",
+        "image": "Popup/B4P3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "gameover1",
+        "image": "Popup/GameOver1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": []
+    },
+    {
+        "name": "gameover2",
+        "image": "Popup/GameOver2.png",
+        "size": [686, 768],
+        "target_y": 40,
+        "closable": false,
+        "buttons": []
     }
 ]
