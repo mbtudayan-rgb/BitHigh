@@ -11,40 +11,40 @@
         "Gender": "Male",
         "Appearance": "Characters/Jasper Thorne.png",
         "starting_stress": 80,
-        "starting_happiness": 40,
-        "starting_intelligence": 50,
+        "starting_happiness": 20,
+        "starting_intelligence": 70,
         "starting_grades": 0
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Kim Dokja.png",
-        "starting_stress": 30,
-        "starting_happiness": 60,
+        "starting_stress": 40,
+        "starting_happiness": 75,
         "starting_intelligence": 80,
-        "starting_grades": 0
+        "starting_grades": 5
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Kim Soleum.png",
-        "starting_stress": 50,
-        "starting_happiness": 46,
-        "starting_intelligence": 32,
-        "starting_grades": 0
+        "starting_stress": 80,
+        "starting_happiness": 25,
+        "starting_intelligence": 90,
+        "starting_grades": 5
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Klein Moretti.png",
-        "starting_stress": 22,
-        "starting_happiness": 10,
-        "starting_intelligence": 40,
-        "starting_grades": 0
+        "starting_stress":50,
+        "starting_happiness": 55,
+        "starting_intelligence": 90,
+        "starting_grades": 5
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Emily Williams.png",
-        "starting_stress": 23,
-        "starting_happiness": 44,
-        "starting_intelligence": 30,
+        "starting_stress": 30,
+        "starting_happiness": 90,
+        "starting_intelligence": 80,
         "starting_grades": 0
     },
     {
@@ -67,17 +67,17 @@
     {
         "Gender": "Female",
         "Appearance": "Characters/Runan Deer.png",
-        "starting_stress": 20,
-        "starting_happiness": 30,
-        "starting_intelligence": 30,
-        "starting_grades": 0
+        "starting_stress": 50,
+        "starting_happiness": 65,
+        "starting_intelligence": 80,
+        "starting_grades": 5
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Luna Salem.png",
-        "starting_stress": 20,
-        "starting_happiness": 80,
-        "starting_intelligence": 40,
-        "starting_grades": 30
+        "starting_stress": 80,
+        "starting_happiness": 50,
+        "starting_intelligence": 65,
+        "starting_grades": 5
     }
 ]
