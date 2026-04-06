@@ -467,7 +467,7 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             if game_state.week > 32:
                 blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
                 game_state.week = 0
-            elif game_state.week % 4 == 1:
+            elif game_state.week % 4 == 0:
                 chosen = random.choice([
                     'friend1',
                     'friend2',
@@ -691,16 +691,16 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                     popups['bully1'].active = False
                     popups['bully1'].state = None
                     popups['b1p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
-                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
+                    print(f"\n{BOLD}You held your ground and did not fold")
+                    print(f"You did not get bullied!!{RESET}\n")
                     print(" ")
 
                 elif btn.role == "bullied!":
                     popups['bully1'].active = False
                     popups['bully1'].state = None
                     popups['b1p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
-                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
+                    print(f"\n{BOLD}You scramble and they laughed harder")
+                    print(f"You unfortunately got bullied by Alexander Graham{RESET}\n")
                     print(" ")
 
     if popups['bully2'].active:
