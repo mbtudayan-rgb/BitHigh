@@ -43,7 +43,7 @@
                 "image_anim": "Buttons/NCE_button1_anim.png",
                 "size": [500, 76],
                 "offset_y": 418,
-                "stats": {"stress": 20, "happiness": 10}
+                "stats": {"stress": 20, "happiness": 10, "grades": 20}
             },
             {
                 "role": "nce_quiz",
@@ -51,7 +51,7 @@
                 "image_anim": "Buttons/NCE_button2_anim.png",
                 "size": [500, 76],
                 "offset_y": 510,
-                "stats": {"stress": 10, "happiness": 20}
+                "stats": {"stress": 10, "happiness": 20, "grades": 20}
             },
             {
                 "role": "nce_close",
@@ -517,7 +517,7 @@
         "name": "gameover2",
         "image": "Popup/GameOver2.png",
         "size": [686, 768],
-        "target_y": 40,
+        "target_y": 0,
         "closable": false,
         "buttons": []
     }
