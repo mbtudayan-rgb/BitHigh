@@ -482,7 +482,19 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 ])
                 popups[chosen].open(sound=assets['slide_in'])
             else:
-                popups['nce'].open(sound=assets['slide_in'])
+                chosen = random.choice([
+                    'friend1',
+                    'friend2',
+                    'friend3',
+                    'friend4',
+                    'friend5',
+                    'friend6',
+                    'bully1',
+                    'bully2',
+                    'bully3',
+                    'bully4'
+                ])
+                popups[chosen].open(sound=assets['slide_in'])
 
     if popups['nce'].active:
         popups['nce'].handle_event(event)
