@@ -2,82 +2,81 @@
     {
         "Gender": "Male",
         "Appearance": "Characters/Finn Gurme.png",
-        "starting_stress": 30,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
+        "starting_stress": 50,
+        "starting_happiness": 85,
+        "starting_intelligence": 60,
+        "starting_grades": 5
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Jasper Thorne.png",
         "starting_stress": 80,
         "starting_happiness": 20,
-        "starting_intelligence": 70,
-        "starting_grades": 0
+        "starting_intelligence": 80,
+        "starting_grades": 20
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Kim Dokja.png",
         "starting_stress": 40,
-        "starting_happiness": 75,
+        "starting_happiness": 60,
         "starting_intelligence": 80,
-        "starting_grades": 5
+        "starting_grades": 20
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Kim Soleum.png",
-        "starting_stress": 80,
-        "starting_happiness": 25,
-        "starting_intelligence": 90,
-        "starting_grades": 5
+        "starting_stress": 65,
+        "starting_happiness": 55,
+        "starting_intelligence": 70,
+        "starting_grades": 10
     },
     {
         "Gender": "Male",
         "Appearance": "Characters/Klein Moretti.png",
-        "starting_stress":50,
-        "starting_happiness": 55,
+        "starting_stress": 65,
+        "starting_happiness": 25,
         "starting_intelligence": 90,
-        "starting_grades": 5
+        "starting_grades": 20
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Emily Williams.png",
-        "starting_stress": 30,
+        "starting_stress": 20,
         "starting_happiness": 90,
         "starting_intelligence": 80,
-        "starting_grades": 0
+        "starting_grades": 10
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Ren Goku.png",
-        "starting_stress": 10,
-        "starting_happiness": 40,
-        "starting_intelligence": 30,
-        "starting_grades": 0
+        "starting_stress": 50,
+        "starting_happiness": 85,
+        "starting_intelligence": 60,
+        "starting_grades": 5
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Yuzu Enoshima.png",
-        "starting_health": 80,
-        "starting_stress": 20,
+        "starting_stress": 30,
         "starting_happiness": 80,
-        "starting_intelligence": 40,
-        "starting_grades": 30
+        "starting_intelligence": 80,
+        "starting_grades": 10
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Runan Deer.png",
         "starting_stress": 50,
-        "starting_happiness": 65,
+        "starting_happiness": 50,
         "starting_intelligence": 80,
-        "starting_grades": 5
+        "starting_grades": 20
     },
     {
         "Gender": "Female",
         "Appearance": "Characters/Luna Salem.png",
         "starting_stress": 80,
-        "starting_happiness": 50,
-        "starting_intelligence": 65,
-        "starting_grades": 5
+        "starting_happiness": 20,
+        "starting_intelligence": 80,
+        "starting_grades": 20
     }
 ]
