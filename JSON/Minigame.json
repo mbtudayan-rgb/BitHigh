@@ -1,0 +1,91 @@
+{
+    "bar": {
+        "track_left": 93,
+        "track_right": 593,
+        "track_y": 285,
+        "track_h": 38,
+        "danger_zone_w": 25
+    },
+    "minigames": {
+        "minigame1": {
+            "label": "EGG DROP",
+            "needle_color": [255, 230, 80],
+            "green_color": [80, 220, 80],
+            "track_color": [40, 40, 60],
+            "danger_color": [200, 50, 50],
+            "speed": 7.0,
+            "green_w_frac": 0.14,
+            "speed_increment": 0.8
+        },
+        "minigame2": {
+            "label": "ROLE PLAY",
+            "needle_color": [200, 100, 255],
+            "green_color": [100, 200, 255],
+            "track_color": [30, 20, 50],
+            "danger_color": [220, 60, 130],
+            "speed": 6.5,
+            "green_w_frac": 0.14,
+            "speed_increment": 1.0
+        },
+        "minigame3": {
+            "label": "VOLCANO",
+            "needle_color": [255, 130, 30],
+            "green_color": [255, 200, 40],
+            "track_color": [50, 20, 10],
+            "danger_color": [200, 30, 10],
+            "speed": 7.5,
+            "green_w_frac": 0.14,
+            "speed_increment": 1.2
+        },
+        "minigame4": {
+            "label": "BRIDGE",
+            "needle_color": [180, 220, 255],
+            "green_color": [60, 180, 120],
+            "track_color": [20, 35, 55],
+            "danger_color": [180, 100, 40],
+            "speed": 6.5,
+            "green_w_frac": 0.14,
+            "speed_increment": 0.9
+        },
+        "minigame5": {
+            "label": "FROG",
+            "needle_color": [120, 255, 120],
+            "green_color": [40, 200, 80],
+            "track_color": [20, 40, 20],
+            "danger_color": [200, 180, 30],
+            "speed": 7.0,
+            "green_w_frac": 0.14,
+            "speed_increment": 1.1
+        },
+        "minigame6": {
+            "label": "CAR",
+            "needle_color": [255, 255, 255],
+            "green_color": [80, 200, 255],
+            "track_color": [30, 30, 30],
+            "danger_color": [220, 50, 50],
+            "speed": 7.5,
+            "green_w_frac": 0.14,
+            "speed_increment": 1.5
+        },
+        "minigame7": {
+            "label": "PAPER MACHE",
+            "needle_color": [255, 180, 100],
+            "green_color": [200, 150, 80],
+            "track_color": [50, 40, 30],
+            "danger_color": [160, 80, 40],
+            "speed": 7.0,
+            "green_w_frac": 0.14,
+            "speed_increment": 0.7
+        },
+        "minigame8": {
+            "label": "STAR",
+            "needle_color": [255, 240, 100],
+            "green_color": [255, 180, 255],
+            "track_color": [20, 10, 40],
+            "danger_color": [100, 50, 200],
+            "speed": 6.5,
+            "green_w_frac": 0.14,
+            "speed_increment": 1.3
+        }
+    }
+}

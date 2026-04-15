@@ -9,7 +9,7 @@ MEMBERS:
 # ==============================================================================
 # IMPORTS
 # ==============================================================================
-import pygame, os, sys, json, random
+import pygame, os, sys, json, random, math
 from ffpyplayer.player import MediaPlayer
 
 # ==============================================================================
@@ -23,7 +23,6 @@ SCREEN_WIDTH  = 686
 SCREEN_HEIGHT = 768
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock  = pygame.time.Clock()
-
 
 RED, GREEN, YELLOW = "\033[31m", "\033[32m", "\033[33m"
 BLUE, MAGENTA, CYAN = "\033[34m", "\033[35m", "\033[36m"
@@ -43,12 +42,10 @@ def load_scaled_image(path, size):
 # ==============================================================================
 # QUIZ
 # ==============================================================================
-def run_nce_quiz(json_file="JSON/NCE.json"):
-
+def run_nce_quiz(json_file="JSON/NCE_Question.json"):
     with open(resource_path(json_file), "r") as f:
         all_questions = json.load(f)
 
-    # Group questions by subject
     subjects = {}
     for q in all_questions:
         subj = q["Subject"]
@@ -56,18 +53,16 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
             subjects[subj] = []
         subjects[subj].append(q)
 
-    # Shuffle subject order AND questions within each subject
     subject_order = list(subjects.keys())
     random.shuffle(subject_order)
     for subj in subject_order:
         random.shuffle(subjects[subj])
 
     score = 0
-    total = sum(len(subjects[s]) for s in subject_order)  # 12 total
+    total = sum(len(subjects[s]) for s in subject_order)
     question_num = 1
 
     for subj in subject_order:
-        # Subject header
         print(f"\n{CYAN}{BOLD}{'='*55}")
         print(f"  {subj}!!!")
         print(f"{'='*55}{RESET}")
@@ -93,7 +88,6 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
                 print(f"{RED}  ✗ Wrong! The answer was: {q['Answer']}{RESET}")
             question_num += 1
 
-    # Final results
     print(f"\n{BOLD}NCE Complete!  Score: {score}/{total}")
     if score >= 8:
         print(f"Nice work! Keep it up! 🌟📚✨")
@@ -103,15 +97,231 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
     return score
 
 # ==============================================================================
+# MINIGAME — load configs from JSON
+# ==============================================================================
+with open(resource_path("JSON/Minigame.json"), "r") as f:
+    _mg_json = json.load(f)
+
+# Convert color lists [r,g,b] back to tuples so pygame is happy
+MINIGAME_BAR = _mg_json["bar"]
+MINIGAME_CONFIGS = {
+    name: {
+        **cfg,
+        "needle_color":  tuple(cfg["needle_color"]),
+        "green_color":   tuple(cfg["green_color"]),
+        "track_color":   tuple(cfg["track_color"]),
+        "danger_color":  tuple(cfg["danger_color"]),
+    }
+    for name, cfg in _mg_json["minigames"].items()
+}
+
+class MinigameState:
+
+    TRACK_LEFT   = MINIGAME_BAR["track_left"]
+    TRACK_RIGHT  = MINIGAME_BAR["track_right"]
+    TRACK_Y      = MINIGAME_BAR["track_y"]
+    TRACK_H      = MINIGAME_BAR["track_h"]
+    DANGER_W     = MINIGAME_BAR["danger_zone_w"]
+    TRACK_W      = TRACK_RIGHT - TRACK_LEFT
+    TOTAL_ROUNDS = 3
+    FLASH_DURATION = 90
+
+    def __init__(self, minigame_name):
+        cfg = MINIGAME_CONFIGS.get(minigame_name, MINIGAME_CONFIGS["minigame1"])
+        self.cfg            = cfg
+        self.name           = minigame_name
+
+        self.needle_x       = float(self.TRACK_LEFT)
+        self.direction      = 1
+        self.current_speed  = cfg["speed"]
+
+        self.round          = 0
+        self.wins           = 0
+        self.done           = False
+        self.passed         = False
+
+        self.green_left     = 0
+        self.green_right    = 0
+        self._place_green()
+
+        self.flash_timer    = 0
+        self.flash_text     = ""
+        self.flash_color    = (255, 255, 255)
+
+        self.particles      = []
+
+        self._font_big      = pygame.font.SysFont("consolas", 26, bold=True)
+        self._font_small    = pygame.font.SysFont("consolas", 16, bold=True)
+        self._font_round    = pygame.font.SysFont("consolas", 18, bold=True)
+
+    def _place_green(self):
+        gw = int(self.TRACK_W * self.cfg["green_w_frac"])
+        max_left = self.TRACK_RIGHT - gw - 20
+        self.green_left  = random.randint(self.TRACK_LEFT + 20, max_left)
+        self.green_right = self.green_left + gw
+
+    def _lerp_color(self, c1, c2, t):
+        return tuple(int(c1[i] + (c2[i] - c1[i]) * t) for i in range(3))
+
+    def _burst(self, x, y, color):
+        for _ in range(18):
+            angle = random.uniform(0, math.tau)
+            speed = random.uniform(2, 6)
+            self.particles.append({
+                "x": x, "y": y,
+                "vx": math.cos(angle) * speed,
+                "vy": math.sin(angle) * speed - 2,
+                "color": color,
+                "life": 1.0,
+                "size": random.randint(3, 7),
+            })
+
+    def hit(self):
+        if self.done or self.flash_timer > 0:
+            return
+
+        nx = self.needle_x
+        if self.green_left <= nx <= self.green_right:
+            self.wins += 1
+            self.flash_text  = f"HIT!  ({self.wins}/{self.TOTAL_ROUNDS})"
+            self.flash_color = self.cfg["green_color"]
+            self._burst(int(nx), self.TRACK_Y, self.cfg["green_color"])
+        else:
+            self.flash_text  = "MISS!"
+            self.flash_color = (230, 60, 60)
+            self._burst(int(nx), self.TRACK_Y, (230, 60, 60))
+
+        self.flash_timer = self.FLASH_DURATION
+        self.round += 1
+
+        if self.round >= self.TOTAL_ROUNDS:
+            self.done   = True
+            self.passed = (self.wins == self.TOTAL_ROUNDS)
+
+    def update(self):
+        if self.done:
+            return
+
+        if self.flash_timer > 0:
+            self.flash_timer -= 1
+            if self.flash_timer == 0 and not self.done:
+                # Advance to next round
+                self._place_green()
+                self.current_speed += self.cfg["speed_increment"]
+                self.needle_x = float(self.TRACK_LEFT)
+                self.direction = 1
+        else:
+            self.needle_x += self.current_speed * self.direction
+            if self.needle_x >= self.TRACK_RIGHT:
+                self.needle_x = float(self.TRACK_RIGHT)
+                self.direction = -1
+            elif self.needle_x <= self.TRACK_LEFT:
+                self.needle_x = float(self.TRACK_LEFT)
+                self.direction = 1
+
+        for p in self.particles:
+            p["x"]    += p["vx"]
+            p["y"]    += p["vy"]
+            p["vy"]   += 0.25
+            p["life"] -= 0.04
+        self.particles = [p for p in self.particles if p["life"] > 0]
+
+    def draw(self, surface):
+        cfg = self.cfg
+        TL  = self.TRACK_LEFT
+        TR  = self.TRACK_RIGHT
+        TY  = self.TRACK_Y
+        TH  = self.TRACK_H
+        TW  = self.TRACK_W
+
+        top = TY - TH // 2
+
+        for i in range(self.TOTAL_ROUNDS):
+            cx = SCREEN_WIDTH // 2 + (i - self.TOTAL_ROUNDS // 2) * 28 + 14
+            filled = i < self.round
+            pygame.draw.circle(surface, cfg["green_color"] if filled else (80, 80, 100), (cx, top - 22), 8)
+            if filled:
+                pygame.draw.circle(surface, (255, 255, 255), (cx, top - 22), 4)
+
+        # Round label
+        rnd_txt = self._font_round.render(
+            f"Round {min(self.round + 1, self.TOTAL_ROUNDS)}/{self.TOTAL_ROUNDS}",
+            True, (200, 200, 220))
+        surface.blit(rnd_txt, (TL, top - 32))
+
+        shadow_rect = pygame.Rect(TL + 3, top + 5, TW, TH)
+        pygame.draw.rect(surface, (10, 10, 20), shadow_rect, border_radius=10)
+
+        track_rect = pygame.Rect(TL, top, TW, TH)
+        pygame.draw.rect(surface, cfg["track_color"], track_rect, border_radius=10)
+
+        dw = 25
+        pygame.draw.rect(surface, cfg["danger_color"], pygame.Rect(TL, top, dw, TH), border_radius=10)
+        pygame.draw.rect(surface, cfg["danger_color"], pygame.Rect(TR - dw, top, dw, TH), border_radius=10)
+
+        gw   = self.green_right - self.green_left
+        gz   = pygame.Rect(self.green_left, top, gw, TH)
+        pygame.draw.rect(surface, cfg["green_color"], gz, border_radius=7)
+
+        hl = pygame.Rect(self.green_left + 4, top + 4, gw - 8, 8)
+        bright = self._lerp_color(cfg["green_color"], (255, 255, 255), 0.5)
+        pygame.draw.rect(surface, bright, hl, border_radius=3)
+
+        gc = (self.green_left + self.green_right) // 2
+        pygame.draw.line(surface, (255, 255, 255), (gc, top + 3), (gc, top + TH - 3), 2)
+
+        pygame.draw.rect(surface, (80, 80, 110), track_rect, 2, border_radius=10)
+
+        if self.flash_timer == 0 or not self.done:
+            nx = int(self.needle_x)
+            pygame.draw.line(surface, (0, 0, 0), (nx + 2, top - 12), (nx + 2, top + TH + 12), 4)
+            pygame.draw.line(surface, cfg["needle_color"], (nx, top - 12), (nx, top + TH + 12), 3)
+            pygame.draw.circle(surface, cfg["needle_color"], (nx, top - 12), 5)
+            pygame.draw.circle(surface, cfg["needle_color"], (nx, top + TH + 12), 5)
+            pygame.draw.circle(surface, (255, 255, 255), (nx, top - 12), 2)
+            pygame.draw.circle(surface, (255, 255, 255), (nx, top + TH + 12), 2)
+
+        if self.flash_timer > 0:
+            t   = self.flash_timer / self.FLASH_DURATION
+            sz  = int(20 + 10 * (1 - abs(t - 0.5) * 2))
+            fnt = pygame.font.SysFont("consolas", sz, bold=True)
+            txt = fnt.render(self.flash_text, True, self.flash_color)
+            shadow = fnt.render(self.flash_text, True, (0, 0, 0))
+            cx = SCREEN_WIDTH // 2
+            ty = top + TH + 18
+            surface.blit(shadow, (cx - txt.get_width() // 2 + 2, ty + 2))
+            surface.blit(txt,    (cx - txt.get_width() // 2,     ty))
+
+        if self.done:
+            msg = "ALL HIT! ✓" if self.passed else f"FAILED ({self.wins}/3)"
+            col = cfg["green_color"] if self.passed else (230, 60, 60)
+            txt = self._font_big.render(msg, True, col)
+            shd = self._font_big.render(msg, True, (0, 0, 0))
+            cx  = SCREEN_WIDTH // 2
+            ty  = top + TH + 20
+            surface.blit(shd, (cx - txt.get_width() // 2 + 2, ty + 2))
+            surface.blit(txt, (cx - txt.get_width() // 2,     ty))
+
+        for p in self.particles:
+            alpha = max(0, p["life"])
+            col   = self._lerp_color(p["color"], (0, 0, 0), 1 - alpha)
+            r     = max(1, int(p["size"] * alpha))
+            pygame.draw.circle(surface, col, (int(p["x"]), int(p["y"])), r)
+
+
+        lbl = self._font_small.render(f"[ {cfg['label']} MINIGAME ]", True, (160, 160, 200))
+        surface.blit(lbl, (TL, top - 52))
+
+# ==============================================================================
 # POPUP
 # ==============================================================================
 class Popup:
-    OFFSCREEN_Y  = -400
-    SLIDE_SPEED  = 35
-    BOB_STRENGTH = -8
-    GRAVITY      = 1.2
-    BOB_DAMPEN   = 0.55
-    BOB_STOP     = 1.5
+    OFFSCREEN_Y   = -400
+    SLIDE_SPEED   = 35
+    BOB_STRENGTH  = -8
+    GRAVITY       = 1.2
+    BOB_DAMPEN    = 0.55
+    BOB_STOP      = 1.5
     SLIDE_OUT_SPD = 22
 
     def __init__(self, image_path, size, target_y, unclickable=True):
@@ -122,12 +332,13 @@ class Popup:
         self.state      = None
         self.vel        = 0.0
         self.active     = False
+        self.minigame   = None   # MinigameState or None
 
     def open(self, sound=None):
         self.rect.top = self.OFFSCREEN_Y
-        self.vel = self.SLIDE_SPEED
-        self.state = 'slide_in'
-        self.active = True
+        self.vel      = self.SLIDE_SPEED
+        self.state    = 'slide_in'
+        self.active   = True
         if sound:
             sound.play()
 
@@ -165,12 +376,19 @@ class Popup:
                 if abs(self.vel) < self.BOB_STOP:
                     self.vel   = 0
                     self.state = None
+            if self.minigame and self.state is None:
+                pass  # minigame starts updating once settled
 
         elif self.state == 'slide_out':
             self.rect.top += self.vel
             if self.rect.top > SCREEN_HEIGHT:
-                self.active = False
-                self.state  = None
+                self.active   = False
+                self.state    = None
+                self.minigame = None
+
+        # Update embedded minigame
+        if self.minigame and self.state is None:
+            self.minigame.update()
 
     def draw(self, surface):
         if not self.active:
@@ -179,6 +397,8 @@ class Popup:
         overlay.fill((0, 0, 0, 150))
         surface.blit(overlay, (0, 0))
         surface.blit(self.image, self.rect)
+        if self.minigame and self.state is None:
+            self.minigame.draw(surface)
 
 # ==============================================================================
 # BUTTON
@@ -199,7 +419,7 @@ class Button:
                 return False
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            was_holding    = self.is_holding
+            was_holding        = self.is_holding
             self.is_holding    = False
             self.current_image = self.image_normal
             if was_holding and self.rect.collidepoint(event.pos):
@@ -218,10 +438,10 @@ class Fade:
     FADE_OUT_SPEED = 5
 
     def __init__(self):
-        self.overlay    = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.overlay     = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.overlay.fill((15, 58, 78))
-        self.alpha      = 0
-        self.state      = None
+        self.alpha       = 0
+        self.state       = None
         self.on_complete = None
 
     @property
@@ -258,22 +478,24 @@ class Fade:
 # ==============================================================================
 class GameState:
     def __init__(self):
-        self.running       = True
-        self.playing_video = True
-        self.week          = 0
-        self.scene         = "menu"
-        self.gender        = None
-        self.selected_char = None
-        self.pending_quiz  = False
-        self.hp         = [0, 0, 0, 0, 0]
-        self.hp_display = [0.0, 0.0, 0.0, 0.0, 0.0]
+        self.running        = True
+        self.playing_video  = True
+        self.week           = 0
+        self.scene          = "menu"
+        self.gender         = None
+        self.selected_char  = None
+        self.pending_quiz   = False
+        self.hp             = [0, 0, 0, 0]
+        self.hp_display     = [0.0, 0.0, 0.0, 0.0]
+        # Minigame result pending (set after minigame popup closes)
+        self.pending_mg_result = None   # None | (popup_name, passed)
 
     def apply_char_stats(self, char):
         self.hp = [
-            char.get("starting_stress",        20),
-            char.get("starting_happiness",     40),
-            char.get("starting_grades",        30),
-            char.get("starting_intelligence",   0),
+            char.get("starting_stress",       20),
+            char.get("starting_happiness",    40),
+            char.get("starting_grades",       30),
+            char.get("starting_intelligence",  0),
         ]
         self.hp_display = [float(v) for v in self.hp]
 
@@ -293,22 +515,21 @@ def load_chars_from_json(json_file, char_images):
 
 def load_assets():
     assets = {}
+    assets['intro_video']     = MediaPlayer(resource_path("Assets/GameIntro.mov"))
+    assets['button_click']    = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
+    assets['slide_in']        = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
+    assets['skip_clicked']    = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
+    assets['game_over']       = pygame.mixer.Sound(resource_path("Assets/GameOver.mp3"))
+    assets['happy']           = pygame.mixer.Sound(resource_path("Assets/Happy.wav"))
+    assets['sad']             = pygame.mixer.Sound(resource_path("Assets/Sad.wav"))
 
-    assets['intro_video']      = MediaPlayer(resource_path("GameIntro.mov"))
-    assets['button_click']     = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
-    assets['slide_in']         = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
-    assets['skip_clicked']     = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
-    assets['game_over']        = pygame.mixer.Sound(resource_path("Assets/GameOver.mp3"))
-    assets['happy']            = pygame.mixer.Sound(resource_path("Assets/Happy.wav"))
-    assets['sad'] = pygame.mixer.Sound(resource_path("Assets/Sad.wav"))
+    assets['main_game_image'] = load_scaled_image("Assets/MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
+    assets['main_menu_image'] = load_scaled_image("Assets/Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    assets['main_game_image']  = load_scaled_image("Assets/MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
-    assets['main_menu_image']  = load_scaled_image("Assets/Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
-
-    assets['char_images'] = {}
-    all_chars = load_chars_from_json("JSON/Characters.json", assets['char_images'])
-    assets['boys_chars']  = [c for c in all_chars if c['Gender'] == 'Male']
-    assets['girls_chars'] = [c for c in all_chars if c['Gender'] == 'Female']
+    assets['char_images']     = {}
+    all_chars                 = load_chars_from_json("JSON/Characters.json", assets['char_images'])
+    assets['boys_chars']      = [c for c in all_chars if c['Gender'] == 'Male']
+    assets['girls_chars']     = [c for c in all_chars if c['Gender'] == 'Female']
 
     return assets
 
@@ -318,7 +539,6 @@ def load_assets():
 def create_buttons_and_popups():
     popups, buttons = load_popups_from_json("JSON/Popup.json")
 
-    # Static buttons that aren't tied to any popup
     buttons['menu_start']   = Button("Buttons/StartGameButton.png", "Buttons/StartGameAnimation.png", (338, 385), (474, 109))
     buttons['menu_details'] = Button("Buttons/DetailsButton.png",   "Buttons/DetailsAnimation.png",   (338, 565), (474, 109))
     buttons['skip']         = Button("Buttons/Skip.png",            "Buttons/SkipAnimation.png",      (120, 655), (128, 130))
@@ -371,7 +591,7 @@ def load_popups_from_json(json_file="JSON/Popup.json"):
         popup = Popup(
             entry["image"],
             (w, h),
-            target_y   = entry["target_y"],
+            target_y    = entry["target_y"],
             unclickable = entry["closable"]
         )
         popup.button_data = entry.get("buttons", [])
@@ -385,10 +605,18 @@ def load_popups_from_json(json_file="JSON/Popup.json"):
                 (0, 0),
                 tuple(btn_data["size"])
             )
-            buttons[key].role = btn_data["role"]
+            buttons[key].role  = btn_data["role"]
             buttons[key].stats = btn_data.get("stats", {})
 
     return popups, buttons
+
+# ==============================================================================
+# MINIGAME NAMES (all 8)
+# ==============================================================================
+ALL_MINIGAMES = [f"minigame{i}" for i in range(1, 9)]
+
+def is_minigame_popup(name):
+    return name in ALL_MINIGAMES
 
 # ==============================================================================
 # MENU SCENE — EVENT HANDLING
@@ -411,16 +639,16 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
                 if btn.role == "gender_boy":
                     game_state.gender = "boy"
                     game_state.selected_char = random.choice(assets['boys_chars'])
-                    game_state.apply_char_stats(game_state.selected_char)  # ← add this
+                    game_state.apply_char_stats(game_state.selected_char)
                 elif btn.role == "gender_girl":
                     game_state.gender = "girl"
                     game_state.selected_char = random.choice(assets['girls_chars'])
                     game_state.apply_char_stats(game_state.selected_char)
 
                 def switch_to_game():
-                    popups['gender'].active = False  #
-                    popups['gender'].state = None
-                    game_state.scene = 'game'
+                    popups['gender'].active = False
+                    popups['gender'].state  = None
+                    game_state.scene        = 'game'
 
                 blue_fade.start(on_peak_callback=switch_to_game)
 
@@ -440,10 +668,10 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
 # GAME SCENE — EVENT HANDLING
 # ==============================================================================
 STAT_INDEX = {
-    "stress":        0,
-    "happiness":     1,
-    "grades":        2,
-    "intelligence":  3,
+    "stress":       0,
+    "happiness":    1,
+    "grades":       2,
+    "intelligence": 3,
 }
 
 def apply_stats(game_state, stats):
@@ -467,26 +695,21 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             if game_state.week > 32:
                 blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
                 game_state.week = 0
-            elif game_state.week % 4 == 0:
+            elif game_state.week % 4 == 2:
                 chosen = random.choice([
-                    'friend1',
-                    'friend2',
-                    'friend3',
-                    'friend4',
-                    'friend5',
-                    'friend6',
-                    'bully1',
-                    'bully2',
-                    'bully3',
-                    'bully4'
+                    'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
+                    'bully1',  'bully2',  'bully3',  'bully4',
                 ])
                 popups[chosen].open(sound=assets['slide_in'])
+            elif game_state.week % 4 == 1:
+                # Minigame week
+                chosen_mg = random.choice(ALL_MINIGAMES)
+                popups[chosen_mg].open(sound=assets['slide_in'])
             else:
                 popups['nce'].open(sound=assets['slide_in'])
 
     if popups['nce'].active:
         popups['nce'].handle_event(event)
-
         for key, btn in buttons.items():
             if not key.startswith("nce_"):
                 continue
@@ -495,316 +718,108 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 if btn.role == "nce_quiz":
                     idx = int(key.split("_")[1])
                     if idx == 0:
-                        print(f"\n{BOLD}You studied hard all night just to take the NCE{RESET}")
-                        print(" ")
+                        print(f"\n{BOLD}You studied hard all night just to take the NCE{RESET}\n")
                     elif idx == 1:
-                        print(f"\n{BOLD}You did not study but still decided to take the NCE{RESET}")
-                        print(" ")
+                        print(f"\n{BOLD}You did not study but still decided to take the NCE{RESET}\n")
                     apply_stats(game_state, btn.stats)
                     popups['nce'].close()
                     game_state.pending_quiz = True
                 elif btn.role == "nce_close":
                     popups['nce'].active = False
-                    popups['nce'].state = None
+                    popups['nce'].state  = None
                     popups['gameover1'].open(sound=assets['game_over'])
                     print(f"\n{RED}{BOLD}{'=' * 55}")
                     print(f"                      Game Over!")
                     print(f"{'=' * 55}{RESET}\n")
 
-    if popups['friend1'].active:
-        popups['friend1'].handle_event(event)
+    for mg_name in ALL_MINIGAMES:
+        popup = popups[mg_name]
+        if not popup.active:
+            continue
 
-        for key, btn in buttons.items():
-            if not key.startswith("friend1_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    idx = int(key.split("_")[1])
-                    if idx == 0:
-                        popups['friend1'].active = False
-                        popups['friend1'].state = None
-                        popups['friend1popup1'].open(sound=assets['happy'])
-                        print(f"\n{BOLD}You decided to sit beside Hao Chang ")
-                        print(f"You made a new friend! Hao Chang!{RESET}\n")
-                        print(" ")
+        if popup.state is None and popup.minigame is None:
+            popup.minigame = MinigameState(mg_name)
 
-                    elif idx == 1:
-                        popups['friend1'].active = False
-                        popups['friend1'].state = None
-                        popups['friend1popup2'].open(sound=assets['happy'])
-                        print(f"\n{BOLD}You decided to compliment his thermos")
-                        print(f"You made a new friend! Hao Chang!{RESET}\n")
-                        print(" ")
+        mg = popup.minigame
+        key = f"{mg_name}_0"
+        if key in buttons:
+            btn = buttons[key]
+            if popup.button_data:
+                offset_y = popup.button_data[0]["offset_y"]
+                btn.rect.center = (349, popup.rect.top + offset_y)
+            btn.draw(screen)
 
-                elif btn.role == "not friends":
-                    popups['friend1'].active = False
-                    popups['friend1'].state = None
-                    popups['friend1popup3'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You pretended to not notice him")
-                    print(f"Awkward... he noticed you slightly looking at him before you walk away{RESET}\n")
-                    print(" ")
+            if mg and not mg.done:
+                if btn.handle_event(event):
+                    assets['button_click'].play()
+                    mg.hit()
+            elif mg and mg.done:
+                if btn.handle_event(event):
+                    assets['button_click'].play()
+                    passed = mg.passed
+                    popup.active   = False
+                    popup.state    = None
+                    popup.minigame = None
+                    result_popup = f"{mg_name[2:]}p1" if passed else f"{mg_name[2:]}p2"
+                    rkey = f"mg{mg_name[-1]}p{'1' if passed else '2'}"
+                    sound = assets['happy'] if passed else assets['sad']
+                    if rkey in popups:
+                        popups[rkey].open(sound=sound)
+                    print(f"\n{BOLD}Minigame {mg_name[-1]}: {'PASSED ✓' if passed else 'FAILED ✗'}{RESET}\n")
 
-    if popups['friend2'].active:
-        popups['friend2'].handle_event(event)
+    for key in ('friend1popup1', 'friend1popup2', 'friend1popup3',
+                'friend2popup1', 'friend2popup2', 'friend2popup3',
+                'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
+                'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2',
+                'b4p1', 'b4p2', 'b4p3',
+                'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
+                'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
+                'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2'):
+        if key in popups:
+            popups[key].handle_event(event)
 
-        for key, btn in buttons.items():
-            if not key.startswith("friend2_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    popups['friend2'].active = False
-                    popups['friend2'].state = None
-                    popups['friend2popup1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You decided to just min your own business and just sit nearby him ")
-                    print(f"You made a new friend! Juan Yuna!{RESET}\n")
-                    print(" ")
+with open(resource_path("JSON/Lore.json"), "r") as f:
+    EVENT_DATA = json.load(f)
 
-                elif btn.role == "not friends":
-                    popups['friend2'].active = False
-                    popups['friend2'].state = None
-                    if random.randint(0, 100) < 30:
-                        popups['friend2popup2'].open(sound=assets['happy'])
-                        print(f"\n{BOLD}You decided to ask what his drawing")
-                        print(f"You made a new friend! Juan Yuna!{RESET}\n")
-                        print(" ")
+def trigger_event_popup(event_id, buttons, popups, game_state, event, assets):
+    data   = EVENT_DATA[event_id]
+    popup  = popups[data["popup"]]
 
-                    else:
-                        popups['friend2popup3'].open(sound=assets['sad'])
-                        print(f"\n{BOLD}You decided to ask what his drawing")
-                        print(f"Awkward... he immediately shuts his notebook and scootched away{RESET}\n")
-                        print(" ")
+    if not popup.active:
+        return
 
-    if popups['friend3'].active:
-        popups['friend3'].handle_event(event)
+    popup.handle_event(event)
+    prefix = data["buttons_"]
+    for key, btn in buttons.items():
+        if not key.startswith(prefix):
+            continue
+        if not btn.handle_event(event):
+            continue
 
-        for key, btn in buttons.items():
-            if not key.startswith("friend3_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    popups['friend3'].active = False
-                    popups['friend3'].state = None
-                    popups['f3p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You got intruiged and asked Joze Lizal how he opened the locker ")
-                    print(f"You made a new friend! Joze Lizal!{RESET}\n")
-                    print(" ")
+        assets['button_click'].play()
+        apply_stats(game_state, btn.stats)
+        role    = btn.role
+        options = data["choices"].get(role)
+        if not options:
+            continue
 
-                elif btn.role == "not friends":
-                    popups['friend3'].active = False
-                    popups['friend3'].state = None
-                    popups['f3p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You ignored him and grabbed your stuff")
-                    print(f"Awkward... He shrugs and does not bother you again{RESET}\n")
-                    print(" ")
+        roll    = random.randint(0, 99)
+        cumul   = 0
+        chosen  = options[-1]
+        for option in options:
+            cumul += option["prob"]
+            if roll < cumul:
+                chosen = option
+                break
 
-    if popups['friend4'].active:
-        popups['friend4'].handle_event(event)
+        popup.active = False
+        popup.state  = None
+        popups[chosen["result"]].open(sound=assets[chosen["sound"]])
+        print(f"\n{BOLD}{chosen['log']}{RESET}\n")
 
-        for key, btn in buttons.items():
-            if not key.startswith("friend4_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    popups['friend4'].active = False
-                    popups['friend4'].state = None
-                    popups['f4p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}She decides your tolerable and you two nail the lab ")
-                    print(f"You made a new friend! Li Tianxi!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "not friends":
-                    popups['friend4'].active = False
-                    popups['friend4'].state = None
-                    popups['f4p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You stared at her and the lab sheet in silence")
-                    print(f"Awkward... She does most of the work in silence{RESET}\n")
-                    print(" ")
-
-    if popups['friend5'].active:
-        popups['friend5'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("friend5_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    popups['friend5'].active = False
-                    popups['friend5'].state = None
-                    popups['f5p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You help her pick up the books and quiz eachother for an hour")
-                    print(f"You made a new friend! Beth Sanchez!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "not friends":
-                    popups['friend5'].active = False
-                    popups['friend5'].state = None
-                    popups['f5p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You decided to ignore her and put your headphones back in")
-                    print(f"Awkward... She struggles alone while you tune out{RESET}\n")
-                    print(" ")
-
-    if popups['friend6'].active:
-        popups['friend6'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("friend6_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "friends!":
-                    popups['friend6'].active = False
-                    popups['friend6'].state = None
-                    popups['f6p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
-                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "not friends":
-                    popups['friend6'].active = False
-                    popups['friend6'].state = None
-                    popups['f6p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
-                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
-                    print(" ")
-
-    if popups['bully1'].active:
-        popups['bully1'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("bully1_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "not bullied":
-                    popups['bully1'].active = False
-                    popups['bully1'].state = None
-                    popups['b1p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You held your ground and did not fold")
-                    print(f"You did not get bullied!!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "bullied!":
-                    popups['bully1'].active = False
-                    popups['bully1'].state = None
-                    popups['b1p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You scramble and they laughed harder")
-                    print(f"You unfortunately got bullied by Alexander Graham{RESET}\n")
-                    print(" ")
-
-    if popups['bully2'].active:
-        popups['bully2'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("bully2_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "not bullied":
-                    popups['bully2'].active = False
-                    popups['bully2'].state = None
-                    popups['b2p1'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
-                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "bullied!":
-                    popups['bully2'].active = False
-                    popups['bully2'].state = None
-                    popups['b2p2'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
-                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
-                    print(" ")
-
-    if popups['bully3'].active:
-        popups['bully3'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("bully3_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "not bullied":
-                    popups['bully3'].active = False
-                    popups['bully3'].state = None
-                    popups['b3p2'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
-                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "bullied!":
-                    popups['bully3'].active = False
-                    popups['bully3'].state = None
-                    popups['b3p1'].open(sound=assets['sad'])
-                    print(f"\n{BOLD}You decided to stare at your phone awkwardly")
-                    print(f"Awkward... You just watch her suffer while your scrolling{RESET}\n")
-                    print(" ")
-
-    if popups['bully4'].active:
-        popups['bully4'].handle_event(event)
-
-        for key, btn in buttons.items():
-            if not key.startswith("bully4_"):
-                continue
-            if btn.handle_event(event):
-                assets['button_click'].play()
-                apply_stats(game_state, btn.stats)
-                if btn.role == "not bullied":
-                    popups['bully4'].active = False
-                    popups['bully4'].state = None
-                    popups['b4p3'].open(sound=assets['happy'])
-                    print(f"\n{BOLD}You two squeezed under the umbrella and spent the whole bus ride talking")
-                    print(f"You made a new friend! Mai Nguyen!{RESET}\n")
-                    print(" ")
-
-                elif btn.role == "bullied!":
-                    popups['bully4'].active = False
-                    popups['bully4'].state = None
-                    if random.randint(0, 100) < 40:
-                        popups['b4p2'].open(sound=assets['happy'])
-                        print(f"\n{BOLD}You decided to ask what his drawing")
-                        print(f"You made a new friend! Juan Yuna!{RESET}\n")
-                        print(" ")
-
-                    else:
-                        popups['b4p1'].open(sound=assets['sad'])
-                        print(f"\n{BOLD}You decided to ask what his drawing")
-                        print(f"Awkward... he immediately shuts his notebook and scootched away{RESET}\n")
-                        print(" ")
-
-    for key in ('friend1popup1', 'friend1popup2', 'friend1popup3'): #<- Here
-        popups[key].handle_event(event)
-    for key in ('friend2popup1', 'friend2popup2', 'friend2popup3'):
-        popups[key].handle_event(event)
-    for key in ('f3p1', 'f3p2'):
-        popups[key].handle_event(event)
-    for key in ('f4p1', 'f4p2'):
-        popups[key].handle_event(event)
-    for key in ('f5p1', 'f5p2'):
-        popups[key].handle_event(event)
-    for key in ('f6p1', 'f6p2'):
-        popups[key].handle_event(event)
-    for key in ('b1p1', 'b1p2'):
-        popups[key].handle_event(event)
-    for key in ('b2p1', 'b2p2'):
-        popups[key].handle_event(event)
-    for key in ('b3p1', 'b3p2'):
-        popups[key].handle_event(event)
-    for key in ('b4p1', 'b4p2', 'b4p3'):
-        popups[key].handle_event(event)
+def _handle_friend_bully(buttons, popups, game_state, event, assets):
+    for event_id in EVENT_DATA:
+        trigger_event_popup(event_id, buttons, popups, game_state, event, assets)
 
 # ==============================================================================
 # MENU SCENE — DRAWING
@@ -822,22 +837,20 @@ def draw_menu(screen, buttons, popups):
         for key, btn in buttons.items():
             if not key.startswith("gender_"):
                 continue
-            # find which button index this is to get offset_y
-            idx = int(key.split("_")[1])
+            idx      = int(key.split("_")[1])
             offset_y = popups['gender'].button_data[idx]["offset_y"]
             btn.rect.center = (337, popup_top + offset_y)
             btn.draw(screen)
+
 # ==============================================================================
 # GAME SCENE — DRAWING
 # ==============================================================================
-
 def draw_health_bar(surface, hp_display, bar_x, bar_y, bar_w=250, bar_h=16, label="", invert=False):
     COLOR_HIGH = (144, 238, 144)
-    COLOR_MID  = (255, 215, 0)
+    COLOR_MID  = (255, 215,   0)
     COLOR_LOW  = (255, 153, 153)
 
     pct = max(0.0, min(100.0, hp_display))
-
     if invert:
         color = COLOR_LOW if pct >= 80 else COLOR_MID if pct >= 21 else COLOR_HIGH
     else:
@@ -858,6 +871,7 @@ def draw_health_bar(surface, hp_display, bar_x, bar_y, bar_w=250, bar_h=16, labe
     txt  = font.render(f"{int(round(pct))}%", True, (255, 255, 255))
     surface.blit(txt, txt.get_rect(center=(bar_x + bar_w // 2, bar_y + bar_h // 2)))
 
+
 def draw_game(screen, assets, game_state, buttons, popups):
     screen.blit(assets['main_game_image'], (0, 0))
 
@@ -875,198 +889,50 @@ def draw_game(screen, assets, game_state, buttons, popups):
         diff = game_state.hp[i] - game_state.hp_display[i]
         game_state.hp_display[i] += diff * 0.12
         draw_health_bar(screen, game_state.hp_display[i],
-        bar_x=BAR_X,
-        bar_y=BAR_START_Y + i * BAR_GAP,
-        bar_w=BAR_W,
-        bar_h=BAR_H,
-        invert=(i == 1)
-        )
+                        bar_x=BAR_X, bar_y=BAR_START_Y + i * BAR_GAP,
+                        bar_w=BAR_W, bar_h=BAR_H,
+                        invert=(i == 1))
 
     buttons['skip'].draw(screen)
+    regular_popups = [
+        'nce',
+        'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
+        'bully1',  'bully2',  'bully3',  'bully4',
+        'gameover1', 'gameover2',
+        'friend1popup1', 'friend1popup2', 'friend1popup3',
+        'friend2popup1', 'friend2popup2', 'friend2popup3',
+        'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
+        'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2', 'b4p1', 'b4p2', 'b4p3',
+        'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
+        'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
+        'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2',
+    ]
 
-    popups['nce'].update()
-    popups['nce'].draw(screen)
-    popups['friend1'].update()
-    popups['friend1'].draw(screen)
-    popups['friend2'].update()
-    popups['friend2'].draw(screen)
-    popups['friend3'].update()
-    popups['friend3'].draw(screen)
-    popups['friend4'].update()
-    popups['friend4'].draw(screen)
-    popups['friend5'].update()
-    popups['friend5'].draw(screen)
-    popups['friend6'].update()
-    popups['friend6'].draw(screen)
-    popups['bully1'].update()
-    popups['bully1'].draw(screen)
-    popups['bully2'].update()
-    popups['bully2'].draw(screen)
-    popups['bully3'].update()
-    popups['bully3'].draw(screen)
-    popups['bully4'].update()
-    popups['bully4'].draw(screen)
+    for pname in regular_popups:
+        if pname not in popups:
+            continue
+        popup = popups[pname]
+        popup.update()
+        popup.draw(screen)
 
-    if popups['nce'].active:
-        popup_top = popups['nce'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("nce_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['nce'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
+        prefix = pname + "_"
+        if popup.active:
+            popup_top = popup.rect.top
+            for key, btn in buttons.items():
+                if not key.startswith(prefix):
+                    continue
+                idx      = int(key.split("_")[-1])
+                if idx < len(popup.button_data):
+                    offset_y = popup.button_data[idx]["offset_y"]
+                    btn.rect.center = (349, popup_top + offset_y)
+                btn.draw(screen)
 
-    if popups['friend1'].active:
-        popup_top = popups['friend1'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend1_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend1'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['friend2'].active:
-        popup_top = popups['friend2'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend2_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend2'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['friend3'].active:
-        popup_top = popups['friend3'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend3_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend3'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['friend4'].active:
-        popup_top = popups['friend4'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend4_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend4'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['friend5'].active:
-        popup_top = popups['friend5'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend5_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend5'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['friend6'].active:
-        popup_top = popups['friend6'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("friend6_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['friend6'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['bully1'].active:
-        popup_top = popups['bully1'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("bully1_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['bully1'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['bully2'].active:
-        popup_top = popups['bully2'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("bully2_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['bully2'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['bully3'].active:
-        popup_top = popups['bully3'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("bully3_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['bully3'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    if popups['bully4'].active:
-        popup_top = popups['bully4'].rect.top
-        for key, btn in buttons.items():
-            if not key.startswith("bully4_"):
-                continue
-            idx = int(key.split("_")[1])
-            offset_y = popups['bully4'].button_data[idx]["offset_y"]
-            btn.rect.center = (349, popup_top + offset_y)
-            btn.draw(screen)
-
-    popups['gameover1'].update()
-    popups['gameover1'].draw(screen)
-    popups['gameover2'].update()
-    popups['gameover2'].draw(screen)
-    popups['friend1popup1'].update()
-    popups['friend1popup1'].draw(screen)
-    popups['friend1popup2'].update()
-    popups['friend1popup2'].draw(screen)
-    popups['friend1popup3'].update()
-    popups['friend1popup3'].draw(screen)
-    popups['friend2popup1'].update()
-    popups['friend2popup1'].draw(screen)
-    popups['friend2popup2'].update()
-    popups['friend2popup2'].draw(screen)
-    popups['friend2popup3'].update()
-    popups['friend2popup3'].draw(screen)
-    popups['f3p1'].update()
-    popups['f3p1'].draw(screen)
-    popups['f3p2'].update()
-    popups['f3p2'].draw(screen)
-    popups['f4p1'].update()
-    popups['f4p1'].draw(screen)
-    popups['f4p2'].update()
-    popups['f4p2'].draw(screen)
-    popups['f5p1'].update()
-    popups['f5p1'].draw(screen)
-    popups['f5p2'].update()
-    popups['f5p2'].draw(screen)
-    popups['f6p1'].update()
-    popups['f6p1'].draw(screen)
-    popups['f6p2'].update()
-    popups['f6p2'].draw(screen)
-    popups['b1p1'].update()
-    popups['b1p1'].draw(screen)
-    popups['b1p2'].update()
-    popups['b1p2'].draw(screen)
-    popups['b2p1'].update()
-    popups['b2p1'].draw(screen)
-    popups['b2p2'].update()
-    popups['b2p2'].draw(screen)
-    popups['b3p1'].update()
-    popups['b3p1'].draw(screen)
-    popups['b3p2'].update()
-    popups['b3p2'].draw(screen)
-    popups['b4p1'].update()
-    popups['b4p1'].draw(screen)
-    popups['b4p2'].update()
-    popups['b4p2'].draw(screen)
-    popups['b4p3'].update()
-    popups['b4p3'].draw(screen)
+    for mg_name in ALL_MINIGAMES:
+        if mg_name not in popups:
+            continue
+        popup = popups[mg_name]
+        popup.update()
+        popup.draw(screen)
 
 # ==============================================================================
 # MAIN LOOP

@@ -506,6 +506,270 @@
         "buttons": []
     },
     {
+        "name": "minigame1",
+        "image": "Popup/EggDrop.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg1p1",
+        "image": "Popup/MG1P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg1p2",
+        "image": "Popup/MG1P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame2",
+        "image": "Popup/RolePlay.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg2p1",
+        "image": "Popup/MG2P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg2p2",
+        "image": "Popup/MG2P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame3",
+        "image": "Popup/Volcano.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg3p1",
+        "image": "Popup/MG3P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg3p2",
+        "image": "Popup/MG3P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame4",
+        "image": "Popup/Bridge.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg4p1",
+        "image": "Popup/MG4P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg4p2",
+        "image": "Popup/MG4P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame5",
+        "image": "Popup/Frog.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg5p1",
+        "image": "Popup/MG5P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg5p2",
+        "image": "Popup/MG5P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame6",
+        "image": "Popup/Car.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg6p1",
+        "image": "Popup/MG6P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg6p2",
+        "image": "Popup/MG6P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame7",
+        "image": "Popup/PaperMachete.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg7p1",
+        "image": "Popup/MG7P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg7p2",
+        "image": "Popup/MG7P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "minigame8",
+        "image": "Popup/Star.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "minigame",
+                "image": "Buttons/DoIt!.png",
+                "image_anim": "Buttons/DoIt!A.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "mg8p1",
+        "image": "Popup/MG8P1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "mg8p2",
+        "image": "Popup/MG8P2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
         "name": "gameover1",
         "image": "Popup/GameOver1.png",
         "size": [686, 768],

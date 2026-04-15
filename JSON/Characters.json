@@ -3,7 +3,7 @@
         "Gender": "Male",
         "Appearance": "Characters/Finn Gurme.png",
         "starting_stress": 30,
-        "starting_happiness": 40,
+        "starting_happiness": 10,
         "starting_intelligence": 30,
         "starting_grades": 0
     },
@@ -11,7 +11,7 @@
         "Gender": "Male",
         "Appearance": "Characters/Jasper Thorne.png",
         "starting_stress": 80,
-        "starting_happiness": 20,
+        "starting_happiness": 10,
         "starting_intelligence": 70,
         "starting_grades": 0
     },
@@ -19,7 +19,7 @@
         "Gender": "Male",
         "Appearance": "Characters/Kim Dokja.png",
         "starting_stress": 40,
-        "starting_happiness": 75,
+        "starting_happiness": 15,
         "starting_intelligence": 80,
         "starting_grades": 5
     },
