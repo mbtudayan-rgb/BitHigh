@@ -775,7 +775,16 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
-        "buttons": []
+        "buttons": [
+            {
+                "role": "start over",
+                "image": "Buttons/StartOver.png",
+                "image_anim": "Buttons/StartOverA.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
     },
     {
         "name": "gameover2",
@@ -783,6 +792,15 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
-        "buttons": []
+        "buttons": [
+            {
+                "role": "start over",
+                "image": "Buttons/StartOver.png",
+                "image_anim": "Buttons/StartOverA.png",
+                "size": [500, 76],
+                "offset_y": 500,
+                "stats": {}
+            }
+        ]
     }
 ]
