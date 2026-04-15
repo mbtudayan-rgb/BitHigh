@@ -2,8 +2,8 @@
     "bar": {
         "track_left": 93,
         "track_right": 593,
-        "track_y": 285,
-        "track_h": 38,
+        "track_y": 445,
+        "track_h": 58,
         "danger_zone_w": 25
     },
     "minigames": {
@@ -13,7 +13,7 @@
             "green_color": [80, 220, 80],
             "track_color": [40, 40, 60],
             "danger_color": [200, 50, 50],
-            "speed": 7.0,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 0.8
         },
@@ -23,7 +23,7 @@
             "green_color": [100, 200, 255],
             "track_color": [30, 20, 50],
             "danger_color": [220, 60, 130],
-            "speed": 6.5,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 1.0
         },
@@ -33,7 +33,7 @@
             "green_color": [255, 200, 40],
             "track_color": [50, 20, 10],
             "danger_color": [200, 30, 10],
-            "speed": 7.5,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 1.2
         },
@@ -43,7 +43,7 @@
             "green_color": [60, 180, 120],
             "track_color": [20, 35, 55],
             "danger_color": [180, 100, 40],
-            "speed": 6.5,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 0.9
         },
@@ -53,7 +53,7 @@
             "green_color": [40, 200, 80],
             "track_color": [20, 40, 20],
             "danger_color": [200, 180, 30],
-            "speed": 7.0,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 1.1
         },
@@ -63,7 +63,7 @@
             "green_color": [80, 200, 255],
             "track_color": [30, 30, 30],
             "danger_color": [220, 50, 50],
-            "speed": 7.5,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 1.5
         },
@@ -73,7 +73,7 @@
             "green_color": [200, 150, 80],
             "track_color": [50, 40, 30],
             "danger_color": [160, 80, 40],
-            "speed": 7.0,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 0.7
         },
@@ -83,7 +83,7 @@
             "green_color": [255, 180, 255],
             "track_color": [20, 10, 40],
             "danger_color": [100, 50, 200],
-            "speed": 6.5,
+            "speed": 20.0,
             "green_w_frac": 0.14,
             "speed_increment": 1.3
         }
