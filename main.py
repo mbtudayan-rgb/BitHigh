@@ -700,7 +700,7 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             elif game_state.week % 4 == 3:
                 chosen_mg = random.choice(ALL_MINIGAMES)
                 popups[chosen_mg].open(sound=assets['slide_in'])
-            elif game_state.week % 4 == 5:
+            elif game_state.week % 4 == 4:
                 chosen = random.choice([
                     'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
                     'bully1', 'bully2', 'bully3', 'bully4', ])
