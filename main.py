@@ -42,7 +42,10 @@ def load_scaled_image(path, size):
 # ==============================================================================
 # QUIZ
 # ==============================================================================
-def run_nce_quiz(json_file="JSON/NCE_Question.json"):
+def run_nce_quiz(json_file="JSON/NCE.json"):
+    print(f"\n{MAGENTA}{BOLD}{'=' * 55}")
+    print(f"                   📋 NCE QUIZ 📋")
+    print(f"{'=' * 55}{RESET}")
     with open(resource_path(json_file), "r") as f:
         all_questions = json.load(f)
 
@@ -63,9 +66,9 @@ def run_nce_quiz(json_file="JSON/NCE_Question.json"):
     question_num = 1
 
     for subj in subject_order:
-        print(f"\n{CYAN}{BOLD}{'='*55}")
+        print(f"\n{CYAN}{BOLD}{'-'*55}")
         print(f"  {subj}!!!")
-        print(f"{'='*55}{RESET}")
+        print(f"{'-'*55}{RESET}")
 
         for q in subjects[subj]:
             print(f"\n{BOLD}Question {question_num} of {total}:{RESET}")
@@ -478,17 +481,17 @@ class Fade:
 # ==============================================================================
 class GameState:
     def __init__(self):
-        self.running        = True
-        self.playing_video  = True
-        self.week           = 0
-        self.scene          = "menu"
-        self.gender         = None
-        self.selected_char  = None
-        self.pending_quiz   = False
-        self.hp             = [0, 0, 0, 0]
-        self.hp_display     = [0.0, 0.0, 0.0, 0.0]
-        # Minigame result pending (set after minigame popup closes)
-        self.pending_mg_result = None   # None | (popup_name, passed)
+        self.running           = True
+        self.playing_video     = True
+        self.week              = 0
+        self.scene             = "menu"
+        self.gender            = None
+        self.selected_char     = None
+        self.pending_quiz      = False
+        self.quiz_just_finished = False          # ← NEW
+        self.hp                = [0, 0, 0, 0]
+        self.hp_display        = [0.0, 0.0, 0.0, 0.0]
+        self.pending_mg_result = None
 
     def apply_char_stats(self, char):
         self.hp = [
@@ -552,15 +555,6 @@ def handle_video(assets, game_state):
     frame, val = assets['intro_video'].get_frame()
 
     if val == 'eof':
-        print(fr"""{CYAN}
- _     _  _______  ___      _______  _______  __   __  _______
-| | _ | ||       ||   |    |       ||       ||  |_|  ||       |
-| || || ||    ___||   |    |       ||   _   ||       ||    ___|
-|       ||   |___ |   |    |       ||  | |  ||       ||   |___
-|       ||    ___||   |___ |      _||  |_|  ||       ||    ___|
-|   _   ||   |___ |       ||     |_ |       || ||_|| ||   |___
-|__| |__||_______||_______||_______||_______||_|   |_||_______|""")
-        print(f"{BLUE}{BOLD}               Start a Scholar's Academic Life!")
         game_state.playing_video = False
         screen.blit(assets['main_menu_image'], (0, 0))
         pygame.display.update()
@@ -688,26 +682,30 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
     if not any_popup_active:
         if buttons['skip'].handle_event(event):
             assets['skip_clicked'].play()
-            print(f"\n{YELLOW}{BOLD}{'=' * 55}")
-            print(f"                    Week {game_state.week} of 32 🗓️")
-            print(f"{'=' * 55}{RESET}")
+
+            # ← NEW: clear terminal after quiz
+            if game_state.quiz_just_finished:
+                print("\n" * 50)
+                game_state.quiz_just_finished = False
+
             game_state.week += 1
             if game_state.week > 32:
                 blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
                 game_state.week = 0
+            elif game_state.week % 4 == 5:
+                popups['free day'].open(sound=assets['slide_in'])
             elif game_state.week % 4 == 2:
                 chosen = random.choice([
                     'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
-                    'bully1',  'bully2',  'bully3',  'bully4',
-                ])
+                    'bully1', 'bully2', 'bully3', 'bully4',])
                 popups[chosen].open(sound=assets['slide_in'])
-            elif game_state.week % 4 == 1:
-                # Minigame week
+            elif game_state.week % 4 == 3:
                 chosen_mg = random.choice(ALL_MINIGAMES)
                 popups[chosen_mg].open(sound=assets['slide_in'])
             else:
                 popups['nce'].open(sound=assets['slide_in'])
 
+    # NCE popup
     if popups['nce'].active:
         popups['nce'].handle_event(event)
         for key, btn in buttons.items():
@@ -716,11 +714,6 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             if btn.handle_event(event):
                 assets['button_click'].play()
                 if btn.role == "nce_quiz":
-                    idx = int(key.split("_")[1])
-                    if idx == 0:
-                        print(f"\n{BOLD}You studied hard all night just to take the NCE{RESET}\n")
-                    elif idx == 1:
-                        print(f"\n{BOLD}You did not study but still decided to take the NCE{RESET}\n")
                     apply_stats(game_state, btn.stats)
                     popups['nce'].close()
                     game_state.pending_quiz = True
@@ -728,9 +721,29 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                     popups['nce'].active = False
                     popups['nce'].state  = None
                     popups['gameover1'].open(sound=assets['game_over'])
-                    print(f"\n{RED}{BOLD}{'=' * 55}")
-                    print(f"                      Game Over!")
-                    print(f"{'=' * 55}{RESET}\n")
+
+    if popups['free day'].active:
+        popup = popups['free day']
+        for key, btn in buttons.items():
+            if not key.startswith('free day_'):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                role = btn.role
+                popup.active = False
+                popup.state = None
+                if role == 'do nothing':
+                    popups['relaxing'].open(sound=assets['happy'])
+                elif role == 'find friend':
+                    apply_stats(game_state, {'happiness': 10})
+                    popups['no friends'].open(sound=assets['sad'])
+                elif role == 'extra credit':
+                    apply_stats(game_state, {'grades': 10, 'stress': 5})
+                    popups['tryhard'].open(sound=assets['happy'])
+                elif role == 'read books':
+                    apply_stats(game_state, {'intelligence': 10, 'grades': 5})
+                    book_popup = random.choice(['Scissor', 'WAP', 'Corpus'])
+                    popups[book_popup].open(sound=assets['happy'])
 
     for mg_name in ALL_MINIGAMES:
         popup = popups[mg_name]
@@ -746,8 +759,7 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             btn = buttons[key]
             if popup.button_data:
                 offset_y = popup.button_data[0]["offset_y"]
-                btn.rect.center = (349, popup.rect.top + offset_y)
-            btn.draw(screen)
+                btn.rect.center = (SCREEN_WIDTH // 2, popup.rect.top + offset_y)
 
             if mg and not mg.done:
                 if btn.handle_event(event):
@@ -760,13 +772,12 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                     popup.active   = False
                     popup.state    = None
                     popup.minigame = None
-                    result_popup = f"{mg_name[2:]}p1" if passed else f"{mg_name[2:]}p2"
                     rkey = f"mg{mg_name[-1]}p{'1' if passed else '2'}"
                     sound = assets['happy'] if passed else assets['sad']
                     if rkey in popups:
                         popups[rkey].open(sound=sound)
-                    print(f"\n{BOLD}Minigame {mg_name[-1]}: {'PASSED ✓' if passed else 'FAILED ✗'}{RESET}\n")
 
+    # Result popups (closable by clicking) — OUTSIDE the minigame loop!
     for key in ('friend1popup1', 'friend1popup2', 'friend1popup3',
                 'friend2popup1', 'friend2popup2', 'friend2popup3',
                 'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
@@ -774,52 +785,55 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 'b4p1', 'b4p2', 'b4p3',
                 'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
                 'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
-                'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2'):
+                'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2'
+                'relaxing', 'no friends', 'tryhard', 'Scissor', 'WAP', 'Corpus'):
         if key in popups:
             popups[key].handle_event(event)
 
-with open(resource_path("JSON/Lore.json"), "r") as f:
-    EVENT_DATA = json.load(f)
+    # Friend/bully choice buttons — OUTSIDE the minigame loop!
+    FRIEND_BULLY_POPUPS = {
+        'friend1': {'friends!': 'friend1popup1', 'not friends': 'friend1popup3'},
+        'friend2': {'friends!': 'friend2popup1', 'not friends': 'friend2popup3'},
+        'friend3': {'friends!': 'f3p1',          'not friends': 'f3p2'},
+        'friend4': {'friends!': 'f4p1',          'not friends': 'f4p2'},
+        'friend5': {'friends!': 'f5p1',          'not friends': 'f5p2'},
+        'friend6': {'friends!': 'f6p1',          'not friends': 'f6p2'},
+        'bully1':  {'not bullied': 'b1p1',       'bullied!': 'b1p2'},
+        'bully2':  {'bullied!': 'b2p1',          'not bullied': 'b2p2'},
+        'bully3':  {'bullied!': 'b3p1',          'not bullied': 'b3p2'},
+        'bully4':  {'bullied!': 'b4p1',          'not bullied': 'b4p2'},
+    }
 
-def trigger_event_popup(event_id, buttons, popups, game_state, event, assets):
-    data   = EVENT_DATA[event_id]
-    popup  = popups[data["popup"]]
-
-    if not popup.active:
-        return
-
-    popup.handle_event(event)
-    prefix = data["buttons_"]
-    for key, btn in buttons.items():
-        if not key.startswith(prefix):
+    for popup_name, role_map in FRIEND_BULLY_POPUPS.items():
+        popup = popups[popup_name]
+        if not popup.active:
             continue
-        if not btn.handle_event(event):
+        for key, btn in buttons.items():
+            if not key.startswith(popup_name + "_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                apply_stats(game_state, btn.stats)
+                result = role_map.get(btn.role)
+                if result and result in popups:
+                    sound = assets['happy'] if btn.role in ('friends!', 'not bullied') else assets['sad']
+                    popup.active = False
+                    popup.state  = None
+                    popups[result].open(sound=sound)
+
+    # Gameover buttons — OUTSIDE the minigame loop!
+    for popup_name in ('gameover1', 'gameover2'):
+        popup = popups[popup_name]
+        if not popup.active:
             continue
-
-        assets['button_click'].play()
-        apply_stats(game_state, btn.stats)
-        role    = btn.role
-        options = data["choices"].get(role)
-        if not options:
-            continue
-
-        roll    = random.randint(0, 99)
-        cumul   = 0
-        chosen  = options[-1]
-        for option in options:
-            cumul += option["prob"]
-            if roll < cumul:
-                chosen = option
-                break
-
-        popup.active = False
-        popup.state  = None
-        popups[chosen["result"]].open(sound=assets[chosen["sound"]])
-        print(f"\n{BOLD}{chosen['log']}{RESET}\n")
-
-def _handle_friend_bully(buttons, popups, game_state, event, assets):
-    for event_id in EVENT_DATA:
-        trigger_event_popup(event_id, buttons, popups, game_state, event, assets)
+        for key, btn in buttons.items():
+            if not key.startswith(popup_name + "_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                popup.active = False
+                popup.state  = None
+                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
 
 # ==============================================================================
 # MENU SCENE — DRAWING
@@ -906,6 +920,8 @@ def draw_game(screen, assets, game_state, buttons, popups):
         'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
         'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
         'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2',
+        'free day',
+        'relaxing', 'no friends', 'tryhard', 'Scissor', 'WAP', 'Corpus'
     ]
 
     for pname in regular_popups:
@@ -934,6 +950,13 @@ def draw_game(screen, assets, game_state, buttons, popups):
         popup.update()
         popup.draw(screen)
 
+        if popup.active and popup.state is None:
+            key = f"{mg_name}_0"
+            if key in buttons and popup.button_data:
+                offset_y = popup.button_data[0]["offset_y"]
+                buttons[key].rect.center = (343, popup.rect.top + offset_y)
+                buttons[key].draw(screen)
+
 # ==============================================================================
 # MAIN LOOP
 # ==============================================================================
@@ -957,10 +980,8 @@ def main():
         if game_state.pending_quiz:
             game_state.pending_quiz = False
             score = run_nce_quiz()
+            game_state.quiz_just_finished = True          # ← NEW
             if score < 8:
-                print(f"\n{RED}{BOLD}{'=' * 55}")
-                print(f"    Game Over!")
-                print(f"{'=' * 55}{RESET}\n")
                 popups['gameover2'].open(sound=assets['game_over'])
 
         if game_state.playing_video:

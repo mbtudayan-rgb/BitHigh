@@ -4,8 +4,7 @@
         "image": "Popup/DetailsPopup.png",
         "size": [613, 727],
         "target_y": 15,
-        "closable": true,
-        "buttons": []
+        "closable": true
     },
     {
         "name": "gender",
@@ -516,8 +515,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -549,8 +548,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -582,8 +581,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -615,8 +614,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -648,8 +647,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -681,8 +680,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -714,8 +713,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -747,8 +746,8 @@
                 "role": "minigame",
                 "image": "Buttons/DoIt!.png",
                 "image_anim": "Buttons/DoIt!A.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [473, 70],
+                "offset_y": 585,
                 "stats": {}
             }
         ]
@@ -770,6 +769,111 @@
         "buttons": []
     },
     {
+        "name": "free day",
+        "image": "Popup/FreeDay.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "buttons": [
+            {
+                "role": "do nothing",
+                "image": "Buttons/FD_B1.png",
+                "image_anim": "Buttons/FD_B1A.png",
+                "size": [473, 71],
+                "offset_y": 395,
+                "stats": {}
+            },
+            {
+                "role": "find friend",
+                "image": "Buttons/FD_B2.png",
+                "image_anim": "Buttons/FD_B2A.png",
+                "size": [473, 71],
+                "offset_y": 475,
+                "stats": {}
+            },
+            {
+                "role": "extra credit",
+                "image": "Buttons/FD_B3.png",
+                "image_anim": "Buttons/FD_B3A.png",
+                "size": [473, 71],
+                "offset_y": 560,
+                "stats": {}
+            },
+            {
+                "role": "read books",
+                "image": "Buttons/FD_B4.png",
+                "image_anim": "Buttons/FD_B4A.png",
+                "size": [473, 71],
+                "offset_y": 645,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "relaxing",
+        "image": "Popup/FDB1_Popup.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "hangout",
+        "image": "Popup/FDB2_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "hangoutzzz",
+        "image": "Popup/FDB2_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "no friends",
+        "image": "Popup/FDB2_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "tryhard",
+        "image": "Popup/FDB3_Popup.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "Scissor",
+        "image": "Popup/FDB4_Popup1.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "WAP",
+        "image": "Popup/FDB4_Popup2.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
+        "name": "Corpus",
+        "image": "Popup/FDB4_Popup3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "buttons": []
+    },
+    {
         "name": "gameover1",
         "image": "Popup/GameOver1.png",
         "size": [686, 768],
@@ -780,8 +884,8 @@
                 "role": "start over",
                 "image": "Buttons/StartOver.png",
                 "image_anim": "Buttons/StartOverA.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [772, 205],
+                "offset_y": 665,
                 "stats": {}
             }
         ]
@@ -797,8 +901,8 @@
                 "role": "start over",
                 "image": "Buttons/StartOver.png",
                 "image_anim": "Buttons/StartOverA.png",
-                "size": [500, 76],
-                "offset_y": 500,
+                "size": [772, 205],
+                "offset_y": 665,
                 "stats": {}
             }
         ]
