@@ -1,9 +1,117 @@
-IMPORTANT!!
+╔══════════════════════════════════════════════════════╗
+║                  B I T H I G H  🎮                   ║
+║  a game about surviving high school. good luck lol   ║
+╠══════════════════════════════════════════════════════╣
+║  MEMBERS:                                            ║
+║    ✏  Bocalan, Rachel                                ║
+║    ✏  Carpizo, Eunice                                ║
+║    ✏  Tudayan, Matt Jhardy                           ║
+╚══════════════════════════════════════════════════════╝
 
-To play the game:
-    -pygame and ffpyplayer must be imported in your pycharm
-    -follow the instructions in the "details"
-    -the game is still underdeveloped so playing the game is still not possible
-    -sometimes, our game wont respond, just rerun to fix it
+📖 About
+BitHigh is a high school survival game built with Python and Pygame. You pick a character,
+manage your stats across 8 months of school life, and try to make it to graduation without
+flunking out, burning out, or getting bullied into the ground.
 
-Enjoy clicking the details button!
+The game runs in two places at once — the Pygame window handles all the visuals and clicking,
+while the terminal is where you actually take your quizzes. Keep both open!
+
+
+🖥️ Requirements
+- Python 3.13
+- A terminal
+- The following Python packages: pygame, ffpyplayer
+
+
+⚙️ Installation
+1. Clone or download the project
+git clone https://github.com/yourrepo/bithigh.git
+cd bithigh
+
+2. Install dependencies**
+pip install pygame ffpyplayer
+> ⚠️ ffpyplayer is required for the intro video. The game will crash on startup without it.
+
+3. Run the game — from your terminal
+python main.py
+> 🖥️ Important: Always launch from the terminal, not by double-clicking the file. The quiz
+portions of the game run directly in your terminal window, so you need it open and visible while you play!
+
+
+🎮 How to Play
+Starting Out
+1. Launch the game from your terminal (`python main.py`)
+2. Watch the intro, then click tart Game
+3. Pick your character's gender — your character is chosen randomly from that pool
+4. The **NCE Quiz** fires immediately in your terminal. Answer all questions before doing anything else!
+
+The Week Cycle
+Each month has 4 weeks, and each week brings a different event:
+
+|        Event         |                    What Happens                     |
+|----------------------|-----------------------------------------------------|
+| 👥 Lore Week         | A friend or bully encounter — choose how to respond |
+| 🎯 Minigame Week     | A needle-bar minigame in the Pygame window          |
+| 📋 Quiz Week         | A subject quiz or long test in your terminal        |
+| 🌴 Free Day          | A choice: rest, hang out, study, or read            |
+
+Hit the Skip button in the game window to move to the next week after each event resolves.
+
+The Quizzes (Terminal)
+When a quiz triggers, your terminal takes over. The game window will sit still/freeze — that's normal!
+- Questions are multiple choice: type `A`, `B`, or `C` and hit Enter
+- Questions are grouped by subject and shuffled each time
+- Your score is shown at the end before the terminal clears
+
+Pass scores:
+|                 Quiz Type                  | Pass Score |
+|--------------------------------------------|------------|
+| NCE                                        | 8 correct  |
+| Subject Quiz (Math, Science, English, Mix) | 6 correct  |
+| Long Test / Exam                           | 6 correct  |
+| Mix Long Test                              | 8 correct  |
+Failing the NCE is an instant game over. Failing subject quizzes and exams just tanks your stats.
+
+The Minigame
+A needle bounces left and right across a track. Hit the button when it's inside the green zone.
+- 3 rounds per minigame — you need to hit all 3 to pass
+- The needle speeds up each round
+- The green zone moves to a new position after each hit
+
+Your Stats
+Four bars track your school life. Watch them carefully:
+
+| Stat            | High is...                             | Hits zero? |
+|-----------------|----------------------------------------|------------|
+| 😰 Stress       | Bad — drains happiness over time       |     —      |
+| 😊 Happiness    | Good                                   | Game Over  |
+| 📝 Grades       | Good                                   | Game Over  |
+| 🧠 Intelligence | Good — low grades drain over time      |     —      |
+> Stress ≥ 80 drains -5 Happiness every week. Intelligence ≤ 20 drains -5 Grades every week.
+
+
+💀 Game Overs
+There are four ways to lose:
+1. Skipping the NCE — you can't opt out
+2. Failing the NCE — score below 8
+3. Happiness reaches 0 — you break down
+4. Grades reach 0 — you get held back
+
+
+🏆 Winning
+Survive all 8 months (32 weeks) and you graduate. Simple. Good luck — you'll need it.
+
+
+🛠️ Common Issues
+Game crashes immediately on startup
+Make sure `ffpyplayer` is installed (`pip install ffpyplayer`). It's needed for the intro video.
+
+Quiz doesn't appear / nothing happens after clicking
+The quiz runs in your terminal — switch to it! If you launched by double-clicking the script,
+the terminal may have closed. Always run with `python main.py` from an open terminal.
+
+`ModuleNotFoundError: No module named 'pygame'`
+Run `pip install pygame` and try again.
+
+Intro video plays with no sound or skips
+This is an ffpyplayer timing thing and doesn't affect gameplay.

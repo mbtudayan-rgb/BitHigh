@@ -1,103 +1,812 @@
 [
     {
-        "role": "nce",
-        "questions": [
-            {
-                "Subject": "English",
-                "Question": "Vocabulary - What is the antonym of \"transparent\"",
-                "A": "A. Opaque",
-                "B": "B. Clear",
-                "C": "C. Shiny",
-                "Answer": "A. Opaque"
-            },
-            {
-                "Subject": "English",
-                "Question": "\"Using Context Clues - The scientist made an erroneous conclusion because she misread the data.\" What does erroneous mean?",
-                "A": "A. Brilliant",
-                "B": "B. Incorrect",
-                "C": "C. Unusual",
-                "Answer": "B. Incorrect"
-            },
-            {
-                "Subject": "English",
-                "Question": "Figure of Speech - Which sentence contains a simile?",
-                "A": "A. The stars danced in the night sky.",
-                "B": "B. Her voice was music to his ears.",
-                "C": "C. He ran as fast as a cheetah.",
-                "Answer": "C. He ran as fast as a cheetah."
-            },
-            {
-                "Subject": "English",
-                "Question": "Figure of speech - The wind whispered through the trees.\" What figure of speech is used?",
-                "A": "A. Simile",
-                "B": "B. Hyperbole",
-                "C": "C. Personification",
-                "Answer": "C. Personification"
-            },
-            {
-                "Subject": "Math",
-                "Question": "Statistics - The scores of 5 students are: 78, 85, 90, 92, and 100. What is their average score?",
-                "A": "A. 87",
-                "B": "B. 90",
-                "C": "C. 89",
-                "Answer": "C. 89"
-            },
-            {
-                "Subject": "Math",
-                "Question": "Word Problems - A tank holds 120 liters of water. If 35% has already been used, how many liters remain?",
-                "A": "A. 67 Liters",
-                "B": "B. 78 Liters",
-                "C": "C. 85 Liters",
-                "Answer": "B. 78 Liters"
-            },
-            {
-                "Subject": "Math",
-                "Question": "Word Problems -If 4 workers can finish a job in 6 days, how many days will it take 8 workers to finish the same job? ",
-                "A": "A. 2 days",
-                "B": "B. 3 days",
-                "C": "C. 4 days",
-                "Answer": "B. 3 days"
-            },
-            {
-                "Subject": "Math",
-                "Question": "Probability - If a bag has 3 red, 4 blue, and 3 green marbles. What is the probability of picking a blue marble?",
-                "A": "A. 2/5",
-                "B": "B. 3/10",
-                "C": "C. 4/9",
-                "Answer": "A. 2/5"
-            },
-            {
-                "Subject": "Science",
-                "Question": "The Water Cycle - Water from the ocean rises into the atmosphere, cools down, and forms a cloud. Rain then falls from it and flows back into rivers and oceans. Which stage of the water cycle causes water vapor to form clouds?",
-                "A": "A. Condensation",
-                "B": "B. Precipitation",
-                "C": "C. Transpiration",
-                "Answer": "A. Condensation"
-            },
-            {
-                "Subject": "Science",
-                "Question": "Forces and Motion - A ball is rolled on a flat surface and slowly stops. What force caused it to stop?",
-                "A": "A. Gravity",
-                "B": "B. Friction",
-                "C": "C. Magnetism",
-                "Answer": "B.  Friction"
-            },
-            {
-                "Subject": "Science",
-                "Question": "Light - What happens to light when it passes through a prism?",
-                "A": "A. It disappears",
-                "B": "B. Nothing happens",
-                "C": "C. It separates into different colors",
-                "Answer": "C. It separates into different colors"
-            },
-            {
-                "Subject": "Science",
-                "Question": "Physics -Which of the following is an example of potential energy?",
-                "A": "A. A fan spinning in a room",
-                "B": "B. A rock sitting at the top of a hill",
-                "C": "C. A car driving on a highway",
-                "Answer": "B. A rock sitting at the top of a hill"
-            }
-        ]
+        "Role": "NCE",
+        "Subject": "English",
+        "Question": "Vocabulary - What is the antonym of \"transparent\"",
+        "A": "A. Opaque",
+        "B": "B. Clear",
+        "C": "C. Shiny",
+        "Answer": "A. Opaque"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "English",
+        "Question": "Using Context Clues - The scientist made an erroneous conclusion because she misread the data. What does erroneous mean?",
+        "A": "A. Brilliant",
+        "B": "B. Incorrect",
+        "C": "C. Unusual",
+        "Answer": "B. Incorrect"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "English",
+        "Question": "Figure of Speech - Which sentence contains a simile?",
+        "A": "A. The stars danced in the night sky.",
+        "B": "B. Her voice was music to his ears.",
+        "C": "C. He ran as fast as a cheetah.",
+        "Answer": "C. He ran as fast as a cheetah."
+    },
+    {
+        "Role": "NCE",
+        "Subject": "English",
+        "Question": "Figure of speech - The wind whispered through the trees. What figure of speech is used?",
+        "A": "A. Simile",
+        "B": "B. Hyperbole",
+        "C": "C. Personification",
+        "Answer": "C. Personification"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Math",
+        "Question": "Statistics - The scores of 5 students are: 78, 85, 90, 92, and 100. What is their average score?",
+        "A": "A. 87",
+        "B": "B. 90",
+        "C": "C. 89",
+        "Answer": "C. 89"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Math",
+        "Question": "Word Problems - A tank holds 120 liters of water. If 35% has already been used, how many liters remain?",
+        "A": "A. 67 Liters",
+        "B": "B. 78 Liters",
+        "C": "C. 85 Liters",
+        "Answer": "B. 78 Liters"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Math",
+        "Question": "Word Problems - If 4 workers can finish a job in 6 days, how many days will it take 8 workers to finish the same job?",
+        "A": "A. 2 days",
+        "B": "B. 3 days",
+        "C": "C. 4 days",
+        "Answer": "B. 3 days"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Math",
+        "Question": "Probability - If a bag has 3 red, 4 blue, and 3 green marbles. What is the probability of picking a blue marble?",
+        "A": "A. 2/5",
+        "B": "B. 3/10",
+        "C": "C. 4/9",
+        "Answer": "A. 2/5"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Science",
+        "Question": "The Water Cycle - Water from the ocean rises into the atmosphere, cools down, and forms a cloud. Rain then falls from it and flows back into rivers and oceans. Which stage of the water cycle causes water vapor to form clouds?",
+        "A": "A. Condensation",
+        "B": "B. Precipitation",
+        "C": "C. Transpiration",
+        "Answer": "A. Condensation"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Science",
+        "Question": "Forces and Motion - A ball is rolled on a flat surface and slowly stops. What force caused it to stop?",
+        "A": "A. Gravity",
+        "B": "B. Friction",
+        "C": "C. Magnetism",
+        "Answer": "B. Friction"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Science",
+        "Question": "Light - What happens to light when it passes through a prism?",
+        "A": "A. It disappears",
+        "B": "B. Nothing happens",
+        "C": "C. It separates into different colors",
+        "Answer": "C. It separates into different colors"
+    },
+    {
+        "Role": "NCE",
+        "Subject": "Science",
+        "Question": "Physics - Which of the following is an example of potential energy?",
+        "A": "A. A fan spinning in a room",
+        "B": "B. A rock sitting at the top of a hill",
+        "C": "C. A car driving on a highway",
+        "Answer": "B. A rock sitting at the top of a hill"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is -21 + 46?",
+        "A": "A. 25",
+        "B": "B. 26",
+        "C": "C. -26",
+        "Answer": "A. 25"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is 6 + (-3)?",
+        "A": "A. -3",
+        "B": "B. 3",
+        "C": "C. 6",
+        "Answer": "B. 3"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is 9 - (-5)?",
+        "A": "A. -14",
+        "B": "B. 14",
+        "C": "C. 15",
+        "Answer": "B. 14"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Adding & Subtracting - What is -40 + 12?",
+        "A": "A. 52",
+        "B": "B. 28",
+        "C": "C. -28",
+        "Answer": "C. -28"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Adding & Subtracting - What is -3 + 12?",
+        "A": "A. 9",
+        "B": "B. 15",
+        "C": "C. -9",
+        "Answer": "A. 9"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Adding & Subtracting - What is -35 - (-21)?",
+        "A": "A. -56",
+        "B": "B. -14",
+        "C": "C. 14",
+        "Answer": "B. -14"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Multiplying & Dividing - What is -9 * 6?",
+        "A": "A. 45",
+        "B": "B. -45",
+        "C": "C. -54",
+        "Answer": "C. -54"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Multiplying & Dividing - What is -21 / 3?",
+        "A": "A. 7",
+        "B": "B. -7",
+        "C": "C. -8",
+        "Answer": "B. -7"
+    },
+    {
+        "Role": "Math Quiz",
+        "Subject": "Math",
+        "Question": "Multiplying & Dividing - What is -18 / -3?",
+        "A": "A. 6",
+        "B": "B. -6",
+        "C": "C. 8",
+        "Answer": "A. 6"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is -15 + 32 + (-10)?",
+        "A": "A. -7",
+        "B": "B. 7",
+        "C": "C. 37",
+        "Answer": "B. 7"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is 20 / (-4)?",
+        "A": "A. -5",
+        "B": "B. 5",
+        "C": "C. -8",
+        "Answer": "A. -5"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is -4 * 3 * -2?",
+        "A": "A. 12",
+        "B": "B. 24",
+        "C": "C. -12",
+        "Answer": "B. 24"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Operations on Integers - What is -12 * 2 - 4?",
+        "A": "A. -24",
+        "B": "B. 24",
+        "C": "C. -28",
+        "Answer": "C. -28"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - The temperature in a city was -3 degrees celsius in the morning. By noon, it rose by 11 degrees. What was the temperature at noon?",
+        "A": "A. 6 degrees celsius",
+        "B": "B. 14 degrees celsius",
+        "C": "C. 8 degrees celsius",
+        "Answer": "C. 8 degrees celsius"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - A submarine is -31 meters below sea level. It descends another 15 meters. What is its new depth?",
+        "A": "A. -16",
+        "B": "B. -46",
+        "C": "C. 16",
+        "Answer": "B. -46"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - Edgar has 1000 Pesos. He gets 230 Pesos on Monday, spends 400 Pesos on Tuesday, and earns 170 Pesos on Wednesday. How much money does he have now?",
+        "A": "A. 1000 Pesos",
+        "B": "B. 900 Pesos",
+        "C": "C. 1200 Pesos",
+        "Answer": "A. 1000 Pesos"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - The temperature drops by 4 degrees celsius every hour during a cold Baguio night. What is the total change in temperature after 6 hours?",
+        "A": "A. -20 degrees celsius",
+        "B": "B. -24 degrees celsius",
+        "C": "C. -28 degrees celsius",
+        "Answer": "B. -24 degrees celsius"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - A business loses 1200 Pesos per day for 5 days straight. What is their total earnings?",
+        "A": "A. -5000 Pesos",
+        "B": "B. -6000 Pesos",
+        "C": "C. -7200 Pesos",
+        "Answer": "B. -6000 Pesos"
+    },
+    {
+        "Role": "Math Long Test",
+        "Subject": "Math",
+        "Question": "Word Problems - A construction crew sinks 6 meters every day. After 9 days, how deep is the hole that they dug relative to the surface?",
+        "A": "A. -63",
+        "B": "B. -45",
+        "C": "C. -54",
+        "Answer": "C. -54"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Earth's Layers - What is the thinnest and outermost layer of the Earth?",
+        "A": "A. Mantle",
+        "B": "B. Crust",
+        "C": "C. Core",
+        "Answer": "B. Crust"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Earth's Layers - Which layer of the Earth is mostly made up of molten rock?",
+        "A": "A. Mantle",
+        "B": "B. Crust",
+        "C": "C. Inner Core",
+        "Answer": "A. Mantle"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Earth's Layers - The innermost layer of the Earth is called the:",
+        "A": "A. Mantle",
+        "B": "B. Core",
+        "C": "C. Crust",
+        "Answer": "B. Core"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Types of Rocks - Metamorphic rocks are formed by:",
+        "A": "A. Cooling Lava",
+        "B": "B. Heat and Pressure",
+        "C": "C. Compressed Sediments",
+        "Answer": "B. Heat and Pressure"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Types of Rocks - Which type of rock is formed when magma or lava cools down?",
+        "A": "A. Sedimentary",
+        "B": "B. Metamorphic",
+        "C": "C. Igneous",
+        "Answer": "C. Igneous"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Types of Rocks - A rock formed from layers of compressed sediment over time is called:",
+        "A": "A. Sedimentary",
+        "B": "B. Metamorphic",
+        "C": "C. Igneous",
+        "Answer": "A. Sedimentary"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Mineral Properties - The shininess or reflectiveness of a mineral's surface is called?",
+        "A": "A. Luster",
+        "B": "B. Streak",
+        "C": "C. Cleavage",
+        "Answer": "A. Luster"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Mineral Properties - What do you call the color of a mineral's powder left when rubbed on a porcelain plate?",
+        "A": "A. Cleavage",
+        "B": "B. Luster",
+        "C": "C. Streak",
+        "Answer": "C. Streak"
+    },
+    {
+        "Role": "Science Quiz",
+        "Subject": "Science",
+        "Question": "Mineral Properties - Which of the following is the hardest mineral?",
+        "A": "A. Magnetite",
+        "B": "B. Diamond",
+        "C": "C. Quartz",
+        "Answer": "B. Diamond"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Plate Tectonics - What type of plate boundary occurs when two plates move away from each other?",
+        "A": "A. Divergent",
+        "B": "B. Convergent",
+        "C": "C. Transform",
+        "Answer": "A. Divergent"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Plate Tectonics - When two plates collide and one sinks beneath the other, ___ happens.",
+        "A": "A. Subduction",
+        "B": "B. Divergence",
+        "C": "C. Convergence",
+        "Answer": "A. Subduction"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Plate Tectonics - The theory that explains how Earth's lithosphere is broken into moving pieces is called:",
+        "A": "A. Continental Drift",
+        "B": "B. Seafloor Spreading",
+        "C": "C. Plate Tectonics",
+        "Answer": "C. Plate Tectonics"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Earthquakes - The point on Earth's surface directly above where an earthquake originates is called the:",
+        "A": "A. Fault",
+        "B": "B. Epicenter",
+        "C": "C. Collision Zone",
+        "Answer": "B. Epicenter"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Earthquakes - Seismic waves that can travel through both solids and liquids are called ___ waves.",
+        "A": "A. Surface",
+        "B": "B. Primary",
+        "C": "C. Secondary",
+        "Answer": "B. Primary"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Earthquakes - Rocks expanding in heat and contracting in cold causes them to crack over time. This is an example of:",
+        "A": "A. Chemical Weathering",
+        "B": "B. Erosion",
+        "C": "C. Physical Weathering",
+        "Answer": "C. Physical Weathering"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Biosphere & Living Systems - Earthworms tunnel through soil, breaking it apart and mixing organic matter into it. This improves soil fertility. Earthworms are an example of a ___ agent of weathering.",
+        "A": "A. Biological",
+        "B": "B. Chemical",
+        "C": "C. Physical",
+        "Answer": "A. Biological"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Biosphere & Living Systems - When a volcanic eruption destroys a forest and new plants slowly begin to grow back over time, this process is called:",
+        "A": "A. Biodiversity",
+        "B": "B. Ecological Succession",
+        "C": "C. Physical Weathering",
+        "Answer": "B. Ecological Succession"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Biosphere & Living Systems - The Philippine eagle lives in the forests of the Philippines, more frequently in Mindanao. This makes it a ___ species.",
+        "A": "A. Endemic",
+        "B": "B. Invasive",
+        "C": "C. Exotic",
+        "Answer": "A. Endemic"
+    },
+    {
+        "Role": "Science Long Test",
+        "Subject": "Science",
+        "Question": "Biosphere & Living Systems - Which of the following BEST describes a decomposer's role in an ecosystem?",
+        "A": "A. A beetle releases enzymes that break down a living tree's bark for energy",
+        "B": "B. A fern absorbs nutrients directly from the soil to fuel its growth",
+        "C": "C. A mushroom breaks down a fallen log, returning its nutrients to the soil",
+        "Answer": "C. A mushroom breaks down a fallen log, returning its nutrients to the soil"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Figures of Speech - \"The stars danced in the night sky.\" This is an example of:",
+        "A": "A. Hyperbole",
+        "B": "B. Personification",
+        "C": "C. Simile",
+        "Answer": "B. Personification"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Figures of Speech - \"Her smile is like sunshine on a rainy day.\" This is an example of:",
+        "A": "A. Simile",
+        "B": "B. Metaphor",
+        "C": "C. Hyperbole",
+        "Answer": "A. Simile"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Figures of Speech - \"Life is a rollercoaster.\" This directly compares two unlike things without using \"like\" or \"as.\" This is a:",
+        "A": "A. Simile",
+        "B": "B. Metaphor",
+        "C": "C. Hyperbole",
+        "Answer": "B. Metaphor"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Figures of Speech - \"I have told you a million times!\" This is an exaggeration used for emphasis, making it a:",
+        "A": "A. Simile",
+        "B": "B. Metaphor",
+        "C": "C. Hyperbole",
+        "Answer": "C. Hyperbole"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Sentence Structure & Subject-Verb Agreement - \"The dogs runs in the park every morning.\" This sentence has an error in:",
+        "A": "A. Subject-Verb Agreement",
+        "B": "B. Punctuation",
+        "C": "C. Word Choice",
+        "Answer": "A. Subject-Verb Agreement"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Sentence Structure & Subject-Verb Agreement - Which of the following is the correct sentence?",
+        "A": "A. The group of students are going on a field trip",
+        "B": "B. The group of students is going on a field trip",
+        "C": "C. The group of students were going on a field trip",
+        "Answer": "B. The group of students is going on a field trip"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Sentence Structure & Subject-Verb Agreement - \"I went to the store, and I bought some rice.\" This sentence is an example of a ___ sentence.",
+        "A": "A. Simple",
+        "B": "B. Compound",
+        "C": "C. Complex",
+        "Answer": "B. Compound"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Sentence Structure & Subject-Verb Agreement - A sentence that contains one independent clause and one dependent clause is called a ___ sentence.",
+        "A": "A. Simple",
+        "B": "B. Compound",
+        "C": "C. Complex",
+        "Answer": "C. Complex"
+    },
+    {
+        "Role": "English Quiz",
+        "Subject": "English",
+        "Question": "Sentence Structure & Subject-Verb Agreement - \"Maria sings.\" This is an example of a ___ sentence because it has only one independent clause.",
+        "A": "A. Simple",
+        "B": "B. Compound",
+        "C": "C. Complex",
+        "Answer": "A. Simple"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Context Clues & Vocabulary - \"The scientist was so engrossed in her research that she forgot to eat lunch.\" The word engrossed most likely means:",
+        "A": "A. Bored and distracted",
+        "B": "B. Deeply absorbed and focused",
+        "C": "C. Frustrated and overwhelmed",
+        "Answer": "B. Deeply absorbed and focused"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Context Clues & Vocabulary - \"After days without rain, the once lush rice fields became parched and cracked.\" The word parched most likely means:",
+        "A": "A. Extremely dry",
+        "B": "B. Flooded and muddy",
+        "C": "C. Green and healthy",
+        "Answer": "A. Extremely dry"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Context Clues & Vocabulary - \"The politician's speech was ambiguous — nobody could tell whether he supported or opposed the new law.\" The word ambiguous most likely means:",
+        "A": "A. Passionate and convincing",
+        "B": "B. Honest and straightforward",
+        "C": "C. Unclear and open to multiple interpretations",
+        "Answer": "C. Unclear and open to multiple interpretations"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Advanced Parts of Speech - \"Neither the scholars nor the teacher was prepared for the announcement.\" The pronoun that correctly replaces \"the teacher\" in this sentence would be:",
+        "A": "A. They",
+        "B": "B. He/She",
+        "C": "C. Them",
+        "Answer": "B. He/She"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Advanced Parts of Speech - \"She studied hard so that she could pass the entrance exam.\" The underlined words form a:",
+        "A": "A. Coordinating conjunction",
+        "B": "B. Subordinating conjunction",
+        "C": "C. Correlative conjunction",
+        "Answer": "B. Subordinating conjunction"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Advanced Parts of Speech - \"Neither the quiz nor the long test was easy for the scholars.\" The underlined words form a:",
+        "A": "A. Coordinating conjunction",
+        "B": "B. Subordinating conjunction",
+        "C": "C. Correlative conjunction",
+        "Answer": "C. Correlative conjunction"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Phrases vs Clauses & Sentence Types - \"Running through the hallway\" — this group of words is a:",
+        "A": "A. Phrase",
+        "B": "B. Independent clause",
+        "C": "C. Dependent clause",
+        "Answer": "A. Phrase"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Phrases vs Clauses & Sentence Types - \"Although she studied for weeks\" — this group of words is a:",
+        "A": "A. Phrase",
+        "B": "B. Independent clause",
+        "C": "C. Dependent clause",
+        "Answer": "C. Dependent clause"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Phrases vs Clauses & Sentence Types - \"The dog barked the cat ran away.\" This is an example of a:",
+        "A": "A. Fragment",
+        "B": "B. Run-on sentence",
+        "C": "C. Comma splice",
+        "Answer": "B. Run-on sentence"
+    },
+    {
+        "Role": "English Long Test",
+        "Subject": "English",
+        "Question": "Phrases vs Clauses & Sentence Types - \"She loves reading, she finishes a book every week.\" This is an example of a:",
+        "A": "A. Fragment",
+        "B": "B. Run-on sentence",
+        "C": "C. Comma splice",
+        "Answer": "C. Comma splice"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "English",
+        "Question": "Verbals - \"Swimming is her favorite hobby.\" The bold word is what type of verbal?",
+        "A": "A. Gerund",
+        "B": "B. Participle",
+        "C": "C. Infinitive",
+        "Answer": "A. Gerund"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "English",
+        "Question": "Verbals - \"The broken window let in the cold air.\" The bold word is what type of verbal?",
+        "A": "A. Gerund",
+        "B": "B. Participle",
+        "C": "C. Infinitive",
+        "Answer": "B. Participle"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "English",
+        "Question": "Verbals - \"The teacher gave us a list of topics to review before the long test.\" The underlined infinitive functions as a/an:",
+        "A": "A. Adjective — it modifies the noun \"topics\"",
+        "B": "B. Noun — it acts as the object of the sentence",
+        "C": "C. Adverb — it modifies the verb \"gave\"",
+        "Answer": "A. Adjective — it modifies the noun \"topics\""
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Math",
+        "Question": "Polynomials - What is the degree of the polynomial 4x³ + 2x² - 7x + 1?",
+        "A": "A. 3",
+        "B": "B. 5",
+        "C": "C. 2",
+        "Answer": "A. 3"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Math",
+        "Question": "Polynomials - Which of the following correctly applies the distributive property to 3x(2x² - 4x + 1)?",
+        "A": "A. 6x² - 12x + 3",
+        "B": "B. 6x³ - 12x² + 3x",
+        "C": "C. 6x³ - 12x + 3x",
+        "Answer": "B. 6x³ - 12x² + 3x"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Math",
+        "Question": "Polynomials - What is the product of (x + 3)(x - 3)?",
+        "A": "A. x² + 9",
+        "B": "B. x² - 9",
+        "C": "C. x² + 6x - 9",
+        "Answer": "B. x² - 9"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Science",
+        "Question": "Understanding Life and Physics - A jeepney travels 120 kilometers in 2 hours. What is its average speed?",
+        "A": "A. 240 km/h",
+        "B": "B. 60 km/h",
+        "C": "C. 122 km/h",
+        "Answer": "B. 60 km/h"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Science",
+        "Question": "Understanding Life and Physics - Charles Darwin's theory of natural selection states that organisms that are better adapted to their environment are more likely to:",
+        "A": "A. Evolve faster than others",
+        "B": "B. Move to a different environment",
+        "C": "C. Survive and pass on their traits to offspring",
+        "Answer": "C. Survive and pass on their traits to offspring"
+    },
+    {
+        "Role": "Mix Quiz",
+        "Subject": "Science",
+        "Question": "Understanding Life and Physics - The Aeta people of the Philippines developed darker skin and shorter stature over generations living in dense forests. This is an example of:",
+        "A": "A. Genetic mutation caused by forest chemicals",
+        "B": "B. Co-dominance between two allele types",
+        "C": "C. Adaptation through natural selection over generations",
+        "Answer": "C. Adaptation through natural selection over generations"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "English",
+        "Question": "Verbals & Modifiers - Which sentence contains an infinitive used as a noun?",
+        "A": "A. She bought a new pen to use during the exam",
+        "B": "B. To give up was never an option for her",
+        "C": "C. He was the first scholar to finish the long test",
+        "Answer": "B. To give up was never an option for her"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "English",
+        "Question": "Verbals & Modifiers - \"The scholar having reviewed all the material felt confident going into the exam.\" Which of the following correctly identifies the underlined verbal phrase?",
+        "A": "A. Participial phrase acting as an adjective modifying \"scholar\"",
+        "B": "B. Infinitive phrase acting as an adverb modifying \"felt\"",
+        "C": "C. Gerund phrase acting as the object of the sentence",
+        "Answer": "A. Participial phrase acting as an adjective modifying \"scholar\""
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "English",
+        "Question": "Verbals & Modifiers - \"Running down the hallway, the bell was heard by the scholars.\" This sentence contains a:",
+        "A": "A. Misplaced modifier",
+        "B": "B. Squinting modifier",
+        "C": "C. Dangling modifier",
+        "Answer": "C. Dangling modifier"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "English",
+        "Question": "Verbals & Modifiers - Which sentence demonstrates correct parallel structure?",
+        "A": "A. She enjoys reading, writing, and swimming",
+        "B": "B. She enjoys reading, to write, and swimming",
+        "C": "C. She enjoys reading, writing, and to swim",
+        "Answer": "A. She enjoys reading, writing, and swimming"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Math",
+        "Question": "Polynomial Operations & Classification - Which of the following is a polynomial in STANDARD FORM?",
+        "A": "A. 3 + 2x³ - x",
+        "B": "B. 2x³ - x + 3",
+        "C": "C. 2x³ + 3 - x",
+        "Answer": "B. 2x³ - x + 3"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Math",
+        "Question": "Polynomial Operations & Classification - Which expression is equivalent to (2x + 5)²?",
+        "A": "A. 4x² + 20x + 25",
+        "B": "B. 4x² + 25",
+        "C": "C. 4x² + 10x + 25",
+        "Answer": "A. 4x² + 20x + 25"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Math",
+        "Question": "Polynomial Operations & Classification - Which of the following is a perfect square trinomial?",
+        "A": "A. x² + 6x + 12",
+        "B": "B. x² + 10x + 25",
+        "C": "C. x² - 4x + 8",
+        "Answer": "B. x² + 10x + 25"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Math",
+        "Question": "Polynomial Operations & Classification - What is the factored form of 3x² - 3x - 36?",
+        "A": "A. 3(x + 3)(x - 4)",
+        "B": "B. 3(x - 3)(x + 4)",
+        "C": "C. 3(x + 4)(x - 3)",
+        "Answer": "B. 3(x - 3)(x + 4)"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Science",
+        "Question": "Speed & Evolution - A train moving at 120 km/h needs to travel 60 km to reach the next station. How long will the trip take?",
+        "A": "A. 30 minutes",
+        "B": "B. 1 hour",
+        "C": "C. 45 minutes",
+        "Answer": "A. 30 minutes"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Science",
+        "Question": "Speed & Evolution - Two cars start from the same point. Car A travels at 60 km/h and Car B travels at 90 km/h in the same direction. After 2 hours, how far apart are they?",
+        "A": "A. 30 km",
+        "B": "B. 90 km",
+        "C": "C. 60 km",
+        "Answer": "C. 60 km"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Science",
+        "Question": "Speed & Evolution - A species of fox living in the Arctic has thick white fur. A few foxes are born with thinner brown fur. What will most likely happen to the brown foxes over time?",
+        "A": "A. The brown foxes will gradually grow thicker white fur to survive",
+        "B": "B. The brown foxes will struggle to survive and fewer will pass on their traits",
+        "C": "C. The brown foxes will thrive because they stand out and attract mates",
+        "Answer": "B. The brown foxes will struggle to survive and fewer will pass on their traits"
+    },
+    {
+        "Role": "Mix Long Test",
+        "Subject": "Science",
+        "Question": "Speed & Evolution - Which of the following best explains why evolution takes millions of years?",
+        "A": "A. Organisms resist change and only evolve when forced to by predators",
+        "B": "B. Scientists have not yet found a way to speed up the process",
+        "C": "C. Small genetic changes accumulate slowly across thousands of generations before significant differences appear",
+        "Answer": "C. Small genetic changes accumulate slowly across thousands of generations before significant differences appear"
     }
 ]

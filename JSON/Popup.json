@@ -4,7 +4,8 @@
         "image": "Popup/DetailsPopup.png",
         "size": [613, 727],
         "target_y": 15,
-        "closable": true
+        "closable": true,
+        "stats": {}
     },
     {
         "name": "gender",
@@ -12,6 +13,7 @@
         "size": [517, 615],
         "target_y": 80,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "gender_boy",
@@ -35,6 +37,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "nce_quiz",
@@ -68,6 +71,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "friends!",
@@ -75,7 +79,7 @@
                 "image_anim": "Buttons/Friend1_Button1A.png",
                 "size": [500, 76],
                 "offset_y": 460,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             },
             {
                 "role": "friends!",
@@ -83,7 +87,7 @@
                 "image_anim": "Buttons/Friend1_button2A.png",
                 "size": [500, 76],
                 "offset_y": 543,
-                "stats": {}
+                "stats": {"happiness": 10, "stress": -5}
             },
             {
                 "role": "not friends",
@@ -91,7 +95,7 @@
                 "image_anim": "Buttons/Friend1_Button3A.png",
                 "size": [500, 76],
                 "offset_y": 630,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             }
         ]
     },
@@ -101,6 +105,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -109,6 +114,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 10, "stress": -5},
         "buttons": []
     },
     {
@@ -117,6 +123,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -125,6 +132,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "not friends",
@@ -132,7 +140,7 @@
                 "image_anim": "Buttons/Friend2_Button1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             },
             {
                 "role": "friends!",
@@ -140,7 +148,7 @@
                 "image_anim": "Buttons/Friend2_Button2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             }
         ]
     },
@@ -150,6 +158,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -158,6 +167,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 10, "stress": -5},
         "buttons": []
     },
     {
@@ -166,6 +176,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -174,6 +185,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "friends!",
@@ -181,7 +193,7 @@
                 "image_anim": "Buttons/F3_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             },
             {
                 "role": "not friends",
@@ -189,7 +201,7 @@
                 "image_anim": "Buttons/F3_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             }
         ]
     },
@@ -199,6 +211,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -207,6 +220,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -215,6 +229,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "friends!",
@@ -222,7 +237,7 @@
                 "image_anim": "Buttons/F4_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             },
             {
                 "role": "not friends",
@@ -230,7 +245,7 @@
                 "image_anim": "Buttons/F4_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             }
         ]
     },
@@ -240,6 +255,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -248,6 +264,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -256,6 +273,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "friends!",
@@ -263,7 +281,7 @@
                 "image_anim": "Buttons/F5_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             },
             {
                 "role": "not friends",
@@ -271,7 +289,7 @@
                 "image_anim": "Buttons/F5_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             }
         ]
     },
@@ -281,6 +299,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -289,6 +308,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -297,6 +317,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "friends!",
@@ -304,7 +325,7 @@
                 "image_anim": "Buttons/F6_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"happiness": 12, "stress": -8}
             },
             {
                 "role": "not friends",
@@ -312,7 +333,7 @@
                 "image_anim": "Buttons/F6_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"happiness": -8, "stress": 5}
             }
         ]
     },
@@ -322,6 +343,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 18, "stress": -5},
         "buttons": []
     },
     {
@@ -330,6 +352,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": -12, "stress": 8},
         "buttons": []
     },
     {
@@ -338,6 +361,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "not bullied",
@@ -345,7 +369,7 @@
                 "image_anim": "Buttons/B1_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"stress": 8, "happiness": 10}
             },
             {
                 "role": "bullied!",
@@ -353,7 +377,7 @@
                 "image_anim": "Buttons/B1_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"stress": 20, "happiness": -15}
             }
         ]
     },
@@ -363,6 +387,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 15, "stress": 10},
         "buttons": []
     },
     {
@@ -371,6 +396,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": 25, "happiness": -20},
         "buttons": []
     },
     {
@@ -379,6 +405,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "bullied!",
@@ -386,7 +413,7 @@
                 "image_anim": "Buttons/B2_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"stress": 20, "happiness": -15}
             },
             {
                 "role": "not bullied",
@@ -394,7 +421,7 @@
                 "image_anim": "Buttons/B2_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"stress": 8, "happiness": 10}
             }
         ]
     },
@@ -404,6 +431,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": 25, "happiness": -20},
         "buttons": []
     },
     {
@@ -412,6 +440,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 15, "stress": 10},
         "buttons": []
     },
     {
@@ -420,6 +449,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "bullied!",
@@ -427,7 +457,7 @@
                 "image_anim": "Buttons/B3_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"stress": 20, "happiness": -15}
             },
             {
                 "role": "not bullied",
@@ -435,7 +465,7 @@
                 "image_anim": "Buttons/B3_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"stress": 8, "happiness": 10}
             }
         ]
     },
@@ -445,6 +475,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": 25, "happiness": -20},
         "buttons": []
     },
     {
@@ -453,6 +484,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 15, "stress": 10},
         "buttons": []
     },
     {
@@ -461,6 +493,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "bullied!",
@@ -468,7 +501,7 @@
                 "image_anim": "Buttons/B4_B1A.png",
                 "size": [500, 76],
                 "offset_y": 500,
-                "stats": {}
+                "stats": {"stress": 20, "happiness": -15}
             },
             {
                 "role": "not bullied",
@@ -476,7 +509,7 @@
                 "image_anim": "Buttons/B4_B2A.png",
                 "size": [500, 76],
                 "offset_y": 610,
-                "stats": {}
+                "stats": {"stress": 8, "happiness": 10}
             }
         ]
     },
@@ -486,6 +519,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": 25, "happiness": -20},
         "buttons": []
     },
     {
@@ -494,6 +528,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 15, "stress": 10},
         "buttons": []
     },
     {
@@ -502,6 +537,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": 12, "happiness": -8},
         "buttons": []
     },
     {
@@ -510,6 +546,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -527,6 +564,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -535,6 +573,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -543,6 +582,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -560,6 +600,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -568,6 +609,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -576,6 +618,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -593,6 +636,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -601,6 +645,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -609,6 +654,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -626,6 +672,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -634,6 +681,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -642,6 +690,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -659,6 +708,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -667,6 +717,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -675,6 +726,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -692,6 +744,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -700,6 +753,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -708,6 +762,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -725,6 +780,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -733,6 +789,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -741,6 +798,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "minigame",
@@ -758,6 +816,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"happiness": 20, "grades": 12, "stress": -8},
         "buttons": []
     },
     {
@@ -766,6 +825,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": -12, "grades": -8},
         "buttons": []
     },
     {
@@ -774,6 +834,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "do nothing",
@@ -781,7 +842,7 @@
                 "image_anim": "Buttons/FD_B1A.png",
                 "size": [473, 71],
                 "offset_y": 395,
-                "stats": {}
+                "stats": {"stress": -15}
             },
             {
                 "role": "find friend",
@@ -789,7 +850,7 @@
                 "image_anim": "Buttons/FD_B2A.png",
                 "size": [473, 71],
                 "offset_y": 475,
-                "stats": {}
+                "stats": {"happiness": 15}
             },
             {
                 "role": "extra credit",
@@ -797,7 +858,7 @@
                 "image_anim": "Buttons/FD_B3A.png",
                 "size": [473, 71],
                 "offset_y": 560,
-                "stats": {}
+                "stats": {"grades": 15}
             },
             {
                 "role": "read books",
@@ -805,7 +866,7 @@
                 "image_anim": "Buttons/FD_B4A.png",
                 "size": [473, 71],
                 "offset_y": 645,
-                "stats": {}
+                "stats": {"intelligence": 15}
             }
         ]
     },
@@ -815,30 +876,16 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"stress": -20, "happiness": 20},
         "buttons": []
     },
     {
         "name": "hangout",
-        "image": "Popup/FDB2_Popup3.png",
+        "image": "Popup/FDB2_Popup.png",
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
-        "buttons": []
-    },
-    {
-        "name": "hangoutzzz",
-        "image": "Popup/FDB2_Popup3.png",
-        "size": [686, 768],
-        "target_y": 0,
-        "closable": true,
-        "buttons": []
-    },
-    {
-        "name": "no friends",
-        "image": "Popup/FDB2_Popup3.png",
-        "size": [686, 768],
-        "target_y": 0,
-        "closable": true,
+        "stats": {"happiness": 15, "stress": -10},
         "buttons": []
     },
     {
@@ -847,6 +894,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"grades": 15, "intelligence": 5, "stress": 10},
         "buttons": []
     },
     {
@@ -855,6 +903,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"intelligence": 15, "grades": 8, "happiness": 8},
         "buttons": []
     },
     {
@@ -863,6 +912,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"intelligence": 15, "grades": 8, "happiness": 8},
         "buttons": []
     },
     {
@@ -871,6 +921,146 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": true,
+        "stats": {"intelligence": 15, "grades": 8, "happiness": 8},
+        "buttons": []
+    },
+    {
+        "name": "Exam",
+        "image": "Popup/ExamPopup.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "take it",
+                "image": "Buttons/Exam.png",
+                "image_anim": "Buttons/ExamA.png",
+                "size": [500, 76],
+                "offset_y": 515,
+                "stats": {"intelligence": 15, "grades": 10, "happiness": 8}
+            },
+            {
+                "role": "act sick",
+                "image": "Buttons/Sick.png",
+                "image_anim": "Buttons/SickA.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {"intelligence": -15, "grades": -10, "happiness": -8}
+            }
+        ]
+    },
+    {
+        "name": "English Quiz",
+        "image": "Popup/English_Quiz.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "take it",
+                "image": "Buttons/Quiz.png",
+                "image_anim": "Buttons/QuizA.png",
+                "size": [500, 76],
+                "offset_y": 515,
+                "stats": {"intelligence": 15, "grades": 10, "happiness": 8}
+            },
+            {
+                "role": "act sick",
+                "image": "Buttons/Sick.png",
+                "image_anim": "Buttons/SickA.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {"intelligence": -15, "grades": -10, "happiness": -8}
+            }
+        ]
+    },
+    {
+        "name": "Science Quiz",
+        "image": "Popup/ScienceQuiz.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "take it",
+                "image": "Buttons/Quiz.png",
+                "image_anim": "Buttons/QuizA.png",
+                "size": [500, 76],
+                "offset_y": 515,
+                "stats": {"intelligence": 15, "grades": 10, "happiness": 8}
+            },
+            {
+                "role": "act sick",
+                "image": "Buttons/Sick.png",
+                "image_anim": "Buttons/SickA.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {"intelligence": -15, "grades": -10, "happiness": -8}
+            }
+        ]
+    },
+    {
+        "name": "Math Quiz",
+        "image": "Popup/MathQuiz_Popup.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "take it",
+                "image": "Buttons/Quiz.png",
+                "image_anim": "Buttons/QuizA.png",
+                "size": [500, 76],
+                "offset_y": 515,
+                "stats": {"intelligence": 15, "grades": 10, "happiness": 8}
+            },
+            {
+                "role": "act sick",
+                "image": "Buttons/Sick.png",
+                "image_anim": "Buttons/SickA.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {"intelligence": -15, "grades": -10, "happiness": -8}
+            }
+        ]
+    },
+    {
+        "name": "Mix Quiz",
+        "image": "Popup/Mix_Quiz.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "take it",
+                "image": "Buttons/Quiz.png",
+                "image_anim": "Buttons/QuizA.png",
+                "size": [500, 76],
+                "offset_y": 515,
+                "stats": {"intelligence": 15, "grades": 10, "happiness": 8}
+            },
+            {
+                "role": "act sick",
+                "image": "Buttons/Sick.png",
+                "image_anim": "Buttons/SickA.png",
+                "size": [500, 76],
+                "offset_y": 630,
+                "stats": {"intelligence": -15, "grades": -10, "happiness": -8}
+            }
+        ]
+    },
+    {
+        "name": "Sick",
+        "image": "Popup/Sick.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": true,
+        "stats": {"stress": 18, "grades": -12, "happiness": -8},
         "buttons": []
     },
     {
@@ -879,6 +1069,7 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "start over",
@@ -896,6 +1087,61 @@
         "size": [686, 768],
         "target_y": 0,
         "closable": false,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "start over",
+                "image": "Buttons/StartOver.png",
+                "image_anim": "Buttons/StartOverA.png",
+                "size": [772, 205],
+                "offset_y": 665,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "gameover3",
+        "image": "Popup/GameOver3.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "start over",
+                "image": "Buttons/StartOver.png",
+                "image_anim": "Buttons/StartOverA.png",
+                "size": [772, 205],
+                "offset_y": 665,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "gameover4",
+        "image": "Popup/GameOver4.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "stats": {},
+        "buttons": [
+            {
+                "role": "start over",
+                "image": "Buttons/StartOver.png",
+                "image_anim": "Buttons/StartOverA.png",
+                "size": [772, 205],
+                "offset_y": 665,
+                "stats": {}
+            }
+        ]
+    },
+    {
+        "name": "WINNER",
+        "image": "Popup/WINNER.png",
+        "size": [686, 768],
+        "target_y": 0,
+        "closable": false,
+        "stats": {},
         "buttons": [
             {
                 "role": "start over",

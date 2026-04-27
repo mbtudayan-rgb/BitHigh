@@ -1,20 +1,23 @@
 """
-GAME:BitHigh
-MEMBERS:
-  -Bocalan, Rachel
-  -Carpizo, Eunice
-  -Tudayan, Matt Jhardy
+╔══════════════════════════════════════════════════════╗
+║                  B I T H I G H  🎮                   ║
+║  a game about surviving high school. good luck lol   ║
+╠══════════════════════════════════════════════════════╣
+║  MEMBERS:                                            ║
+║    ✏  Bocalan, Rachel                                ║
+║    ✏  Carpizo, Eunice                                ║
+║    ✏  Tudayan, Matt Jhardy                           ║
+╚══════════════════════════════════════════════════════╝
 """
 
-# ==============================================================================
-# IMPORTS
-# ==============================================================================
+# ============================================================
+#  [1]  IMPORTS & INITIALIZATION
+#       all the stuff python needs for the game to work
+# ============================================================
 import pygame, os, sys, json, random, math
-from ffpyplayer.player import MediaPlayer
+from ffpyplayer.player import MediaPlayer      # <- needed for the intro video!!
+                                               #    install: pip install ffpyplayer
 
-# ==============================================================================
-# INITIALIZATION
-# ==============================================================================
 pygame.init()
 pygame.display.set_caption("BitHigh")
 pygame.display.set_icon(pygame.image.load("Assets/BitHighIcon.png"))
@@ -24,33 +27,90 @@ SCREEN_HEIGHT = 768
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock  = pygame.time.Clock()
 
+# console colors for the NCE quiz output (ANSI codes)
 RED, GREEN, YELLOW = "\033[31m", "\033[32m", "\033[33m"
 BLUE, MAGENTA, CYAN = "\033[34m", "\033[35m", "\033[36m"
 RESET = "\033[0m"
 BOLD  = "\033[1m"
 
-# ==============================================================================
-# UTILITIES
-# ==============================================================================
+
+# ============================================================
+#  [2]  UTILITY FUNCTIONS
+# ============================================================
 def resource_path(relative):
+    """
+    finds the right folder whether we're running the .py
+    or a compiled .exe (pyinstaller changes where files live)
+    """
     base = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
     return os.path.join(base, relative)
 
+
 def load_scaled_image(path, size):
+    """load an image from disk and immediately scale it — saves us two lines every time"""
     return pygame.transform.scale(pygame.image.load(resource_path(path)), size)
 
-# ==============================================================================
-# QUIZ
-# ==============================================================================
-def run_nce_quiz(json_file="JSON/NCE.json"):
+
+# ============================================================
+#  [3]  NCE QUIZ
+#       runs in the terminal (not in pygame) during the game
+#       questions come from JSON/NCE.json
+#
+#       scoring:  8+ correct  →  pass  ✓
+#                 7 or less   →  game over  ✗
+# ============================================================
+# which quiz role runs on which game week
+MONTH_QUIZ_SCHEDULE = {
+    1: "Math Quiz",
+    2: "Math Long Test",
+    3: "Science Quiz",
+    4: "Science Long Test",
+    5: "English Quiz",
+    6: "English Long Test",
+    7: "Mix Quiz",
+    8: "Mix Long Test",
+}
+
+QUIZ_PASSED = {
+    "NCE":               8,
+    "Math Quiz":         6,
+    "Math Long Test":    6,
+    "Science Quiz":      6,
+    "Science Long Test": 6,
+    "English Quiz":      6,
+    "English Long Test": 6,
+    "Mix Quiz":          6,
+    "Mix Long Test":     8,
+}
+
+# maps each quiz role to the JSON file that holds its questions.
+# if you split questions into separate files later, update the paths here.
+QUIZ_JSON_MAP = {
+    "NCE":               "JSON/NCE.json",
+    "Math Quiz":         "JSON/NCE.json",
+    "Math Long Test":    "JSON/NCE.json",
+    "Science Quiz":      "JSON/NCE.json",
+    "Science Long Test": "JSON/NCE.json",
+    "English Quiz":      "JSON/NCE.json",
+    "English Long Test": "JSON/NCE.json",
+    "Mix Quiz":          "JSON/NCE.json",
+    "Mix Long Test":     "JSON/NCE.json",
+}
+
+def run_nce_quiz(json_file="JSON/NCE.json", role="NCE"):
     print(f"\n{MAGENTA}{BOLD}{'=' * 55}")
-    print(f"                   📋 NCE QUIZ 📋")
+    print(f"           📋 {role.upper()} 📋")
     print(f"{'=' * 55}{RESET}")
+
     with open(resource_path(json_file), "r") as f:
         all_questions = json.load(f)
 
+    # filter questions by the requested role
+    role_questions = [q for q in all_questions if q["Role"] == role]
+
+    # group by subject so they appear in subject blocks
     subjects = {}
-    for q in all_questions:
+    for q in role_questions:
         subj = q["Subject"]
         if subj not in subjects:
             subjects[subj] = []
@@ -61,8 +121,9 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
     for subj in subject_order:
         random.shuffle(subjects[subj])
 
-    score = 0
-    total = sum(len(subjects[s]) for s in subject_order)
+    score        = 0
+    total        = sum(len(subjects[s]) for s in subject_order)
+    pass_score   = QUIZ_PASSED.get(role, 8)
     question_num = 1
 
     for subj in subject_order:
@@ -91,21 +152,31 @@ def run_nce_quiz(json_file="JSON/NCE.json"):
                 print(f"{RED}  ✗ Wrong! The answer was: {q['Answer']}{RESET}")
             question_num += 1
 
-    print(f"\n{BOLD}NCE Complete!  Score: {score}/{total}")
-    if score >= 8:
+    print(f"\n{BOLD}{role} Complete!  Score: {score}/{total}  (Pass: {pass_score}+)")
+    if score >= pass_score:
         print(f"Nice work! Keep it up! 🌟📚✨")
     else:
         print(f"Yikes... better hit the books! 😬📖💀")
-        print(f"You got {7 - score + 1} more wrong than passing... 😅{RESET}\n")
-    return score
+        print(f"You need {pass_score} to pass but got {score}... 😅{RESET}\n")
 
-# ==============================================================================
-# MINIGAME — load configs from JSON
-# ==============================================================================
+    os.system('cls' if os.name == 'nt' else 'clear')
+    return score, pass_score
+
+# ============================================================
+#  [4]  MINIGAME CONFIGS  (loaded from JSON/Minigame.json)
+#       and the MinigameState class
+#
+#       how it works:
+#         - a needle bounces left ↔ right on a track
+#         - player hits SPACE (or the button) to "stop" it
+#         - if needle lands in the green zone  →  HIT ✓
+#         - if it lands in the red danger zone →  MISS ✗
+#         - win 3/3 rounds to pass the minigame
+# ============================================================
 with open(resource_path("JSON/Minigame.json"), "r") as f:
     _mg_json = json.load(f)
 
-# Convert color lists [r,g,b] back to tuples so pygame is happy
+# colors in JSON are [r,g,b] lists — convert to tuples for pygame
 MINIGAME_BAR = _mg_json["bar"]
 MINIGAME_CONFIGS = {
     name: {
@@ -118,74 +189,99 @@ MINIGAME_CONFIGS = {
     for name, cfg in _mg_json["minigames"].items()
 }
 
-class MinigameState:
 
-    TRACK_LEFT   = MINIGAME_BAR["track_left"]
-    TRACK_RIGHT  = MINIGAME_BAR["track_right"]
-    TRACK_Y      = MINIGAME_BAR["track_y"]
-    TRACK_H      = MINIGAME_BAR["track_h"]
-    DANGER_W     = MINIGAME_BAR["danger_zone_w"]
-    TRACK_W      = TRACK_RIGHT - TRACK_LEFT
-    TOTAL_ROUNDS = 3
-    FLASH_DURATION = 90
+class MinigameState:
+    """
+    handles ONE minigame session (needle bar mini-game)
+    created fresh each time a minigame popup opens
+    """
+
+    # track bounds and appearance — pulled from JSON
+    TRACK_LEFT     = MINIGAME_BAR["track_left"]
+    TRACK_RIGHT    = MINIGAME_BAR["track_right"]
+    TRACK_Y        = MINIGAME_BAR["track_y"]
+    TRACK_H        = MINIGAME_BAR["track_h"]
+    DANGER_W       = MINIGAME_BAR["danger_zone_w"]
+    TRACK_W        = TRACK_RIGHT - TRACK_LEFT
+    TOTAL_ROUNDS   = 3             # must win all 3 to pass
+    FLASH_DURATION = 90            # frames the HIT/MISS text stays on screen
 
     def __init__(self, minigame_name):
         cfg = MINIGAME_CONFIGS.get(minigame_name, MINIGAME_CONFIGS["minigame1"])
-        self.cfg            = cfg
-        self.name           = minigame_name
+        self.cfg           = cfg
+        self.name          = minigame_name
 
-        self.needle_x       = float(self.TRACK_LEFT)
-        self.direction      = 1
-        self.current_speed  = cfg["speed"]
+        # needle position & movement
+        self.needle_x      = float(self.TRACK_LEFT)
+        self.direction     = 1
+        self.current_speed = cfg["speed"]
 
-        self.round          = 0
-        self.wins           = 0
-        self.done           = False
-        self.passed         = False
+        # round tracking
+        self.round  = 0
+        self.wins   = 0
+        self.done   = False
+        self.passed = False
 
-        self.green_left     = 0
-        self.green_right    = 0
+        # green zone — placed randomly each round
+        self.green_left  = 0
+        self.green_right = 0
         self._place_green()
 
-        self.flash_timer    = 0
-        self.flash_text     = ""
-        self.flash_color    = (255, 255, 255)
+        # feedback flash (HIT! / MISS!)
+        self.flash_timer = 0
+        self.flash_text  = ""
+        self.flash_color = (255, 255, 255)
 
-        self.particles      = []
+        # particle burst on hit/miss
+        self.particles = []
 
-        self._font_big      = pygame.font.SysFont("consolas", 26, bold=True)
-        self._font_small    = pygame.font.SysFont("consolas", 16, bold=True)
-        self._font_round    = pygame.font.SysFont("consolas", 18, bold=True)
+        # fonts — created once, reused every frame
+        self._font_big   = pygame.font.SysFont("consolas", 26, bold=True)
+        self._font_small = pygame.font.SysFont("consolas", 16, bold=True)
+        self._font_round = pygame.font.SysFont("consolas", 18, bold=True)
+
+    # ── internal helpers ─────────────────────────────────────
 
     def _place_green(self):
+        """randomize the green zone position for a new round"""
         gw = int(self.TRACK_W * self.cfg["green_w_frac"])
         max_left = self.TRACK_RIGHT - gw - 20
         self.green_left  = random.randint(self.TRACK_LEFT + 20, max_left)
         self.green_right = self.green_left + gw
 
     def _lerp_color(self, c1, c2, t):
+        """linear interpolate between two RGB tuples"""
         return tuple(int(c1[i] + (c2[i] - c1[i]) * t) for i in range(3))
 
     def _burst(self, x, y, color):
+        """spawn a bunch of particles at (x, y) — called on hit/miss"""
         for _ in range(18):
             angle = random.uniform(0, math.tau)
             speed = random.uniform(2, 6)
             self.particles.append({
-                "x": x, "y": y,
-                "vx": math.cos(angle) * speed,
-                "vy": math.sin(angle) * speed - 2,
+                "x":     x,
+                "y":     y,
+                "vx":    math.cos(angle) * speed,
+                "vy":    math.sin(angle) * speed - 2,
                 "color": color,
-                "life": 1.0,
-                "size": random.randint(3, 7),
+                "life":  1.0,
+                "size":  random.randint(3, 7),
             })
 
+    # ── public methods ────────────────────────────────────────
+
     def hit(self):
+        """
+        called when the player presses the hit button.
+        checks if needle is in the green zone, updates score.
+        does nothing if the game is already done or mid-flash.
+        """
         if self.done or self.flash_timer > 0:
             return
 
         nx = self.needle_x
         if self.green_left <= nx <= self.green_right:
-            self.wins += 1
+            self.wins       += 1
             self.flash_text  = f"HIT!  ({self.wins}/{self.TOTAL_ROUNDS})"
             self.flash_color = self.cfg["green_color"]
             self._burst(int(nx), self.TRACK_Y, self.cfg["green_color"])
@@ -195,25 +291,31 @@ class MinigameState:
             self._burst(int(nx), self.TRACK_Y, (230, 60, 60))
 
         self.flash_timer = self.FLASH_DURATION
-        self.round += 1
+        self.round      += 1
 
+        # check if all rounds are done
         if self.round >= self.TOTAL_ROUNDS:
             self.done   = True
             self.passed = (self.wins == self.TOTAL_ROUNDS)
 
     def update(self):
+        """
+        called every frame.
+        moves the needle, counts down flash, moves particles.
+        """
         if self.done:
             return
 
         if self.flash_timer > 0:
             self.flash_timer -= 1
             if self.flash_timer == 0 and not self.done:
-                # Advance to next round
+                # start the next round — place new green zone, speed up a bit
                 self._place_green()
                 self.current_speed += self.cfg["speed_increment"]
-                self.needle_x = float(self.TRACK_LEFT)
-                self.direction = 1
+                self.needle_x       = float(self.TRACK_LEFT)
+                self.direction      = 1
         else:
+            # bounce the needle back and forth
             self.needle_x += self.current_speed * self.direction
             if self.needle_x >= self.TRACK_RIGHT:
                 self.needle_x = float(self.TRACK_RIGHT)
@@ -222,14 +324,16 @@ class MinigameState:
                 self.needle_x = float(self.TRACK_LEFT)
                 self.direction = 1
 
+        # update particles (gravity + fade)
         for p in self.particles:
             p["x"]    += p["vx"]
             p["y"]    += p["vy"]
-            p["vy"]   += 0.25
+            p["vy"]   += 0.25          # gravity
             p["life"] -= 0.04
         self.particles = [p for p in self.particles if p["life"] > 0]
 
     def draw(self, surface):
+        """draws the whole minigame bar + needle + particles + flash text"""
         cfg = self.cfg
         TL  = self.TRACK_LEFT
         TR  = self.TRACK_RIGHT
@@ -239,62 +343,75 @@ class MinigameState:
 
         top = TY - TH // 2
 
+        # ── round indicator dots ──────────────────────────────
         for i in range(self.TOTAL_ROUNDS):
-            cx = SCREEN_WIDTH // 2 + (i - self.TOTAL_ROUNDS // 2) * 28 + 14
+            cx     = SCREEN_WIDTH // 2 + (i - self.TOTAL_ROUNDS // 2) * 28 + 14
             filled = i < self.round
-            pygame.draw.circle(surface, cfg["green_color"] if filled else (80, 80, 100), (cx, top - 22), 8)
+            pygame.draw.circle(
+                surface,
+                cfg["green_color"] if filled else (80, 80, 100),
+                (cx, top - 22), 8
+            )
             if filled:
                 pygame.draw.circle(surface, (255, 255, 255), (cx, top - 22), 4)
 
-        # Round label
         rnd_txt = self._font_round.render(
             f"Round {min(self.round + 1, self.TOTAL_ROUNDS)}/{self.TOTAL_ROUNDS}",
             True, (200, 200, 220))
         surface.blit(rnd_txt, (TL, top - 32))
 
+        # ── track background ──────────────────────────────────
         shadow_rect = pygame.Rect(TL + 3, top + 5, TW, TH)
         pygame.draw.rect(surface, (10, 10, 20), shadow_rect, border_radius=10)
 
         track_rect = pygame.Rect(TL, top, TW, TH)
         pygame.draw.rect(surface, cfg["track_color"], track_rect, border_radius=10)
 
+        # ── red danger zones on each end ─────────────────────
         dw = 25
-        pygame.draw.rect(surface, cfg["danger_color"], pygame.Rect(TL, top, dw, TH), border_radius=10)
+        pygame.draw.rect(surface, cfg["danger_color"], pygame.Rect(TL,      top, dw, TH), border_radius=10)
         pygame.draw.rect(surface, cfg["danger_color"], pygame.Rect(TR - dw, top, dw, TH), border_radius=10)
 
-        gw   = self.green_right - self.green_left
-        gz   = pygame.Rect(self.green_left, top, gw, TH)
+        # ── green hit zone ────────────────────────────────────
+        gw = self.green_right - self.green_left
+        gz = pygame.Rect(self.green_left, top, gw, TH)
         pygame.draw.rect(surface, cfg["green_color"], gz, border_radius=7)
 
-        hl = pygame.Rect(self.green_left + 4, top + 4, gw - 8, 8)
+        # highlight stripe on green zone
+        hl     = pygame.Rect(self.green_left + 4, top + 4, gw - 8, 8)
         bright = self._lerp_color(cfg["green_color"], (255, 255, 255), 0.5)
         pygame.draw.rect(surface, bright, hl, border_radius=3)
 
+        # center line on green zone
         gc = (self.green_left + self.green_right) // 2
         pygame.draw.line(surface, (255, 255, 255), (gc, top + 3), (gc, top + TH - 3), 2)
 
+        # track border
         pygame.draw.rect(surface, (80, 80, 110), track_rect, 2, border_radius=10)
 
+        # ── needle ────────────────────────────────────────────
         if self.flash_timer == 0 or not self.done:
             nx = int(self.needle_x)
-            pygame.draw.line(surface, (0, 0, 0), (nx + 2, top - 12), (nx + 2, top + TH + 12), 4)
-            pygame.draw.line(surface, cfg["needle_color"], (nx, top - 12), (nx, top + TH + 12), 3)
-            pygame.draw.circle(surface, cfg["needle_color"], (nx, top - 12), 5)
+            pygame.draw.line(surface, (0, 0, 0),             (nx + 2, top - 12), (nx + 2, top + TH + 12), 4)
+            pygame.draw.line(surface, cfg["needle_color"],   (nx,     top - 12), (nx,     top + TH + 12), 3)
+            pygame.draw.circle(surface, cfg["needle_color"], (nx, top - 12),      5)
             pygame.draw.circle(surface, cfg["needle_color"], (nx, top + TH + 12), 5)
-            pygame.draw.circle(surface, (255, 255, 255), (nx, top - 12), 2)
-            pygame.draw.circle(surface, (255, 255, 255), (nx, top + TH + 12), 2)
+            pygame.draw.circle(surface, (255, 255, 255),     (nx, top - 12),      2)
+            pygame.draw.circle(surface, (255, 255, 255),     (nx, top + TH + 12), 2)
 
+        # ── HIT / MISS flash text ─────────────────────────────
         if self.flash_timer > 0:
             t   = self.flash_timer / self.FLASH_DURATION
             sz  = int(20 + 10 * (1 - abs(t - 0.5) * 2))
             fnt = pygame.font.SysFont("consolas", sz, bold=True)
-            txt = fnt.render(self.flash_text, True, self.flash_color)
+            txt    = fnt.render(self.flash_text, True, self.flash_color)
             shadow = fnt.render(self.flash_text, True, (0, 0, 0))
             cx = SCREEN_WIDTH // 2
             ty = top + TH + 18
             surface.blit(shadow, (cx - txt.get_width() // 2 + 2, ty + 2))
             surface.blit(txt,    (cx - txt.get_width() // 2,     ty))
 
+        # ── ALL HIT / FAILED result ───────────────────────────
         if self.done:
             msg = "ALL HIT! ✓" if self.passed else f"FAILED ({self.wins}/3)"
             col = cfg["green_color"] if self.passed else (230, 60, 60)
@@ -305,39 +422,45 @@ class MinigameState:
             surface.blit(shd, (cx - txt.get_width() // 2 + 2, ty + 2))
             surface.blit(txt, (cx - txt.get_width() // 2,     ty))
 
+        # ── particles ─────────────────────────────────────────
         for p in self.particles:
             alpha = max(0, p["life"])
             col   = self._lerp_color(p["color"], (0, 0, 0), 1 - alpha)
             r     = max(1, int(p["size"] * alpha))
             pygame.draw.circle(surface, col, (int(p["x"]), int(p["y"])), r)
 
-
+        # label at the top
         lbl = self._font_small.render(f"[ {cfg['label']} MINIGAME ]", True, (160, 160, 200))
         surface.blit(lbl, (TL, top - 52))
 
-# ==============================================================================
-# POPUP
-# ==============================================================================
+
+# ============================================================
+#  [5]  POPUP CLASS
+#       popups slide in from the top of the screen,
+#       do a little bounce (bob), then sit still.
+#       clicking on them (if closable) slides them back out.
+# ============================================================
 class Popup:
-    OFFSCREEN_Y   = -400
-    SLIDE_SPEED   = 35
-    BOB_STRENGTH  = -8
-    GRAVITY       = 1.2
-    BOB_DAMPEN    = 0.55
-    BOB_STOP      = 1.5
-    SLIDE_OUT_SPD = 22
+    OFFSCREEN_Y   = -400    # starting position (above screen)
+    SLIDE_SPEED   = 35      # px/frame while entering
+    BOB_STRENGTH  = -8      # initial upward velocity after landing
+    GRAVITY       = 1.2     # how fast it falls back down
+    BOB_DAMPEN    = 0.55    # fraction of velocity kept each bounce (e.g. 0.55 = 55% kept)
+    BOB_STOP      = 1.5     # stop bobbing below this velocity
+    SLIDE_OUT_SPD = 22      # px/frame while exiting
 
     def __init__(self, image_path, size, target_y, unclickable=True):
-        self.image      = load_scaled_image(image_path, size)
-        self.rect       = self.image.get_rect(centerx=SCREEN_WIDTH // 2, top=self.OFFSCREEN_Y)
-        self.target_y   = target_y
-        self.unclickable = unclickable
-        self.state      = None
-        self.vel        = 0.0
-        self.active     = False
-        self.minigame   = None   # MinigameState or None
+        self.image       = load_scaled_image(image_path, size)
+        self.rect        = self.image.get_rect(centerx=SCREEN_WIDTH // 2, top=self.OFFSCREEN_Y)
+        self.target_y    = target_y
+        self.unclickable = unclickable  # if True, clicking the popup closes it
+        self.state       = None         # 'slide_in' | 'bob' | 'slide_out' | None
+        self.vel         = 0.0
+        self.active      = False
+        self.minigame    = None         # MinigameState attached to this popup (if any)
 
     def open(self, sound=None):
+        """make the popup appear and slide in from the top"""
         self.rect.top = self.OFFSCREEN_Y
         self.vel      = self.SLIDE_SPEED
         self.state    = 'slide_in'
@@ -346,11 +469,13 @@ class Popup:
             sound.play()
 
     def close(self):
+        """start the slide-out animation"""
         if self.active and self.state != 'slide_out':
             self.vel   = self.SLIDE_OUT_SPD
             self.state = 'slide_out'
 
     def handle_event(self, event):
+        """returns True if click closed the popup"""
         if not self.active:
             return False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
@@ -360,6 +485,7 @@ class Popup:
         return False
 
     def update(self):
+        """move the popup each frame based on current state"""
         if not self.active:
             return
 
@@ -378,9 +504,7 @@ class Popup:
                 self.vel      = self.vel * -self.BOB_DAMPEN
                 if abs(self.vel) < self.BOB_STOP:
                     self.vel   = 0
-                    self.state = None
-            if self.minigame and self.state is None:
-                pass  # minigame starts updating once settled
+                    self.state = None   # settled — minigame can now start
 
         elif self.state == 'slide_out':
             self.rect.top += self.vel
@@ -389,23 +513,29 @@ class Popup:
                 self.state    = None
                 self.minigame = None
 
-        # Update embedded minigame
+        # tick minigame only when the popup is fully settled
         if self.minigame and self.state is None:
             self.minigame.update()
 
     def draw(self, surface):
         if not self.active:
             return
+        # darken the background behind the popup
         overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 150))
         surface.blit(overlay, (0, 0))
         surface.blit(self.image, self.rect)
+        # draw embedded minigame on top (only when settled)
         if self.minigame and self.state is None:
             self.minigame.draw(surface)
 
-# ==============================================================================
-# BUTTON
-# ==============================================================================
+
+# ============================================================
+#  [6]  BUTTON CLASS
+#       two images: normal and pressed.
+#       returns True from handle_event only on a full click
+#       (mouse down AND up on the same button).
+# ============================================================
 class Button:
     def __init__(self, image1_path, image2_path, position, size):
         self.image_normal  = load_scaled_image(image1_path, size)
@@ -415,6 +545,7 @@ class Button:
         self.is_holding    = False
 
     def handle_event(self, event):
+        """returns True on a completed click (down + up on this button)"""
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.is_holding    = True
@@ -433,25 +564,30 @@ class Button:
     def draw(self, surface):
         surface.blit(self.current_image, self.rect)
 
-# ==============================================================================
-# FADE TRANSITION
-# ==============================================================================
+
+# ============================================================
+#  [7]  FADE TRANSITION
+#       fades the screen to a solid blue color, runs a callback
+#       at peak darkness, then fades back in.
+#       used for scene switches (menu → game, etc.)
+# ============================================================
 class Fade:
-    FADE_IN_SPEED  = 5
-    FADE_OUT_SPEED = 5
+    FADE_IN_SPEED  = 5   # alpha added per frame (0→255)
+    FADE_OUT_SPEED = 5   # alpha removed per frame (255→0)
 
     def __init__(self):
-        self.overlay     = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.overlay.fill((15, 58, 78))
+        self.overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.overlay.fill((15, 58, 78))   # dark teal-blue
         self.alpha       = 0
-        self.state       = None
-        self.on_complete = None
+        self.state       = None           # 'fade_in' | 'fade_out' | None
+        self.on_complete = None           # callback fired at peak opacity
 
     @property
     def active(self):
         return self.state is not None
 
     def start(self, on_peak_callback=None):
+        """kick off a fade — callback fires when fully black (before fade out)"""
         self.alpha       = 0
         self.state       = 'fade_in'
         self.on_complete = on_peak_callback
@@ -476,38 +612,69 @@ class Fade:
         self.overlay.set_alpha(self.alpha)
         surface.blit(self.overlay, (0, 0))
 
-# ==============================================================================
-# GAME STATE
-# ==============================================================================
+
+# ============================================================
+#  [8]  GAME STATE
+#       holds everything that needs to survive between frames:
+#       current scene, selected character, week number, stats.
+#
+#       stats layout:
+#         [0] stress       ← inverted: high = bad!
+#         [1] happiness
+#         [2] grades
+#         [3] intelligence
+# ============================================================
 class GameState:
     def __init__(self):
-        self.running           = True
-        self.playing_video     = True
-        self.week              = 0
-        self.scene             = "menu"
-        self.gender            = None
-        self.selected_char     = None
-        self.pending_quiz      = False
-        self.quiz_just_finished = False          # ← NEW
-        self.hp                = [0, 0, 0, 0]
-        self.hp_display        = [0.0, 0.0, 0.0, 0.0]
-        self.pending_mg_result = None
+        self.running            = True
+        self.playing_video      = True
+        self.week               = 0
+        self.scene              = "menu"
+        self.gender             = None
+        self.selected_char      = None
+        self.pending_quiz       = False                 # set to True to trigger NCE quiz next frame
+        self.pending_quiz_role  = "NCE"
+        self.quiz_just_finished = False
+        self.stats              = [0, 0, 0, 0]          # actual values
+        self.stats_display      = [0.0, 0.0, 0.0, 0.0]  # smoothed for the bar animation
+        self.pending_mg_result  = None
+        self.month_schedules    = {}
+        self.week_label_timer   = 0
+        self.week_label_text    = ""
+        self.used_friend_bully = set()
+        self.used_minigames = set()
 
     def apply_char_stats(self, char):
-        self.hp = [
+        """copy starting stats from the selected character's JSON entry"""
+        self.stats = [
             char.get("starting_stress",       20),
             char.get("starting_happiness",    40),
             char.get("starting_grades",       30),
             char.get("starting_intelligence",  0),
         ]
-        self.hp_display = [float(v) for v in self.hp]
+        self.stats_display = [float(v) for v in self.stats]
 
-# ==============================================================================
-# ASSET LOADING
-# ==============================================================================
-CHAR_IMG_SIZE = (700, 382)
+    def get_month_schedule(self, month):
+        """returns the 4-event order for this month, generating it if needed"""
+        if month not in self.month_schedules:
+            order = ['lore', 'minigame', 'quiz', 'free_day']
+            if month in (1, 8):
+                pass  # fixed order — don't shuffle
+            else:
+                random.shuffle(order)
+            self.month_schedules[month] = order
+        return self.month_schedules[month]
+
+
+# ============================================================
+#  [9]  ASSET LOADING
+#       loads EVERYTHING at startup so nothing lags mid-game.
+#       returns one big `assets` dict used throughout the code.
+# ============================================================
+CHAR_IMG_SIZE = (700, 382)   # all character portraits are this size
 
 def load_chars_from_json(json_file, char_images):
+    """load character data from JSON and pre-load their portrait images"""
     with open(resource_path(json_file), "r") as f:
         chars = json.load(f)
     for char in chars:
@@ -516,45 +683,61 @@ def load_chars_from_json(json_file, char_images):
             char_images[key] = load_scaled_image(key, CHAR_IMG_SIZE)
     return chars
 
+
 def load_assets():
     assets = {}
-    assets['intro_video']     = MediaPlayer(resource_path("Assets/GameIntro.mov"))
-    assets['button_click']    = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
-    assets['slide_in']        = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
-    assets['skip_clicked']    = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
-    assets['game_over']       = pygame.mixer.Sound(resource_path("Assets/GameOver.mp3"))
-    assets['happy']           = pygame.mixer.Sound(resource_path("Assets/Happy.wav"))
-    assets['sad']             = pygame.mixer.Sound(resource_path("Assets/Sad.wav"))
 
-    assets['main_game_image'] = load_scaled_image("Assets/MainGame.png",  (SCREEN_WIDTH, SCREEN_HEIGHT))
-    assets['main_menu_image'] = load_scaled_image("Assets/Menu.png",      (SCREEN_WIDTH, SCREEN_HEIGHT))
+    # video (plays on startup)
+    assets['intro_video'] = MediaPlayer(resource_path("Assets/GameIntro.mov"))
 
-    assets['char_images']     = {}
-    all_chars                 = load_chars_from_json("JSON/Characters.json", assets['char_images'])
-    assets['boys_chars']      = [c for c in all_chars if c['Gender'] == 'Male']
-    assets['girls_chars']     = [c for c in all_chars if c['Gender'] == 'Female']
+    # sound effects
+    assets['button_click'] = pygame.mixer.Sound(resource_path("Assets/ButtonClicked.mp3"))
+    assets['slide_in']     = pygame.mixer.Sound(resource_path("Assets/slide_in.mp3"))
+    assets['skip_clicked'] = pygame.mixer.Sound(resource_path("Assets/skip_clicked.mp3"))
+    assets['game_over']    = pygame.mixer.Sound(resource_path("Assets/GameOver.mp3"))
+    assets['happy']        = pygame.mixer.Sound(resource_path("Assets/Happy.wav"))
+    assets['sad']          = pygame.mixer.Sound(resource_path("Assets/Sad.wav"))
+
+    # background images
+    assets['main_game_image'] = load_scaled_image("Assets/MainGame.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
+    assets['main_menu_image'] = load_scaled_image("Assets/Menu.png",     (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    # character portraits (sorted by gender for the selection screen)
+    assets['char_images'] = {}
+    all_chars             = load_chars_from_json("JSON/Characters.json", assets['char_images'])
+    assets['boys_chars']  = [c for c in all_chars if c['Gender'] == 'Male']
+    assets['girls_chars'] = [c for c in all_chars if c['Gender'] == 'Female']
 
     return assets
 
-# ==============================================================================
-# BUTTON / POPUP CREATION
-# ==============================================================================
+
+# ============================================================
+#  [10] BUTTON & POPUP FACTORY
+#       creates all the buttons and popups used in the game.
+#       most come from JSON/Popup.json — see load_popups_from_json()
+#       below for how that works.
+# ============================================================
 def create_buttons_and_popups():
     popups, buttons = load_popups_from_json("JSON/Popup.json")
 
+    # hard-coded menu buttons (not in the popup JSON)
     buttons['menu_start']   = Button("Buttons/StartGameButton.png", "Buttons/StartGameAnimation.png", (338, 385), (474, 109))
     buttons['menu_details'] = Button("Buttons/DetailsButton.png",   "Buttons/DetailsAnimation.png",   (338, 565), (474, 109))
     buttons['skip']         = Button("Buttons/Skip.png",            "Buttons/SkipAnimation.png",      (120, 655), (128, 130))
 
     return buttons, popups
 
-# ==============================================================================
-# VIDEO PLAYBACK
-# ==============================================================================
+
+# ============================================================
+#  [11] VIDEO PLAYBACK
+#       ffpyplayer feeds us frames as raw RGB buffers.
+#       we blit each frame to the screen until 'eof' is returned.
+# ============================================================
 def handle_video(assets, game_state):
     frame, val = assets['intro_video'].get_frame()
 
     if val == 'eof':
+        # video finished → switch to menu
         game_state.playing_video = False
         screen.blit(assets['main_menu_image'], (0, 0))
         pygame.display.update()
@@ -565,12 +748,19 @@ def handle_video(assets, game_state):
         img, _ = frame
         surface = pygame.transform.scale(
             pygame.image.frombuffer(img.to_bytearray()[0], img.get_size(), 'RGB'),
-            (SCREEN_WIDTH, SCREEN_HEIGHT))
+            (SCREEN_WIDTH, SCREEN_HEIGHT)
+        )
         screen.blit(surface, (0, 0))
 
-# ==============================================================================
-# POPUP + BUTTON LOADING FROM JSON
-# ==============================================================================
+
+# ============================================================
+#  [12] JSON-BASED POPUP + BUTTON LOADER
+#       reads JSON/Popup.json and builds Popup + Button objects.
+#
+#       JSON structure per entry:
+#         name, image, size, target_y, closable, buttons[ ]
+#       each button has: image, image_anim, size, offset_y, role, stats
+# ============================================================
 def load_popups_from_json(json_file="JSON/Popup.json"):
     with open(resource_path(json_file), "r") as f:
         data = json.load(f)
@@ -582,42 +772,39 @@ def load_popups_from_json(json_file="JSON/Popup.json"):
         name = entry["name"]
         w, h = entry["size"]
 
-        popup = Popup(
-            entry["image"],
-            (w, h),
-            target_y    = entry["target_y"],
-            unclickable = entry["closable"]
-        )
+        popup             = Popup(entry["image"], (w, h), target_y=entry["target_y"], unclickable=entry["closable"])
         popup.button_data = entry.get("buttons", [])
-        popups[name] = popup
+        popup.json_stats  = entry.get("stats", {})   # ← stats applied when this popup is clicked closed
+        popups[name]      = popup
 
         for i, btn_data in enumerate(popup.button_data):
-            key = f"{name}_{i}"
-            buttons[key] = Button(
-                btn_data["image"],
-                btn_data["image_anim"],
-                (0, 0),
-                tuple(btn_data["size"])
-            )
+            key            = f"{name}_{i}"
+            buttons[key]   = Button(btn_data["image"], btn_data["image_anim"], (0, 0), tuple(btn_data["size"]))
             buttons[key].role  = btn_data["role"]
             buttons[key].stats = btn_data.get("stats", {})
 
     return popups, buttons
 
-# ==============================================================================
-# MINIGAME NAMES (all 8)
-# ==============================================================================
+
+# ============================================================
+#  MINIGAME NAME LIST  (minigame1 through minigame8)
+# ============================================================
+
 ALL_MINIGAMES = [f"minigame{i}" for i in range(1, 9)]
 
 def is_minigame_popup(name):
     return name in ALL_MINIGAMES
 
-# ==============================================================================
-# MENU SCENE — EVENT HANDLING
-# ==============================================================================
+
+# ============================================================
+#  [13] EVENT HANDLING — MENU SCENE
+#       handles clicks on the main menu screen:
+#         Start Game → opens gender popup → fade to game
+#         Details    → opens the details popup (info screen)
+# ============================================================
 def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
     if blue_fade.active:
-        return
+        return   # ignore input while fading
 
     gender_popup  = popups['gender']
     details_popup = popups['details']
@@ -630,19 +817,21 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
                 continue
             if btn.handle_event(event):
                 assets['button_click'].play()
+
                 if btn.role == "gender_boy":
-                    game_state.gender = "boy"
+                    game_state.gender        = "boy"
                     game_state.selected_char = random.choice(assets['boys_chars'])
-                    game_state.apply_char_stats(game_state.selected_char)
                 elif btn.role == "gender_girl":
-                    game_state.gender = "girl"
+                    game_state.gender        = "girl"
                     game_state.selected_char = random.choice(assets['girls_chars'])
-                    game_state.apply_char_stats(game_state.selected_char)
+
+                game_state.apply_char_stats(game_state.selected_char)
 
                 def switch_to_game():
                     popups['gender'].active = False
                     popups['gender'].state  = None
                     game_state.scene        = 'game'
+                    popups['nce'].open(sound=assets['slide_in'])
 
                 blue_fade.start(on_peak_callback=switch_to_game)
 
@@ -658,9 +847,30 @@ def handle_menu_events(buttons, popups, game_state, event, blue_fade, assets):
             assets['button_click'].play()
             gender_popup.open(sound=assets['slide_in'])
 
-# ==============================================================================
-# GAME SCENE — EVENT HANDLING
-# ==============================================================================
+
+# ============================================================
+#  [14] EVENT HANDLING — GAME SCENE
+#
+#       week cycle (repeats every 4 weeks):
+#         week % 4 == 1  → friend or bully encounter
+#         week % 4 == 2  → minigame
+#         week % 4 == 3  → free (nothing happens)
+#         week % 4 == 0  → free day popup
+#
+#       stat indexes (used by apply_stats):
+#         0 = stress  |  1 = happiness  |  2 = grades  |  3 = intelligence
+# ============================================================
+QUIZ_POPUP_MAP = {
+    "Math Quiz":         "Math Quiz",
+    "Math Long Test":    "Exam",
+    "Science Quiz":      "Science Quiz",
+    "Science Long Test": "Exam",
+    "English Quiz":      "English Quiz",
+    "English Long Test": "Exam",
+    "Mix Quiz":          "Mix Quiz",
+    "Mix Long Test":     "Exam",
+}
+
 STAT_INDEX = {
     "stress":       0,
     "happiness":    1,
@@ -669,48 +879,113 @@ STAT_INDEX = {
 }
 
 def apply_stats(game_state, stats):
+    """add (or subtract) stat changes, clamped to [0, 100]"""
     for stat, value in stats.items():
         idx = STAT_INDEX.get(stat)
         if idx is not None:
-            game_state.hp[idx] = max(0, min(100, game_state.hp[idx] + value))
+            game_state.stats[idx] = max(0, min(100, game_state.stats[idx] + value))
+
+def check_stat_game_overs(game_state, popups, assets):
+    if game_state.stats[1] == 0:
+        popups['gameover3'].open(sound=assets['game_over'])
+    elif game_state.stats[2] == 0:
+        popups['gameover4'].open(sound=assets['game_over'])
+
+def apply_passive_penalties(game_state):
+    """
+    called every time the skip button is pressed.
+    stress >= 80       → happiness -5
+    intelligence <= 20 → grades   -5
+    game-over checks are handled by the caller after this returns,
+    so we only touch stats here — no popup logic.
+    """
+    stress       = game_state.stats[0]
+    happiness    = game_state.stats[1]
+    grades       = game_state.stats[2]
+    intelligence = game_state.stats[3]
+
+    # ── stress penalty ────────────────────────────────────────
+    if stress >= 80:
+        game_state.stats[1] = max(0, happiness - 5)
+
+    # ── intelligence penalty ──────────────────────────────────
+    if intelligence <= 20:
+        game_state.stats[2] = max(0, grades - 5)
+
 
 def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
     if blue_fade.active:
         return
 
     any_popup_active = any(p.active for p in popups.values())
+
+    # ── SKIP button (advances the week) ──────────────────────
     if not any_popup_active:
         if buttons['skip'].handle_event(event):
             assets['skip_clicked'].play()
 
-            # ← NEW: clear terminal after quiz
             if game_state.quiz_just_finished:
-                print("\n" * 50)
+                os.system('cls' if os.name == 'nt' else 'clear')
                 game_state.quiz_just_finished = False
 
             game_state.week += 1
-            if game_state.week > 32:
-                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
-                game_state.week = 0
-            elif game_state.week % 4 == 2:
-                chosen = random.choice([
-                    'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
-                    'bully1', 'bully2', 'bully3', 'bully4',])
-                popups[chosen].open(sound=assets['slide_in'])
-            elif game_state.week % 4 == 3:
-                chosen_mg = random.choice(ALL_MINIGAMES)
-                popups[chosen_mg].open(sound=assets['slide_in'])
-            elif game_state.week % 4 == 4:
-                chosen = random.choice([
-                    'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
-                    'bully1', 'bully2', 'bully3', 'bully4', ])
-                popups[chosen].open(sound=assets['slide_in'])
-            elif game_state.week % 4 == 5:
-                popups['free day'].open(sound=assets['slide_in'])
-            else:
-                popups['nce'].open(sound=assets['slide_in'])
+            apply_passive_penalties(game_state)   # stat math only
+            check_stat_game_overs(game_state, popups, assets)  # one single check after
 
-    # NCE popup
+            if 1 <= game_state.week <= 32:
+                month         = (game_state.week - 1) // 4 + 1
+                week_in_month = (game_state.week - 1) % 4 + 1
+                game_state.week_label_text  = f"Month {month}  -  Week {week_in_month}"
+                game_state.week_label_timer = 180
+
+            if game_state.week == 32:
+                game_state.week = 0
+                popups['WINNER'].open(sound=assets['happy'])
+
+            elif game_state.week == 0:
+                popups['nce'].open(sound=assets['slide_in'])
+            else:
+                month         = (game_state.week - 1) // 4 + 1
+                week_in_month = (game_state.week - 1) % 4  # 0, 1, 2, 3
+                schedule      = game_state.get_month_schedule(month)
+                event_type    = schedule[week_in_month]
+
+                if event_type == 'lore':
+                    ALL_FRIEND_BULLY = [
+                        'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
+                        'bully1', 'bully2', 'bully3', 'bully4',
+                    ]
+                    pool = [p for p in ALL_FRIEND_BULLY if p not in game_state.used_friend_bully]
+                    if not pool:
+                        game_state.used_friend_bully.clear()
+                        pool = ALL_FRIEND_BULLY
+                    chosen = random.choice(pool)
+                    game_state.used_friend_bully.add(chosen)
+                    popups[chosen].open(sound=assets['slide_in'])
+
+                elif event_type == 'minigame':
+                    mg_pool = [m for m in ALL_MINIGAMES if m not in game_state.used_minigames]
+                    if not mg_pool:
+                        game_state.used_minigames.clear()
+                        mg_pool = ALL_MINIGAMES
+                    chosen_mg = random.choice(mg_pool)
+                    game_state.used_minigames.add(chosen_mg)
+                    popups[chosen_mg].open(sound=assets['slide_in'])
+
+                elif event_type == 'quiz':
+                    if month in MONTH_QUIZ_SCHEDULE:
+                        role      = MONTH_QUIZ_SCHEDULE[month]
+                        popup_key = QUIZ_POPUP_MAP.get(role)
+                        game_state.pending_quiz_role = role
+                        if popup_key and popup_key in popups:
+                            popups[popup_key].open(sound=assets['slide_in'])
+                        else:
+                            game_state.pending_quiz = True
+
+                elif event_type == 'free_day':
+                    popups['free day'].open(sound=assets['slide_in'])
+
+    # ── NCE QUIZ popup ────────────────────────────────────────
     if popups['nce'].active:
         popups['nce'].handle_event(event)
         for key, btn in buttons.items():
@@ -721,12 +996,15 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 if btn.role == "nce_quiz":
                     apply_stats(game_state, btn.stats)
                     popups['nce'].close()
-                    game_state.pending_quiz = True
+                    game_state.pending_quiz      = True
+                    game_state.pending_quiz_role = "NCE"
                 elif btn.role == "nce_close":
+                    # skipped the quiz → immediate game over
                     popups['nce'].active = False
                     popups['nce'].state  = None
                     popups['gameover1'].open(sound=assets['game_over'])
 
+    # ── FREE DAY popup ────────────────────────────────────────
     if popups['free day'].active:
         popup = popups['free day']
         for key, btn in buttons.items():
@@ -734,68 +1012,78 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 continue
             if btn.handle_event(event):
                 assets['button_click'].play()
-                role = btn.role
+                apply_stats(game_state, btn.stats)   # ← applies stats straight from JSON
                 popup.active = False
-                popup.state = None
+                popup.state  = None
+                role = btn.role
+
                 if role == 'do nothing':
                     popups['relaxing'].open(sound=assets['happy'])
                 elif role == 'find friend':
-                    apply_stats(game_state, {'happiness': 10})
-                    popups['no friends'].open(sound=assets['sad'])
+                    popups['hangout'].open(sound=assets['happy'])
                 elif role == 'extra credit':
-                    apply_stats(game_state, {'grades': 10, 'stress': 5})
                     popups['tryhard'].open(sound=assets['happy'])
                 elif role == 'read books':
-                    apply_stats(game_state, {'intelligence': 10, 'grades': 5})
-                    book_popup = random.choice(['Scissor', 'WAP', 'Corpus'])
-                    popups[book_popup].open(sound=assets['happy'])
+                    popups[random.choice(['Scissor', 'WAP', 'Corpus'])].open(sound=assets['happy'])
 
+    # ── MINIGAME popups ───────────────────────────────────────
     for mg_name in ALL_MINIGAMES:
         popup = popups[mg_name]
         if not popup.active:
             continue
 
+        # create the minigame state once the popup settles
         if popup.state is None and popup.minigame is None:
             popup.minigame = MinigameState(mg_name)
 
-        mg = popup.minigame
+        mg  = popup.minigame
         key = f"{mg_name}_0"
+
         if key in buttons:
             btn = buttons[key]
             if popup.button_data:
-                offset_y = popup.button_data[0]["offset_y"]
-                btn.rect.center = (SCREEN_WIDTH // 2, popup.rect.top + offset_y)
+                btn.rect.center = (SCREEN_WIDTH // 2, popup.rect.top + popup.button_data[0]["offset_y"])
 
             if mg and not mg.done:
-                if btn.handle_event(event):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and btn.rect.collidepoint(event.pos):
                     assets['button_click'].play()
                     mg.hit()
             elif mg and mg.done:
+                # show result popup (pass or fail)
                 if btn.handle_event(event):
                     assets['button_click'].play()
-                    passed = mg.passed
+                    passed         = mg.passed
                     popup.active   = False
                     popup.state    = None
                     popup.minigame = None
-                    rkey = f"mg{mg_name[-1]}p{'1' if passed else '2'}"
+                    rkey  = f"mg{mg_name[-1]}p{'1' if passed else '2'}"
                     sound = assets['happy'] if passed else assets['sad']
                     if rkey in popups:
                         popups[rkey].open(sound=sound)
 
-    # Result popups (closable by clicking) — OUTSIDE the minigame loop!
-    for key in ('friend1popup1', 'friend1popup2', 'friend1popup3',
-                'friend2popup1', 'friend2popup2', 'friend2popup3',
-                'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
-                'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2',
-                'b4p1', 'b4p2', 'b4p3',
-                'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
-                'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
-                'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2'
-                'relaxing', 'no friends', 'tryhard', 'Scissor', 'WAP', 'Corpus'):
-        if key in popups:
-            popups[key].handle_event(event)
+    # ── RESULT popups (close on click → apply their json_stats) ──
+    # note: friend1popup2 and friend2popup2 are intentionally absent —
+    # they have no routing code and are never opened anywhere.
+    # b4p3 is also removed for the same reason.
+    RESULT_POPUPS_WITH_STATS = [
+        'friend1popup1', 'friend1popup3',
+        'friend2popup1', 'friend2popup3',
+        'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
+        'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2', 'b4p1', 'b4p2',
+        'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
+        'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
+        'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2',
+        'relaxing', 'hangout', 'tryhard', 'Scissor', 'WAP', 'Corpus', 'Sick',
+    ]
 
-    # Friend/bully choice buttons — OUTSIDE the minigame loop!
+    for key in RESULT_POPUPS_WITH_STATS:
+        if key not in popups or not popups[key].active:
+            continue
+        if popups[key].handle_event(event):   # returns True on click-close
+            apply_stats(game_state, popups[key].json_stats)
+            check_stat_game_overs(game_state, popups, assets)
+
+    # ── FRIEND / BULLY choice popups ─────────────────────────
     FRIEND_BULLY_POPUPS = {
         'friend1': {'friends!': 'friend1popup1', 'not friends': 'friend1popup3'},
         'friend2': {'friends!': 'friend2popup1', 'not friends': 'friend2popup3'},
@@ -809,6 +1097,24 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
         'bully4':  {'bullied!': 'b4p1',          'not bullied': 'b4p2'},
     }
 
+    # ── QUIZ / EXAM announcement popups ──────────────────────
+    for popup_key in ("Math Quiz", "Science Quiz", "English Quiz", "Mix Quiz", "Exam"):
+        popup = popups.get(popup_key)
+        if not popup or not popup.active:
+            continue
+        for key, btn in buttons.items():
+            if not key.startswith(popup_key + "_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                popup.active = False
+                popup.state  = None
+                if btn.role == "take it":
+                    game_state.pending_quiz = True
+                elif btn.role == "act sick":
+                    apply_stats(game_state, {'stress': 15, 'grades': -10, 'happiness': -5})
+                    popups['Sick'].open(sound=assets['sad'])
+
     for popup_name, role_map in FRIEND_BULLY_POPUPS.items():
         popup = popups[popup_name]
         if not popup.active:
@@ -819,15 +1125,16 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
             if btn.handle_event(event):
                 assets['button_click'].play()
                 apply_stats(game_state, btn.stats)
+                check_stat_game_overs(game_state, popups, assets)
                 result = role_map.get(btn.role)
                 if result and result in popups:
-                    sound = assets['happy'] if btn.role in ('friends!', 'not bullied') else assets['sad']
+                    sound        = assets['happy'] if btn.role in ('friends!', 'not bullied') else assets['sad']
                     popup.active = False
                     popup.state  = None
                     popups[result].open(sound=sound)
 
-    # Gameover buttons — OUTSIDE the minigame loop!
-    for popup_name in ('gameover1', 'gameover2'):
+    # ── GAME OVER buttons ─────────────────────────────────────
+    for popup_name in ('gameover1', 'gameover2', 'gameover3', 'gameover4'):
         popup = popups[popup_name]
         if not popup.active:
             continue
@@ -840,52 +1147,86 @@ def handle_game_events(buttons, popups, game_state, event, blue_fade, assets):
                 popup.state  = None
                 blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
 
-# ==============================================================================
-# MENU SCENE — DRAWING
-# ==============================================================================
+    # ── WINNER popup ──────────────────────────────────────────
+    if popups['WINNER'].active:
+        for key, btn in buttons.items():
+            if not key.startswith("WINNER_"):
+                continue
+            if btn.handle_event(event):
+                assets['button_click'].play()
+                popups['WINNER'].active = False
+                popups['WINNER'].state = None
+                blue_fade.start(on_peak_callback=lambda: setattr(game_state, 'scene', 'menu'))
+
+# ============================================================
+#  [15] UPDATE — POPUPS
+#       advances every popup's animation state each frame.
+#       kept here instead of inside the draw functions so that
+#       update and render logic stay cleanly separated.
+# ============================================================
+def update_popups(popups):
+    for popup in popups.values():
+        popup.update()
+
+
+# ============================================================
+#  [16] DRAWING — MENU SCENE
+# ============================================================
 def draw_menu(screen, buttons, popups):
     buttons['menu_start'].draw(screen)
     buttons['menu_details'].draw(screen)
 
     for popup in popups.values():
-        popup.update()
         popup.draw(screen)
 
+    # position gender buttons relative to the popup's current position
     if popups['gender'].active:
         popup_top = popups['gender'].rect.top
         for key, btn in buttons.items():
             if not key.startswith("gender_"):
                 continue
-            idx      = int(key.split("_")[1])
-            offset_y = popups['gender'].button_data[idx]["offset_y"]
-            btn.rect.center = (337, popup_top + offset_y)
+            idx = int(key.split("_")[1])
+            btn.rect.center = (337, popup_top + popups['gender'].button_data[idx]["offset_y"])
             btn.draw(screen)
 
-# ==============================================================================
-# GAME SCENE — DRAWING
-# ==============================================================================
-def draw_health_bar(surface, hp_display, bar_x, bar_y, bar_w=250, bar_h=16, label="", invert=False):
-    COLOR_HIGH = (144, 238, 144)
-    COLOR_MID  = (255, 215,   0)
-    COLOR_LOW  = (255, 153, 153)
 
-    pct = max(0.0, min(100.0, hp_display))
+# ============================================================
+#  [17] DRAWING — GAME SCENE
+#
+#       stat bars:
+#         bar 0 (stress)  → inverted color logic (high = red)
+#         bars 1-3        → normal (high = green)
+# ============================================================
+def draw_stat_bar(surface, stat_display, bar_x, bar_y, bar_w=250, bar_h=16, label="", invert=False):
+    """draw a single stat bar with a label, percentage, and colour based on value"""
+    COLOR_HIGH = (144, 238, 144)   # green
+    COLOR_MID  = (255, 215,   0)   # yellow
+    COLOR_LOW  = (255, 153, 153)   # red/pink
+
+    pct = max(0.0, min(100.0, stat_display))
     if invert:
         color = COLOR_LOW if pct >= 80 else COLOR_MID if pct >= 21 else COLOR_HIGH
     else:
         color = COLOR_HIGH if pct >= 80 else COLOR_MID if pct >= 21 else COLOR_LOW
 
+    # label (drawn to the left of the bar)
     if label:
         font_lbl = pygame.font.SysFont("Segoe UI", 12, bold=True)
-        lbl = font_lbl.render(label, True, (255, 255, 255))
+        lbl      = font_lbl.render(label, True, (255, 255, 255))
         surface.blit(lbl, (bar_x - lbl.get_width() - 8, bar_y + bar_h // 2 - lbl.get_height() // 2))
 
+    # background track
     pygame.draw.rect(surface, (60, 60, 70), (bar_x, bar_y, bar_w, bar_h), border_radius=6)
+
+    # filled portion
     fill_w = int(bar_w * pct / 100)
     if fill_w > 0:
         pygame.draw.rect(surface, color, (bar_x, bar_y, fill_w, bar_h), border_radius=6)
+
+    # white border
     pygame.draw.rect(surface, (255, 255, 255), (bar_x, bar_y, bar_w, bar_h), 2, border_radius=6)
 
+    # percentage text centered on the bar
     font = pygame.font.SysFont("Segoe UI", 12, bold=True)
     txt  = font.render(f"{int(round(pct))}%", True, (255, 255, 255))
     surface.blit(txt, txt.get_rect(center=(bar_x + bar_w // 2, bar_y + bar_h // 2)))
@@ -894,10 +1235,12 @@ def draw_health_bar(surface, hp_display, bar_x, bar_y, bar_w=250, bar_h=16, labe
 def draw_game(screen, assets, game_state, buttons, popups):
     screen.blit(assets['main_game_image'], (0, 0))
 
+    # draw the selected character portrait
     if game_state.selected_char:
         face_img = assets['char_images'][game_state.selected_char['Appearance']]
         screen.blit(face_img, (-7, -1))
 
+    # stat bars — positions tuned to fit the MainGame.png layout
     BAR_X       = 290
     BAR_START_Y = 377
     BAR_GAP     = 51
@@ -905,66 +1248,103 @@ def draw_game(screen, assets, game_state, buttons, popups):
     BAR_H       = 25
 
     for i in range(4):
-        diff = game_state.hp[i] - game_state.hp_display[i]
-        game_state.hp_display[i] += diff * 0.12
-        draw_health_bar(screen, game_state.hp_display[i],
-                        bar_x=BAR_X, bar_y=BAR_START_Y + i * BAR_GAP,
-                        bar_w=BAR_W, bar_h=BAR_H,
-                        invert=(i == 1))
+        # smoothly animate bars toward their target value (lerp 12%)
+        diff = game_state.stats[i] - game_state.stats_display[i]
+        game_state.stats_display[i] += diff * 0.12
+        draw_stat_bar(
+            screen,
+            game_state.stats_display[i],
+            bar_x=BAR_X,
+            bar_y=BAR_START_Y + i * BAR_GAP,
+            bar_w=BAR_W,
+            bar_h=BAR_H,
+            invert=(i == 0)   # stress bar: high is bad
+        )
 
     buttons['skip'].draw(screen)
+
+    # ── regular popups ────────────────────────────────────────
     regular_popups = [
         'nce',
         'friend1', 'friend2', 'friend3', 'friend4', 'friend5', 'friend6',
         'bully1',  'bully2',  'bully3',  'bully4',
-        'gameover1', 'gameover2',
-        'friend1popup1', 'friend1popup2', 'friend1popup3',
-        'friend2popup1', 'friend2popup2', 'friend2popup3',
+        'gameover1', 'gameover2', 'gameover3', 'gameover4',
+        'friend1popup1', 'friend1popup3',
+        'friend2popup1', 'friend2popup3',
         'f3p1', 'f3p2', 'f4p1', 'f4p2', 'f5p1', 'f5p2', 'f6p1', 'f6p2',
-        'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2', 'b4p1', 'b4p2', 'b4p3',
+        'b1p1', 'b1p2', 'b2p1', 'b2p2', 'b3p1', 'b3p2', 'b4p1', 'b4p2',
         'mg1p1', 'mg1p2', 'mg2p1', 'mg2p2', 'mg3p1', 'mg3p2',
         'mg4p1', 'mg4p2', 'mg5p1', 'mg5p2', 'mg6p1', 'mg6p2',
         'mg7p1', 'mg7p2', 'mg8p1', 'mg8p2',
+        'Math Quiz', 'Science Quiz', 'English Quiz', 'Mix Quiz', 'Exam',
         'free day',
-        'relaxing', 'no friends', 'tryhard', 'Scissor', 'WAP', 'Corpus'
+        'relaxing', 'hangout', 'tryhard', 'Scissor', 'WAP', 'Corpus', 'Sick',
+        'WINNER'
     ]
 
     for pname in regular_popups:
         if pname not in popups:
             continue
         popup = popups[pname]
-        popup.update()
         popup.draw(screen)
 
+        # draw that popup's buttons at the correct offset position
         prefix = pname + "_"
         if popup.active:
             popup_top = popup.rect.top
             for key, btn in buttons.items():
                 if not key.startswith(prefix):
                     continue
-                idx      = int(key.split("_")[-1])
+                idx = int(key.split("_")[-1])
                 if idx < len(popup.button_data):
-                    offset_y = popup.button_data[idx]["offset_y"]
-                    btn.rect.center = (349, popup_top + offset_y)
+                    btn.rect.center = (349, popup_top + popup.button_data[idx]["offset_y"])
                 btn.draw(screen)
 
+    # ── minigame popups ───────────────────────────────────────
     for mg_name in ALL_MINIGAMES:
         if mg_name not in popups:
             continue
         popup = popups[mg_name]
-        popup.update()
         popup.draw(screen)
 
         if popup.active and popup.state is None:
             key = f"{mg_name}_0"
             if key in buttons and popup.button_data:
-                offset_y = popup.button_data[0]["offset_y"]
-                buttons[key].rect.center = (343, popup.rect.top + offset_y)
+                buttons[key].rect.center = (343, popup.rect.top + popup.button_data[0]["offset_y"])
                 buttons[key].draw(screen)
 
-# ==============================================================================
-# MAIN LOOP
-# ==============================================================================
+    # ── Week / Month label (rotated 90°, chalk style) ────────
+    if game_state.week_label_timer > 0:
+        game_state.week_label_timer -= 1
+
+        # fade out in the last 60 frames
+        alpha = min(255, game_state.week_label_timer * 4)
+
+        try:
+            chalk_font = pygame.font.SysFont("segoeprint", 36, bold=True)
+        except FileNotFoundError:
+            chalk_font = pygame.font.SysFont("segoescript", 36)
+
+        label_surf = chalk_font.render(game_state.week_label_text, True, (245, 240, 220))
+        label_surf.set_alpha(alpha)
+
+        # rotate 90° counter-clockwise
+        rotated = pygame.transform.rotate(label_surf, 90)
+
+        # stick it on the right edge of the screen
+        rx = SCREEN_WIDTH - rotated.get_width() - 8
+        ry = SCREEN_HEIGHT // 2 - rotated.get_height() // 2
+        screen.blit(rotated, (rx, ry))
+
+
+# ============================================================
+#  [18] MAIN LOOP
+#       standard pygame loop:
+#         poll events → update state → draw → flip
+#
+#       special case: pending_quiz is checked OUTSIDE the event
+#       loop so the terminal quiz can block without freezing pygame.
+# ============================================================
 def main():
     assets          = load_assets()
     buttons, popups = create_buttons_and_popups()
@@ -972,6 +1352,8 @@ def main():
     blue_fade       = Fade()
 
     while game_state.running:
+
+        # ── event polling ─────────────────────────────────────
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_state.running = False
@@ -982,23 +1364,47 @@ def main():
             elif not game_state.playing_video and game_state.scene == "game":
                 handle_game_events(buttons, popups, game_state, event, blue_fade, assets)
 
+        # ── NCE quiz (runs blocking in terminal) ──────────────
         if game_state.pending_quiz:
             game_state.pending_quiz = False
-            score = run_nce_quiz()
-            game_state.quiz_just_finished = True          # ← NEW
-            if score < 8:
-                popups['gameover2'].open(sound=assets['game_over'])
+            role      = game_state.pending_quiz_role
+            json_file = QUIZ_JSON_MAP.get(role, "JSON/NCE.json")
+            score, pass_score = run_nce_quiz(json_file=json_file, role=role)
+            game_state.quiz_just_finished = True
+            passed = score >= pass_score
 
+            if role == "NCE":
+                if not passed:
+                    popups['gameover2'].open(sound=assets['game_over'])
+
+            elif role in ("Math Long Test", "Science Long Test", "English Long Test", "Mix Long Test"):
+                # EXAM — bigger stat swings
+                if passed:
+                    apply_stats(game_state, {'grades': 15, 'stress': -5, 'happiness': 5})
+                else:
+                    apply_stats(game_state, {'grades': -15, 'stress': 5, 'happiness': -5})
+                check_stat_game_overs(game_state, popups, assets)
+            else:
+                # QUIZ (Math Quiz, Science Quiz, English Quiz, Mix Quiz)
+                if passed:
+                    apply_stats(game_state, {'grades': 5, 'happiness': 5})
+                else:
+                    apply_stats(game_state, {'grades': -5, 'happiness': -5})
+                check_stat_game_overs(game_state, popups, assets)
+
+        # ── drawing ───────────────────────────────────────────
         if game_state.playing_video:
             handle_video(assets, game_state)
 
         elif game_state.scene == "menu":
             screen.blit(assets['main_menu_image'], (0, 0))
+            update_popups(popups)
             draw_menu(screen, buttons, popups)
             blue_fade.update()
             blue_fade.draw(screen)
 
         elif game_state.scene == "game":
+            update_popups(popups)
             draw_game(screen, assets, game_state, buttons, popups)
             blue_fade.update()
             blue_fade.draw(screen)
@@ -1008,8 +1414,9 @@ def main():
 
     pygame.quit()
 
-# ==============================================================================
-# ENTRY POINT
-# ==============================================================================
+
+# ============================================================
+#  [19] ENTRY POINT
+# ============================================================
 if __name__ == "__main__":
     main()
