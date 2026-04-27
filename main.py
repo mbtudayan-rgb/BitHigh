@@ -1420,3 +1420,110 @@ def main():
 # ============================================================
 if __name__ == "__main__":
     main()
+
+# ============================================================
+#  [20] REFERENCES
+# ============================================================
+"""
+GameDev Academy. (2023, November 8). Pygame animation tutorial: Complete guide. GameDev Academy. 
+https://gamedevacademy.org/pygame-animation-tutorial-complete-guide/
+
+GeeksforGeeks. (2025, April 28). How to create a pop up in pygame with pgu? GeeksforGeeks. 
+https://www.geeksforgeeks.org/python/how-to-create-a-pop-up-in-pygame-with-pgu/
+
+kadir014. (n.d.). pygame-video: Video player for pygame [Source code]. GitHub. 
+https://github.com/kadir014/pygame-video
+
+MakeUseOf. (2023, July 12). Adding special effects to pygame games: Particle systems and visual enhancements. MakeUseOf. 
+https://www.makeuseof.com/pygame-games-special-effects-particle-systems-visual-enhancements/
+
+PygameVN. (n.d.). Game state management. https://staff6773.github.io/PygameVN/game_state_management/
+
+RipTutorial. (n.d.). Drawing and a basic animation. https://riptutorial.com/pygame/example/17502/drawing-and-a-basic-animation
+
+Tech With Tim. (n.d.). Pygame animation. Tech With Tim. https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/pygame-animation
+
+Tech With Tim. (2020, January 27). Menus - pygame tutorial [Video]. YouTube. https://www.youtube.com/watch?v=0RryiSjpJn0
+
+Coding Together. (2025, n.d.). Simple snake game in Python #python #coding #programming using pure pygame! [Video]. YouTube. https://www.youtube.com/watch?v=u4Iq4niauCo
+
+DaFluffyPotato. (2023, November 11). How to create particle effects in Python - pygame tutorial [Video]. YouTube. https://www.youtube.com/watch?v=ZiPWN39mGM0
+
+Giraffe Academy. (2017, October 22). Building a multiple choice quiz | Python | Tutorial 32 [Video]. YouTube. https://www.youtube.com/watch?v=SgQhwtIoQ7o
+
+Lmaogg. (2018, March 13). How to fade your screen in pygame [code in description] [Video]. YouTube. https://www.youtube.com/watch?v=H2r2N7D56Uw
+
+Sloth Developer. (2021, October 4). PyGame endless vertical platformer beginner tutorial in Python - Part 9: Fade effect & transitions [Video]. YouTube. https://www.youtube.com/watch?v=m3yWB01hV6Q
+
+Tech with Tim. (2018, March 2). Pygame tutorial #8 - scoring and health bars [Video]. YouTube. https://www.youtube.com/watch?v=JLUqOmE9veI
+
+Tech with Tim. (2020, January 27). Menus - pygame tutorial [Video]. YouTube. https://www.youtube.com/watch?v=0RryiSjpJn0
+
+Tech with Tim. (n.d.). Pygame animation tutorial: How to animate a player character [Video]. YouTube. https://www.youtube.com/watch?v=qPnKIbrVnJk
+
+thenewboston. (2014, December 15). Pygame (Python game development) tutorial - 77 - health bars [Video]. YouTube. https://www.youtube.com/watch?v=TcnWjyHVaOs
+
+Unknown creator. (2021, March 15). Saving and loading in pygame with JSON [Video]. YouTube. https://www.youtube.com/watch?v=__mZO-53PPM
+
+Unknown creator. (2020, June 22). Pygame tutorial - health bars [Video]. YouTube. https://www.youtube.com/watch?v=zY8hIp4KWSM
+
+Unknown creator. (2020, January 5). Making an executable from a pygame game (PyInstaller) [Video]. YouTube. https://www.youtube.com/watch?v=lTxaran0Cig
+
+Unknown creator. (2020, October 2). Creating a health bar in pygame [Dark Souls style] [Video]. YouTube. https://www.youtube.com/watch?v=pUEZbUAMZYA
+
+Unknown creator. (2021, July 31). Pygame saving and loading tutorial: Creating customizable controls [Video]. YouTube. https://www.youtube.com/watch?v=1UCaiX8ESsQ
+
+Unknown creator. (2022, September 7). How to add score and health bar? - Python #PyGame lesson 7 [Video]. YouTube. https://www.youtube.com/watch?v=PgRemhpfUbo
+
+Unknown creator. (2022, December 14). How to create a health bar or inventory status bar in a Python text-based game [Video]. YouTube. https://www.youtube.com/watch?v=oSrjaftUG_8
+
+Unknown creator. (2023, May 6). How to create health bars - pygame tutorial [Video]. YouTube. https://www.youtube.com/watch?v=E82_hdoe06M
+
+Unknown creator. (2024, January 30). Python/Pygame music rhythm game tutorial. ASMR [Video]. YouTube. https://www.youtube.com/watch?v=tYkzrgS5wfE
+
+Unknown creator. (2024, November 23). How to make an executable of your pygame game for Windows using PyInstaller [Video]. YouTube. https://www.youtube.com/watch?v=McFfp3KSimA
+
+Unknown creator. (2025, May 19). Enhancing your pygame rhythm game: Implementing exact timing for smooth gameplay [Video]. YouTube. https://www.youtube.com/watch?v=7HKPvMOSjPw
+
+Unknown creator. (n.d.). Pygame tutorial - part 13 - health bars [Video]. YouTube. https://www.youtube.com/watch?v=m-XqM41ZlvA
+
+JennEngineer [@jennengineer]. (2024, n.d.). A very simple python game courtesy of pygame #pythonprogramming #techtok #codingtiktok #codingisfun #pygame [Video]. TikTok. https://www.tiktok.com/@jennengineer/video/7378975582127672618
+
+JennEngineer [@jennengineer]. (2024, January 16). This might be the simplest game in python / pygame lol [Video]. TikTok. https://www.tiktok.com/@jennengineer/video/7324788642650574123
+
+Ouali Code [@ouali.code]. (2025, n.d.). Making games with Python pygame [Video]. TikTok. https://www.tiktok.com/@ouali.code/video/7468061900811619590
+
+Thom Code [@thom.code]. (2025, n.d.). Making a game in Python with no experience #gamedev #programming #python #pygame [Video]. TikTok. https://www.tiktok.com/@thom.code/video/7483063173600300310
+
+Tiff in Tech [@tiffintech]. (2022, n.d.). Coding a game using Python and pygame #pygame #python #tech #womeninstem [Video]. TikTok. https://www.tiktok.com/@tiffintech/video/7133989870644579589
+
+CodersLegacy. (2021, November 19). Pygame RPG tutorial - status bar. CodersLegacy. https://coderslegacy.com/python/pygame-rpg-status-bar/
+
+demaisj. (n.d.). Pygame-Transitions: Beautiful & easy transitions for pygame programs [Source code]. GitHub. https://github.com/demaisj/Pygame-Transitions
+
+GameDev Academy. (2023, November 8). Pygame animation tutorial: Complete guide. GameDev Academy. https://gamedevacademy.org/pygame-animation-tutorial-complete-guide/
+
+GeeksforGeeks. (2025). How to create a pop up in pygame with pgu? GeeksforGeeks. https://www.geeksforgeeks.org/python/how-to-create-a-pop-up-in-pygame-with-pgu/
+
+GeeksforGeeks. (2025). Save/load game function in pygame. GeeksforGeeks. https://www.geeksforgeeks.org/python/save-load-game-function-in-pygame/
+
+Inventwithpython.com. (n.d.). Chapter 18 - Animating graphics. Invent With Python. https://inventwithpython.com/invent4thed/chapter18.html
+
+Kwan, I. (2013, April 29). Using PyInstaller to make EXEs from Python scripts (and a 48-hour game design compo). Irwin Kwan. https://irwinkwan.com/2013/04/29/python-executables-pyinstaller-and-a-48-hour-game-design-compo/
+
+MakeUseOf. (2023, July 12). Adding special effects to pygame games: Particle systems and visual enhancements. MakeUseOf. https://www.makeuseof.com/pygame-games-special-effects-particle-systems-visual-enhancements/
+
+Program Arcade Games. (n.d.). Introduction to animation. Program Arcade Games With Python and Pygame. http://programarcadegames.com/index.php?lang=en&chapter=introduction_to_animation
+
+Pygame GUI. (n.d.). Text effects. Pygame GUI Documentation. https://pygame-gui.readthedocs.io/en/latest/text_effects.html
+
+PygameVN. (n.d.). Game state management. PygameVN. https://staff6773.github.io/PygameVN/game_state_management/
+
+Real Python. (2025, February 2). Build a quiz application with Python. Real Python. https://realpython.com/python-quiz-application/
+
+RipTutorial. (n.d.). Drawing and a basic animation. RipTutorial. https://riptutorial.com/pygame/example/17502/drawing-and-a-basic-animation
+
+Tech with Tim. (n.d.). Pygame tutorial - scoring & health bars. Tech with Tim. https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/scoring-health-bars
+
+Tech with Tim. (n.d.). Pygame animation. Tech with Tim. https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/pygame-animation
+"""
